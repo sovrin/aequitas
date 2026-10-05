@@ -610,16 +610,23 @@ function lightDismiss(root: Root): void {
   }
 }
 
-/** Table of contents: marks the link whose section is in view. */
+/** Table of contents: marks the link whose section is in view. Rebuilt whenever its links change,
+ *  so a TOC a framework re-renders in place (new page, same <nav>) follows the new sections. */
+const tocs = new WeakMap<HTMLElement, { key: string; io?: IntersectionObserver }>();
 function toc(root: Root): void {
   for (const nav of q<HTMLElement>(".toc", root)) {
-    if (nav.dataset.ae != null) continue;
-    nav.dataset.ae = "";
     const links = q<HTMLAnchorElement>('a[href^="#"]', nav).filter((a) => a.hash.length > 1);
+    const key = links.map((a) => a.hash).join(" ");
+    const prev = tocs.get(nav);
+    if (prev?.key === key) continue;
+    prev?.io?.disconnect();
+    tocs.delete(nav);
     const targets = links
       .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
       .filter(Boolean) as Element[];
+    // Sections not rendered yet: try again on the next enhance().
     if (!targets.length || !("IntersectionObserver" in window)) continue;
+    nav.dataset.ae = "";
     const io = new IntersectionObserver(
       (entries) => {
         const hit = entries.find((e) => e.isIntersecting);
@@ -631,6 +638,7 @@ function toc(root: Root): void {
       { rootMargin: "-20% 0px -70% 0px" },
     );
     targets.forEach((t) => io.observe(t));
+    tocs.set(nav, { key, io });
   }
 }
 
