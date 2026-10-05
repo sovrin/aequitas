@@ -2,7 +2,8 @@
   "name": "aequitas",
   "version": "0.1.0",
   "private": true,
-  "description": "A minimal CSS design language with frost and blur.",
+  "description": "A CSS design language proportioned on the golden ratio, with frosted glass where things float.",
+  "license": "MIT",
   "bin": {
     "aequitas-check": "dist/aequitas-check.mjs"
   },
