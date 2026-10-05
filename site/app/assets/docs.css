@@ -691,8 +691,11 @@
 }
 
 /* Specimens */
+/* One column that never grows past the card: an auto track would widen to fit its content (a
+   resized .resizable, a long line), and that content would spill out of the frame. */
 .specimen {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0;
   background: var(--ae-frost-bg);
   box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
@@ -727,6 +730,7 @@
 
 .specimen-preview {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--ae-space-4);
   padding: var(--ae-space-5);
 }

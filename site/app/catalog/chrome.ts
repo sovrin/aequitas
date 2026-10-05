@@ -182,7 +182,7 @@ export const chrome: Entry[] = [
     anatomy: [
       [
         ".resizable",
-        "Any block. Gets the browser's resize grip in its end corner and scrolls what overflows. At least φ^4.5 ≈ 8.7rem wide, never wider than its container.",
+        "Any block. Gets the browser's resize grip in its end corner and scrolls what overflows. At least φ^4.5 ≈ 8.7rem wide, never wider than its container, as long as the container's width doesn't come from its content: in a grid or flex track, give the track `minmax(0, 1fr)` or `min-inline-size: 0`, or the track grows as you drag.",
       ],
     ],
     demos: [
