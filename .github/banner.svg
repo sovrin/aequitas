@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 476 294" width="476" height="294">
+  <!-- A 34 × 21 golden rectangle cut into squares. The largest holds the mark; the rest step the
+       accent up the tint ladder, 7% · φⁿ, until the last unit square is solid. -->
+  <style>
+    .a { fill: #006de2 }
+    @media (prefers-color-scheme: dark) { .a { fill: #5fa7ff } }
+  </style>
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3c95f0" />
+      <stop offset="1" stop-color="#004fc8" />
+    </linearGradient>
+    <linearGradient id="catch" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0" />
+      <stop offset=".5" stop-color="#fff" stop-opacity=".75" />
+      <stop offset="1" stop-color="#fff" stop-opacity="0" />
+    </linearGradient>
+    <clipPath id="glass"><circle cx="32" cy="32" r="15" /></clipPath>
+    <mask id="clear">
+      <rect width="64" height="64" fill="#fff" />
+      <circle cx="32" cy="32" r="15" fill="#000" />
+    </mask>
+    <filter id="blur" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="1.8" /></filter>
+  </defs>
+  <g transform="translate(1.5 1.5) scale(4.5469)">
+    <rect width="64" height="64" rx="3.84" fill="url(#tile)" />
+    <g clip-path="url(#glass)">
+      <rect x="30" y="7.75" width="4" height="48.5" fill="#fff" fill-opacity=".85" filter="url(#blur)" />
+    </g>
+    <circle cx="32" cy="32" r="15" fill="#fff" fill-opacity=".24" />
+    <path d="M19.44 24.75A14.5 14.5 0 0 1 44.56 24.75" fill="none" stroke="url(#catch)" stroke-width=".5" />
+    <rect x="30" y="7.75" width="4" height="48.5" fill="#fff" mask="url(#clear)" />
+  </g>
+  <rect class="a" x="295.5" y="1.5" width="179" height="179" rx="10.7" fill-opacity="0.07" />
+  <rect class="a" x="365.5" y="183.5" width="109" height="109" rx="6.5" fill-opacity="0.113" />
+  <rect class="a" x="295.5" y="225.5" width="67" height="67" rx="4.0" fill-opacity="0.183" />
+  <rect class="a" x="295.5" y="183.5" width="39" height="39" rx="2.3" fill-opacity="0.296" />
+  <rect class="a" x="337.5" y="183.5" width="25" height="25" rx="2.0" fill-opacity="0.479" />
+  <rect class="a" x="337.5" y="211.5" width="11" height="11" rx="2.0" fill-opacity="0.775" />
+  <rect class="a" x="351.5" y="211.5" width="11" height="11" rx="2.0" />
+</svg>
