@@ -1,0 +1,357 @@
+/* The focus ring of the focused element itself, so a component that draws its own box-shadow
+   (a state edge, a separator) can keep the ring: box-shadow: …, var(--ae-focus, 0 0 #0000).
+   Not inherited, so a focused container never rings its children. */
+@property --ae-focus {
+  syntax: "*";
+  inherits: false;
+}
+
+@layer ae.base {
+  html {
+    background: var(--ae-bg);
+    scrollbar-color: var(--ae-border-strong) transparent;
+    accent-color: var(--ae-accent);
+  }
+
+  body {
+    min-block-size: 100dvh;
+    font-family: var(--ae-font-sans);
+    font-size: var(--ae-text-m);
+    line-height: var(--ae-leading-normal);
+    color: var(--ae-text);
+    font-optical-sizing: auto;
+    font-feature-settings: "calt", "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Cross-document view transitions: same-origin navigations crossfade. */
+  @media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+      navigation: auto;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: var(--ae-duration);
+    }
+  }
+
+  /* Theme switch (setTheme): the page changes in one piece. No transitions, and one snapshot of
+     the whole page. Important so unlayered page styles cannot reintroduce either. */
+  :root[data-ae-restyle],
+  :root[data-ae-restyle] *,
+  :root[data-ae-restyle] *::before,
+  :root[data-ae-restyle] *::after {
+    transition: none !important;
+  }
+
+  :root[data-ae-restyle] * {
+    view-transition-name: none !important;
+  }
+
+  /* With an origin, the new look grows out of the control in a circle over the old one. */
+  :root[data-ae-restyle="reveal"] {
+    &::view-transition-old(root) {
+      animation: none;
+    }
+
+    &::view-transition-new(root) {
+      animation: ae-reveal calc(var(--ae-duration-slow) * var(--ae-phi)) var(--ae-ease) both;
+    }
+  }
+
+  @keyframes ae-reveal {
+    from {
+      clip-path: circle(0 at var(--ae-reveal-x) var(--ae-reveal-y));
+    }
+    to {
+      clip-path: circle(var(--ae-reveal-r) at var(--ae-reveal-x) var(--ae-reveal-y));
+    }
+  }
+
+  /* The aurora lives on a fixed layer so it never scrolls with content. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: var(--ae-aurora);
+    background-size: 120% 120%;
+    pointer-events: none;
+
+    @media (prefers-reduced-motion: no-preference) {
+      animation: ae-drift 48s ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes ae-drift {
+    from {
+      background-position: 0% 0%;
+    }
+    to {
+      background-position: 100% 100%;
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    line-height: var(--ae-leading-tight);
+    font-weight: 520;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  /* Large type gets lighter and tighter, not heavier: size carries the weight. */
+  h1 {
+    font-size: var(--ae-text-4xl);
+    font-weight: 460;
+    letter-spacing: -0.038em;
+    line-height: 1.04;
+  }
+  h2 {
+    font-weight: 480;
+    letter-spacing: -0.03em;
+  }
+  h2 {
+    font-size: var(--ae-text-3xl);
+  }
+  h3 {
+    font-size: var(--ae-text-2xl);
+  }
+  h4 {
+    font-size: var(--ae-text-xl);
+  }
+  h5 {
+    font-size: var(--ae-text-l);
+    font-weight: 560;
+  }
+  h6 {
+    font-size: var(--ae-text-s);
+    font-weight: 560;
+    letter-spacing: 0;
+    color: var(--ae-text-muted);
+  }
+
+  p,
+  li,
+  figcaption {
+    text-wrap: pretty;
+  }
+
+  small {
+    font-size: var(--ae-text-s);
+    color: var(--ae-text-muted);
+  }
+
+  a {
+    color: var(--ae-accent);
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklch, currentColor 35%, transparent);
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color var(--ae-duration) var(--ae-ease);
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+
+  strong,
+  b {
+    font-weight: 580;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--ae-font-mono);
+    font-size: 0.9em;
+  }
+
+  code,
+  kbd {
+    padding: 0.1em 0.4em;
+    border-radius: var(--ae-radius-s);
+    background: var(--ae-fill);
+  }
+
+  kbd {
+    box-shadow: inset 0 -1px 0 var(--ae-border-strong);
+  }
+
+  pre {
+    padding: var(--ae-space-4) var(--ae-space-5);
+    border-radius: var(--ae-radius-m);
+    background: var(--ae-fill);
+    overflow-x: auto;
+    scrollbar-width: thin;
+
+    & code {
+      padding: 0;
+      border: 0;
+      background: none;
+    }
+  }
+
+  ul,
+  ol {
+    padding-inline-start: 1.25em;
+  }
+
+  li + li {
+    margin-block-start: var(--ae-space-1);
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: var(--ae-space-2) var(--ae-space-5);
+  }
+
+  dt {
+    color: var(--ae-text-muted);
+  }
+
+  blockquote {
+    padding-inline-start: var(--ae-space-4);
+    box-shadow: inset var(--ae-edge-x) 0 0 var(--ae-accent);
+    color: var(--ae-text-muted);
+    text-wrap: pretty;
+
+    & cite {
+      display: block;
+      margin-block-start: var(--ae-space-2);
+      font-size: var(--ae-text-s);
+      font-style: normal;
+    }
+  }
+
+  mark {
+    padding: 0.05em 0.25em;
+    background: color-mix(in oklch, var(--ae-warning) 35%, transparent);
+    color: inherit;
+  }
+
+  figcaption {
+    margin-block-start: var(--ae-space-2);
+    font-size: var(--ae-text-s);
+    color: var(--ae-text-muted);
+  }
+
+  hr {
+    border: 0;
+    block-size: 1px;
+    background: var(--ae-border);
+  }
+
+  /* Text roles usable on any element */
+  /* Small capitals, tracked open: a label, set like one. */
+  .eyebrow {
+    font-size: var(--ae-text-xs);
+    font-weight: 540;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ae-text-muted);
+  }
+
+  .lead {
+    font-size: var(--ae-text-l);
+    color: var(--ae-text-muted);
+    text-wrap: pretty;
+  }
+
+  .display {
+    font-size: var(--ae-text-4xl);
+    font-weight: 420;
+    line-height: 1.04;
+    letter-spacing: -0.042em;
+    text-wrap: balance;
+  }
+
+  .caption {
+    font-size: var(--ae-text-xs);
+    color: var(--ae-text-muted);
+  }
+
+  /* List variants: <ul data-variant="plain|inline|check">, on ol too. */
+  :is(ul, ol)[data-variant="plain"] {
+    padding: 0;
+    list-style: none;
+
+    & > li {
+      margin: 0;
+    }
+  }
+
+  :is(ul, ol)[data-variant="inline"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ae-space-2) var(--ae-space-4);
+    padding: 0;
+    list-style: none;
+
+    & > li {
+      margin: 0;
+    }
+  }
+
+  :is(ul, ol)[data-variant="check"] {
+    padding: 0;
+    list-style: none;
+
+    & > li {
+      padding-inline-start: 1.4em;
+      text-indent: -1.4em;
+
+      &::before {
+        content: "✓";
+        display: inline-block;
+        inline-size: 1.4em;
+        text-indent: 0;
+        color: var(--ae-accent);
+      }
+    }
+  }
+
+  /* Quiet link: inherits colour, underlines on hover. */
+  a[data-quiet] {
+    color: inherit;
+    text-decoration-color: transparent;
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+
+  /* A button that looks like a link. */
+  .link {
+    padding: 0;
+    font: inherit;
+    color: var(--ae-accent);
+    background: none;
+    border: 0;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklch, currentColor 35%, transparent);
+    text-underline-offset: 0.25em;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration-color: currentColor;
+    }
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--ae-accent) 30%, transparent);
+  }
+
+  :focus-visible {
+    --ae-focus: var(--ae-ring);
+    /* Invisible, until forced colours drop the box-shadow ring and paint it. */
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: var(--ae-ring);
+  }
+}

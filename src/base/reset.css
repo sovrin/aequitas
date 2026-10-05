@@ -1,0 +1,57 @@
+@layer ae.reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  * {
+    margin: 0;
+  }
+
+  :root {
+    interpolate-size: allow-keywords;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    tab-size: 2;
+  }
+
+  img,
+  picture,
+  svg,
+  video,
+  canvas {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+  }
+
+  textarea {
+    field-sizing: content;
+    min-block-size: 3lh;
+  }
+
+  :where([hidden]:not([hidden="until-found"])) {
+    display: none !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 1ms !important;
+      /* A loop at 1ms would strobe: run it once and rest. */
+      animation-iteration-count: 1 !important;
+    }
+  }
+}

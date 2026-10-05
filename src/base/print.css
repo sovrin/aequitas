@@ -1,0 +1,47 @@
+@layer ae.base {
+  @media print {
+    :root {
+      color-scheme: light;
+    }
+
+    body {
+      background: #fff;
+      color: #000;
+    }
+
+    body::before,
+    .navbar,
+    .sidebar,
+    .toasts,
+    .banner,
+    .action-bar,
+    .selection-bar,
+    .dock,
+    .tabbar,
+    .fab,
+    .loading-bar,
+    .skeleton,
+    [data-tip]::after {
+      display: none !important;
+    }
+
+    .card,
+    .list,
+    .alert {
+      background: none;
+      box-shadow: none;
+      outline: 1px solid #ddd;
+      break-inside: avoid;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    a[href^="http"]::after {
+      content: " (" attr(href) ")";
+      font-size: 0.85em;
+      color: #666;
+    }
+  }
+}
