@@ -53,11 +53,11 @@
       background: var(--ae-tone);
 
       &:hover {
-        background: color-mix(in oklch, var(--ae-tone), var(--ae-text) var(--ae-tint-hover));
+        background: color-mix(in oklab, var(--ae-tone), var(--ae-text) var(--ae-tint-hover));
       }
 
       &:active {
-        background: color-mix(in oklch, var(--ae-tone), var(--ae-text) var(--ae-tint-press));
+        background: color-mix(in oklab, var(--ae-tone), var(--ae-text) var(--ae-tint-press));
       }
     }
 
