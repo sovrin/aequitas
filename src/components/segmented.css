@@ -91,5 +91,19 @@
       opacity: 0.4;
       pointer-events: none;
     }
+
+    /* Spans its row; the segments share it equally, whatever their labels. */
+    &[data-fill] {
+      display: flex;
+
+      /* Equal shares while there is room; a label never shrinks below its word. */
+      & > label {
+        flex: 1 1 0;
+      }
+
+      & span {
+        text-align: center;
+      }
+    }
   }
 }

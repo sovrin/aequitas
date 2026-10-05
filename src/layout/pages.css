@@ -245,6 +245,32 @@
     }
   }
 
+  /* Stage: a sunken box that shows media whole. Its replaced child (canvas, video, img, svg) keeps
+     its proportions and is scaled down to fit, never cropped and never overflowing. Size
+     containment means the content can't size the box: it is φ⁵ ≈ 11rem tall as if that were its
+     content, and takes any size you give it (.golden, a block-size, [data-grow] in a filling
+     shell). An intrinsic size, not a minimum, so an aspect ratio never turns it into a min width. */
+  .stage {
+    display: grid;
+    place-items: center;
+    contain-intrinsic-block-size: calc(1rem * pow(var(--ae-phi), 5));
+    /* Nor a content minimum: with .golden the ratio holds exactly. */
+    min-block-size: 0;
+    padding: var(--ae-space-5);
+    background: var(--ae-bg-sunken);
+    container-type: size;
+
+    & > :is(img, video, canvas, svg) {
+      display: block;
+      max-inline-size: 100cqi;
+      max-block-size: 100cqb;
+    }
+
+    @media (width < 48rem) {
+      padding: var(--ae-space-3);
+    }
+  }
+
   /* Overlay covering its positioned parent. */
   :has(> .overlay) {
     position: relative;

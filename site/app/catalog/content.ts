@@ -243,8 +243,49 @@ export const content: Entry[] = [
       "The frame is a plain box and adds no semantics. Put `alt` on the image inside, or wrap it in a `<figure>` with a caption.",
       "Cropping can cut off what the image is about. Keep important detail near the centre, or describe it in the `alt`.",
     ],
-    related: ["media", "card", "grid"],
+    related: ["stage", "media", "card", "grid"],
     keywords: "aspect ratio crop image video thumbnail",
+  },
+  {
+    slug: "stage",
+    title: "Stage",
+    group: "Content",
+    lede: "A sunken box that shows media whole: any aspect, scaled down to fit, never cropped and never overflowing. Where a frame crops, a stage fits.",
+    owns: [".stage"],
+    anatomy: [
+      [
+        ".stage",
+        "The sunken surface, its content centred. A size container, so its content can't size it: on its own it is φ⁵ ≈ 11rem tall, and it takes any size you give it, from `.golden`, a block size, or `[data-grow]` in a filling shell, where it grows but never shrinks below those 11rem.",
+      ],
+      [
+        "> canvas, > video, > img, > svg",
+        "The media. Keeps its own proportions and is scaled down until it fits inside the stage's padding; never scaled up past its natural size.",
+      ],
+    ],
+    demos: [
+      {
+        title: "Any aspect",
+        note: "The same stage holds a 16:9, a 9:16 and a 1:1 canvas: each fits whole.",
+        html: `<div class="row">
+  <div class="stage golden"><canvas width="1600" height="900" class="bg-accent" role="img" aria-label="16:9"></canvas></div>
+  <div class="stage golden"><canvas width="900" height="1600" class="bg-accent" role="img" aria-label="9:16"></canvas></div>
+  <div class="stage golden"><canvas width="1200" height="1200" class="bg-accent" role="img" aria-label="1:1"></canvas></div>
+</div>`,
+      },
+      {
+        title: "Growing",
+        note: "Drag the corner: the media follows the box, whichever side runs out first.",
+        html: `<div class="resizable" data-axis="both" style="inline-size: 60%; block-size: 14rem">
+  <div class="stage" style="block-size: 100%"><canvas width="1600" height="900" class="bg-accent" role="img" aria-label="16:9"></canvas></div>
+</div>`,
+      },
+    ],
+    a11y: [
+      'The stage is a plain box and adds no semantics. Name what it shows: `alt` on an image, `role="img"` and an `aria-label` on a canvas, captions on a video.',
+      "Media is never cropped, so nothing in it is cut off at any size or zoom.",
+    ],
+    related: ["frame", "shell", "media"],
+    keywords: "media fit contain canvas video preview viewer letterbox aspect",
   },
   {
     slug: "carousel",

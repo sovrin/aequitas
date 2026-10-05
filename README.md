@@ -48,9 +48,9 @@ Variants are `data-*` attributes and state is ARIA: there is no `.btn-primary` a
 
 | Group     | Classes                                                                                                                                                                                                  |
 | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Controls  | `.btn`, `.input`, `.select`, `.input-group`, checkbox, radio, switch, range, `.segmented`, `.tabs`, `.chip`, `.combobox`                                                                                 |
+| Controls  | `.btn`, `.input`, `.select`, `.input-group`, checkbox, radio, switch, range, `.range-pair`, `.segmented`, `.tabs`, `.chip`, `.combobox`                                                                  |
 | Surfaces  | `.card`, `.list`, `.alert`, `.toast`, `.menu`, `.popover`, `dialog`, `dialog.drawer`, `dialog.palette`, `.navbar`                                                                                        |
-| Content   | `.badge`, `.avatar`, `.accordion`, `.table`, `.stat`, `progress`, `meter`, `.skeleton`, `.spinner`, `.empty`, `.steps`                                                                                   |
+| Content   | `.badge`, `.avatar`, `.accordion`, `.table`, `.stat`, `progress`, `meter`, `.skeleton`, `.spinner`, `.empty`, `.steps`, `.frame`, `.stage`                                                               |
 | App       | `.shell`, `.sidebar`, `.page-header`, `.toolbar`, `.settings`, `.master-detail`, `.calendar`, `.tree`, `.thread`                                                                                         |
 | Chrome    | `.window`, `.menubar`, `.statusbar`, `.dock`, `.tabbar`, `.footer`, `.resizable`                                                                                                                         |
 | Marketing | `.hero`, `.features`, `.pricing`, `.testimonial`, `.logos`                                                                                                                                               |
@@ -78,7 +78,7 @@ Controls answer the pointer with tone, never movement, and persistent states add
 
 ## Behaviours
 
-`aequitas.js` is optional: about 5 kB gzipped, ESM, typed. It initialises itself; add `data-ae-manual` to `<html>` and call `init()` (or `bind()` once and `enhance()` after each render) to drive it yourself.
+`aequitas.js` is optional: about 6 kB gzipped, ESM, typed. It initialises itself; add `data-ae-manual` to `<html>` and call `init()` (or `bind()` once and `enhance()` after each render) to drive it yourself.
 
 | Markup                                 | Does                                                                        |
 | -------------------------------------- | --------------------------------------------------------------------------- |
@@ -93,10 +93,12 @@ Controls answer the pointer with tone, never movement, and persistent states add
 | `[data-toggle][aria-pressed]`          | flips `aria-pressed` on click                                               |
 | `.number > button[data-step]`          | steps the input up or down                                                  |
 | `input[type=range][data-output]`       | keeps the track fill and an output element in sync                          |
+| `.range-pair`                          | fills between its two ranges and keeps them from crossing                   |
 | `.tag-input`, `.otp`                   | turns Enter into chips; advances between code cells and takes pastes        |
 | `.input-group > [data-password]`       | shows or hides a password                                                   |
 | `.table` with row checkboxes           | select-all, `aria-selected` and a `.selection-bar` count                    |
 | `.dropzone`                            | sets `data-active` while files are dragged over it                          |
+| `.dropzone[data-page]`                 | shows while files are dragged anywhere over the page                        |
 | `.toc`                                 | marks the link whose section is in view                                     |
 
 ```js

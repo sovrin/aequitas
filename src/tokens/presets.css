@@ -136,11 +136,13 @@
       .swatch-group label,
       progress,
       meter,
+      .range-pair,
       input:is([type="checkbox"], [type="radio"], [type="range"]):not(
           .segmented input,
           .chip input,
           .rating input,
-          .swatch-group input
+          .swatch-group input,
+          .range-pair > input
         )
     ) {
       border: 1px solid !important;
@@ -206,10 +208,11 @@
     .rating label:not(:has(:checked), :has(~ label :checked)) {
       background: Canvas !important;
     }
-    input[type="range"]::-webkit-slider-runnable-track {
+    /* A pair draws one track for both inputs (range.css); theirs stay clear over it. */
+    input[type="range"]:not(.range-pair > input)::-webkit-slider-runnable-track {
       background: GrayText !important;
     }
-    input[type="range"]::-moz-range-track {
+    input[type="range"]:not(.range-pair > input)::-moz-range-track {
       background: GrayText !important;
     }
     input[type="range"]::-webkit-slider-thumb {
@@ -243,6 +246,14 @@
     .swatch-group label:has(:checked) {
       outline: 2px solid Highlight;
       outline-offset: 2px;
+    }
+
+    /* Two thumbs share one box, so the box's outline can't say which has focus: the thumb does. */
+    .range-pair > input:focus-visible::-webkit-slider-thumb {
+      background: Highlight !important;
+    }
+    .range-pair > input:focus-visible::-moz-range-thumb {
+      background: Highlight !important;
     }
 
     /* Controls built around a hidden input: their box-shadow ring is gone, so outline the label. */

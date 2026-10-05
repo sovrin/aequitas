@@ -722,21 +722,34 @@ export const inputs: Entry[] = [
   or click to browse · up to 25 MB
 </label>`,
       },
+      {
+        title: "Page-wide · data-page",
+        note: "Drag a file from your desktop over this page. Here it fills only this card: the card is glass, and glass holds fixed layers inside it. On your page, put it last in <body>.",
+        html: `<div class="dropzone" data-page aria-hidden="true">
+  <strong>Drop to open</strong>
+  MusicXML, Guitar Pro or MIDI
+</div>`,
+      },
     ],
     attrs: [
       [
         "data-active",
-        "The hover look: accent tint and accent outline. aequitas.js sets it while files are dragged over the zone and removes it on leave or drop.",
+        "The hover look: accent tint and accent outline. aequitas.js sets it while files are dragged over the zone and removes it on leave or drop. On a page zone it is what shows it.",
+      ],
+      [
+        "data-page",
+        "Makes the zone the whole page: a frosted layer a step inside the viewport, with a dashed accent edge, above everything else. Hidden until `data-active`. It never takes the pointer: make it a `<div>` (not a `<label>`, no input), hide it from screen readers, and put it last in `<body>`. Inside a glass layer (anything with `backdrop-filter`, a `transform` or a `filter`) a fixed layer covers only that layer.",
       ],
       ["multiple", "Native, on the input: accept more than one file."],
       ["accept=<types>", "Native, on the input: limits the picker to these file types."],
     ],
-    js: "While files are dragged over the zone, aequitas.js sets `data-active`, and removes it when they leave the zone or are dropped. Without it the zone still takes the drop and the click, but doesn't light up during a drag.",
+    js: "While files are dragged over the zone, aequitas.js sets `data-active`, and removes it when they leave the zone or are dropped. Without it the zone still takes the drop and the click, but doesn't light up during a drag. A `data-page` zone gets `data-active` while files are dragged anywhere over the document; while one exists, aequitas.js also cancels the browser's own handling of a file dropped outside a file input, so the page never navigates to the file. Read the files in your own `drop` listener, from `event.dataTransfer.files`.",
     keys: [["Enter / Space", "On the focused file input: opens the file picker (native)."]],
     a11y: [
       "The label's text is the file input's accessible name, so write it as an instruction.",
       "The input is invisible but focusable; keyboard focus lights the zone through `:has(:focus-visible)`.",
       'The browser\'s own file name display is hidden. List the chosen files yourself, in an element with `aria-live="polite"`.',
+      'A page zone only answers a pointer drag. Give it `aria-hidden="true"` and keep a file input or button on the page for everyone else.',
     ],
     related: ["input", "field", "progress"],
     keywords: "file upload drop drag and drop attachment",

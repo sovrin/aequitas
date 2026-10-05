@@ -10,35 +10,46 @@ export const layouts: Entry[] = [
     slug: "shell",
     title: "Shell",
     group: "Shells",
-    lede: "One .shell, six attributes. The sidebar is a container: narrow it and it becomes a rail by itself.",
+    lede: "One .shell, seven attributes. The sidebar is a container: narrow it and it becomes a rail by itself; leave it out and its column goes too.",
     owns: [".shell", ".main", ".inspector"],
     anatomy: [
       [
         ".shell",
         "Full-height grid (at least `100dvh`) that places its children by class. Under 48rem it stops being a grid: everything stacks in source order.",
       ],
-      ["> header.navbar", "Optional, with `data-header`: spans the top row across every column."],
+      [
+        "> header.navbar",
+        "Optional, with `data-header`: spans the top row across every column and, from 48rem, is exactly `--header` tall, so the sticky panels line up under it. Below that it grows if its links wrap.",
+      ],
       [
         "> nav.sidebar",
-        "The sidebar column; see Sidebar. Sticky, scrolls on its own, and switches to its rail layout when the column is narrower than 7rem. Under 48rem it becomes a horizontally scrolling row.",
+        "Optional. The sidebar column; see Sidebar. Sticky, scrolls on its own, and switches to its rail layout when the column is narrower than 7rem. Under 48rem it becomes a horizontally scrolling row. Without one the shell drops the side column and its area: header, main and inspector need no `--sidebar: 0`.",
       ],
       [
         "> main",
-        "The working column. A `<main>` or any element with `.main`; it may shrink below its content width.",
+        "The working column. A `<main>` or any element with `.main`; it may shrink below its content width. With `data-fill` it is a column exactly as tall as the viewport leaves it.",
+      ],
+      [
+        "main > [data-grow]",
+        "With `data-fill`: the child that takes the height the others leave, such as a `.stage`.",
       ],
       [
         "> aside.inspector",
         "Optional, with `data-inspector`: the trailing properties column. Sticky and scrolling like the sidebar, with wider padding and a hairline on its start edge. Under 48rem it drops below the main column.",
+      ],
+      [
+        ".inspector > header, .inspector > .tabs",
+        "Optional header part, as the first child: it stays put while what follows scrolls. Each child after it scrolls on its own, so give it one body, or tab panels of which one is shown.",
       ],
     ],
     demos: [
       { title: "Default", preview: true, html: shell("", side + main()) },
       { title: "Rail · data-rail", preview: true, html: shell(" data-rail", side + main()) },
       {
-        title: "Header · data-header, --header set to the navbar height",
+        title: "Header · data-header",
         preview: true,
         html: shell(
-          ' data-header style="--header: 3rem"',
+          " data-header",
           `<header class="navbar"><strong>Northlight</strong><nav class="cluster"><a href="#" aria-current="page">Pages</a><a href="#">Media</a></nav><span class="end"><button class="btn" data-size="s" data-variant="primary">Publish</button></span></header>` +
             side +
             main(),
@@ -60,6 +71,33 @@ export const layouts: Entry[] = [
         html: shell(' data-side="end"', main() + side),
       },
       { title: "Floating · data-float", preview: true, html: shell(" data-float", side + main()) },
+      {
+        title: "Editor · no sidebar, data-header data-inspector data-float data-fill",
+        note: "No sidebar, so no side column. The main column is exactly as tall as the viewport leaves it, its stage takes what the other rows leave, and the inspector's tabs stay put while its body scrolls.",
+        preview: true,
+        html: `<div class="preview"><div class="shell" data-header data-inspector data-float data-fill style="block-size: 26rem">
+  <header class="navbar"><strong>Sketchpad</strong><span class="end"><button class="btn" data-size="s" data-variant="primary">Export</button></span></header>
+  <main>
+    <div class="page-header"><h4>Untitled</h4></div>
+    <div class="stage" data-grow><canvas width="1600" height="900" class="bg-fill" role="img" aria-label="Preview"></canvas></div>
+    <div class="cluster text-s text-muted">1600 × 900 · 16:9</div>
+  </main>
+  <aside class="inspector" aria-label="Inspector">
+    <div class="tabs" role="tablist" aria-label="Settings">
+      <button role="tab" aria-selected="true" aria-controls="ed-look" id="ed-look-tab">Look</button>
+      <button role="tab" aria-selected="false" aria-controls="ed-out" id="ed-out-tab">Output</button>
+    </div>
+    <div role="tabpanel" id="ed-look" aria-labelledby="ed-look-tab" tabindex="0">
+      <div class="stack" data-divided>
+        <section class="stack gap-3"><h5 class="eyebrow">Frame</h5><div class="segmented" data-fill role="radiogroup" aria-label="Frame"><label><input type="radio" name="ed-frame" checked /><span>16:9</span></label><label><input type="radio" name="ed-frame" /><span>1:1</span></label><label><input type="radio" name="ed-frame" /><span>9:16</span></label></div></section>
+        <section class="stack gap-3"><h5 class="eyebrow">Colour</h5><div class="field"><label for="ed-op">Opacity</label><input type="range" id="ed-op" value="62" /></div></section>
+        <section class="stack gap-3"><h5 class="eyebrow">Labels</h5><label><input type="checkbox" role="switch" checked /> Show numbers</label></section>
+      </div>
+    </div>
+    <div role="tabpanel" id="ed-out" aria-labelledby="ed-out-tab" tabindex="0" hidden><p class="text-s text-muted">Output settings.</p></div>
+  </aside>
+</div></div>`,
+      },
     ],
     attrs: [
       [
@@ -72,11 +110,11 @@ export const layouts: Entry[] = [
       ],
       [
         "data-header",
-        "Adds a top row that a `.navbar` child spans across every column. Set `--header` to the navbar's height.",
+        "Adds a top row that a `.navbar` child spans across every column. The navbar is made exactly `--header` tall from 48rem, so nothing needs measuring.",
       ],
       [
         ".shell[--header=<length>]",
-        "Height of the header row. The sidebar and inspector stick this far from the top and shorten by the same amount. Default `0px`.",
+        "Height of the header row and of its navbar (from 48rem; below, the navbar's minimum). The sidebar and inspector stick this far from the top and shorten by the same amount. With `data-header` φ^2.5 ≈ 3.3 units (`--ae-unit`, so it follows the density), else `0px`.",
       ],
       [
         "data-inspector",
@@ -88,7 +126,15 @@ export const layouts: Entry[] = [
       ],
       [
         "data-float",
-        "Insets the shell by a step on every side and floats the sidebar as a panel with shadow and frost edge. With `data-header` it sticks below the header.",
+        "Insets the shell by a step on every side and floats the sidebar and the inspector as glass panels with shadow and frost edge. With `data-header` they stick a step below the header. Under 48rem they lie flat again.",
+      ],
+      [
+        "data-fill",
+        "Makes the shell exactly one viewport tall, for editors: nothing scrolls the page. Main becomes a column of the height the header, padding and gaps leave (scrolling if its content needs more), and its `[data-grow]` child takes what the other children leave. The side panels scroll inside their rows. Under 48rem the shell stacks and the page scrolls as usual.",
+      ],
+      [
+        "main > [data-grow]",
+        "With `data-fill`: grows to fill the main column. It shrinks only as far as its flex minimum: a scrolling element to nothing, a `.stage` to its φ⁵ ≈ 11rem, anything else to its content, after which main scrolls.",
       ],
       [".shell[--sidebar=<length>]", "Sidebar column width. Default φ⁶ ≈ 18rem."],
       [
@@ -101,10 +147,12 @@ export const layouts: Entry[] = [
       "The working column should be the `<main>` landmark, and a `.skip-link` pointing at it the first thing in `<body>`, so keyboard users can pass the sidebar.",
       'With a `.navbar` and a `nav.sidebar` there are two `<nav>` landmarks: give each an `aria-label` ("Primary", "Workspace"). Give an `aside.inspector` one too.',
       'Columns are placed by grid area, so source order is free; under 48rem the shell stacks in source order. With `data-side="end"` put the sidebar after `<main>` in the markup if it should also be read after it.',
+      'With `data-fill` the page itself never scrolls from 48rem up: main and the side panels scroll inside. Not every browser lets the keyboard into a scroller that holds nothing focusable (Safari doesn\'t), so give such a scroller `tabindex="0"` (a tab panel without controls, as in the demo), and make `<main tabindex="-1">` the skip link\'s target. A `.stage` scales its media down instead of clipping it.',
+      "From 48rem the navbar is exactly `--header` tall; below that it is at least that tall and grows when its links wrap, so zoomed and reflowed text stays inside it.",
       'In the rail the labels are still there, only smaller (or visually hidden with the sidebar\'s `data-labels="hidden"`): keep each label in its `<span>` so the link has a name, and hide glyph icons with `aria-hidden="true"`.',
     ],
     related: ["sidebar", "navbar", "master-detail"],
-    keywords: "app shell sidebar rail inspector layout frame chrome",
+    keywords: "app shell sidebar rail inspector layout frame chrome editor viewport fill",
   },
   {
     slug: "container",
@@ -123,7 +171,7 @@ export const layouts: Entry[] = [
       ],
       [
         ".stack",
-        "Vertical flex column, one unit (`--ae-space-4`) between children. Change the gap with `.gap-1` … `.gap-8`.",
+        "Vertical flex column, one unit (`--ae-space-4`) between children. Change the gap with `.gap-1` … `.gap-8`. With `data-divided`, a hairline between children.",
       ],
       [
         ".cluster",
@@ -157,6 +205,14 @@ export const layouts: Entry[] = [
 </div>`,
       },
       {
+        title: "Divided stack · data-divided",
+        html: `<div class="stack" data-divided style="max-inline-size: 20rem">
+  <section class="stack gap-2"><h4 class="eyebrow">Frame</h4><p class="text-s text-muted">Aspect and margins.</p></section>
+  <section class="stack gap-2"><h4 class="eyebrow">Colour</h4><p class="text-s text-muted">Palette and opacity.</p></section>
+  <section class="stack gap-2"><h4 class="eyebrow">Labels</h4><p class="text-s text-muted">Numbers and names.</p></section>
+</div>`,
+      },
+      {
         title: "Section and golden",
         html: `<div class="bg-fill">
   <section class="section container">
@@ -171,6 +227,10 @@ export const layouts: Entry[] = [
         "Narrower or wider page. Default φ⁹ ≈ 76rem; `s` is φ⁸ ≈ 47rem, `l` φ^9.5 ≈ 97rem, `full` the whole width less the gutters.",
       ],
       [".container[--ae-container=<length>]", "Any other cap width. This is what `s` and `l` set."],
+      [
+        ".stack[data-divided]",
+        "Divides the children with a hairline: every child after the first gets the line along its top. `data-divided` sets its own step, φ ≈ 1.6 units (`--ae-space-5`), on both sides of the line; a `.gap-n` changes only the space above it. A border, not a shadow, so a child's own shadow is kept.",
+      ],
       [".measure[--ae-measure=<length>]", "Any other line length. Default 40ch·φ."],
     ],
     a11y: [

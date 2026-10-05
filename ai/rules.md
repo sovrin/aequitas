@@ -34,8 +34,8 @@
     - `[data-password]` in an `.input-group` reveals a password; a `.table` with row checkboxes gets select-all and drives a sibling `.selection-bar`.
     - `toast()`, `setTheme()` and `markMatches()` are exported from the module, with `init()`, `bind()` and `enhance()` for driving it yourself.
     - `[data-toast="message"]` shows a toast (`data-toast-title`, `data-toast-tone`). `[data-theme-set]` works on buttons and on radios.
-    - `[data-toggle]` on a button with `aria-pressed` flips it; `.number > button[data-step]` steps its input; `input[type=range][data-output="id"]` writes its value into that element.
-    - `.combobox` and `dialog.palette` filter and highlight as you type (`dialog.palette[data-manual]` opts out); `.tag-input` turns Enter into chips; `.otp` advances between cells and takes pastes; `.dropzone` gets `data-active` during a drag; `.toc` sets `aria-current` on the link whose section is in view.
+    - `[data-toggle]` on a button with `aria-pressed` flips it; `.number > button[data-step]` steps its input; `input[type=range][data-output="id"]` writes its value into that element; a `.range-pair` of two ranges fills between them and keeps them from crossing.
+    - `.combobox` and `dialog.palette` filter and highlight as you type (`dialog.palette[data-manual]` opts out); `.tag-input` turns Enter into chips; `.otp` advances between cells and takes pastes; `.dropzone` gets `data-active` during a drag (`.dropzone[data-page]` during a drag anywhere over the page); `.toc` sets `aria-current` on the link whose section is in view.
     - Don't write JavaScript for these.
 11. **Don't invent anything.** If a class, attribute value or token isn't in this reference, it doesn't exist. Compose existing pieces instead.
-12. **Verify.** Run `{{check}} <files>` on every file you write, and fix every error before you finish. Pass `--css <file>` for the project's own stylesheet so its classes, and the `data-*` values it styles on them, count as known.
+12. **Verify.** Run `{{check}} <files>` on every file you write, and fix every error before you finish. Pass `--css <file>` for the project's own stylesheet so its classes, and the `data-*` values it styles on them, count as known. If it warns that one of your classes is also an aequitas component, rename yours or use the component.

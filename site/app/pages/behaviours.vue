@@ -14,7 +14,7 @@ markMatches(list, "term"); // highlight a term in the options of a dialog.palett
     <DocsPageHeader
       group="Behaviours"
       title="Behaviours"
-      lede="Five kilobytes, gzipped, of TypeScript for what HTML cannot do alone."
+      lede="Six kilobytes, gzipped, of TypeScript for what HTML cannot do alone."
     />
     <section class="section stack gap-6" id="behaviours">
       <div class="stack measure">
@@ -69,6 +69,10 @@ markMatches(list, "term"); // highlight a term in the options of a dialog.palett
             <td>Keeps the track fill and an output element in sync</td>
           </tr>
           <tr>
+            <td><code>.range-pair</code></td>
+            <td>Fills between its two ranges and keeps them from crossing</td>
+          </tr>
+          <tr>
             <td><code>.number &gt; button[data-step]</code>, <code>[data-toggle]</code></td>
             <td>Stepper buttons; pressed-state toggles</td>
           </tr>
@@ -101,6 +105,13 @@ markMatches(list, "term"); // highlight a term in the options of a dialog.palett
           <tr>
             <td><code>.dropzone</code></td>
             <td><code>data-active</code> while files are dragged over it</td>
+          </tr>
+          <tr>
+            <td><code>.dropzone[data-page]</code></td>
+            <td>
+              <code>data-active</code> while files are dragged anywhere over the page; the page
+              takes the drop
+            </td>
           </tr>
           <tr>
             <td><code>[popovertarget]</code>, <code>[data-open]</code> on a popover</td>

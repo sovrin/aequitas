@@ -42,6 +42,34 @@
     &:has(:focus-visible) {
       box-shadow: var(--ae-ring);
     }
+
+    /* The whole page as the target: a glass layer a step inside the viewport, shown only while
+       files are dragged over the document. It never takes the pointer; the drop reaches the page. */
+    &[data-page] {
+      /* It floats over content of any colour: the thick material, as bars and menus use. */
+      --ae-frost-bg: var(--ae-frost-bg-thick);
+      position: fixed;
+      inset: var(--ae-space-3);
+      z-index: 40;
+      gap: var(--ae-space-2);
+      font-size: var(--ae-text-l);
+      /* Over any page, through glass: full text colour, since muted can't hold 4.5:1 here. */
+      color: var(--ae-text);
+      background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-rest), var(--ae-frost-bg));
+      backdrop-filter: var(--ae-frost-filter);
+      outline: var(--ae-edge) dashed var(--ae-accent);
+      outline-offset: calc(var(--ae-edge) * -1);
+      box-shadow: var(--ae-shadow-l), var(--ae-frost-edge);
+      pointer-events: none;
+      transition:
+        opacity var(--ae-duration) var(--ae-ease),
+        visibility var(--ae-duration);
+
+      &:not([data-active]) {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
   }
 
   /* <figure class="code"><figcaption>build.ts <button class="btn" data-size="s">Copy</button></figcaption><pre>…</pre></figure> */

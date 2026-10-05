@@ -182,8 +182,20 @@ export const selection: Entry[] = [
   <label><input type="radio" name="seg" /><span>Month</span></label>
 </div>`,
       },
+      {
+        title: "Full width · data-fill",
+        html: `<div class="segmented" data-fill role="radiogroup" aria-label="Frame" style="max-inline-size: 20rem">
+  <label><input type="radio" name="seg-fill" checked /><span>16:9</span></label>
+  <label><input type="radio" name="seg-fill" /><span>1:1</span></label>
+  <label><input type="radio" name="seg-fill" /><span>9:16</span></label>
+</div>`,
+      },
     ],
     attrs: [
+      [
+        "data-fill",
+        "Spans the row instead of hugging its labels; the segments share it equally, their text centred. For inspectors and narrow panels.",
+      ],
       [
         "checked",
         "On one input: the segment that starts selected. With none checked, no surface is drawn.",
@@ -258,8 +270,81 @@ export const selection: Entry[] = [
       "Focus draws the ring on the thumb.",
       "The value reads from where the tone fill ends against the track (3:1 or more); the glass thumb itself is deliberately quiet against the page.",
     ],
-    related: ["number", "progress", "meter"],
+    related: ["range-pair", "number", "progress", "meter"],
     keywords: "slider",
+  },
+  {
+    slug: "range-pair",
+    title: "Range pair",
+    group: "Selection",
+    lede: "Two native ranges on one track, for picking a span. Each thumb keeps its own keyboard and value; the fill runs between them.",
+    owns: [".range-pair"],
+    anatomy: [
+      [
+        ".range-pair",
+        'The track: tinted, filled with the tone from `--from` to `--to`. Give it `role="group"` and an `aria-label` that names the span.',
+      ],
+      [
+        "> input[type=range]",
+        "Exactly two, sharing `min`, `max` and `step`: the first is the start, the second the end. Their own tracks are clear; only the glass thumbs take the pointer, so either can be grabbed.",
+      ],
+    ],
+    demos: [
+      {
+        title: "Range pair",
+        html: `<div class="field" style="max-inline-size: 24rem">
+  <span id="rp-label">Bars <span id="rp-from">9</span>–<span id="rp-to">40</span></span>
+  <div class="range-pair" role="group" aria-labelledby="rp-label">
+    <input type="range" min="1" max="64" value="9" aria-label="First bar" data-output="rp-from" />
+    <input type="range" min="1" max="64" value="40" aria-label="Last bar" data-output="rp-to" />
+  </div>
+</div>`,
+      },
+      {
+        title: "Tone",
+        html: `<div class="range-pair" role="group" aria-label="Price" data-tone="success" style="max-inline-size: 24rem">
+  <input type="range" value="20" aria-label="Minimum price" />
+  <input type="range" value="70" aria-label="Maximum price" />
+</div>`,
+      },
+    ],
+    attrs: [
+      [
+        "--from=<percent>",
+        "Where the fill starts, as a share of the track. Default `0%`. aequitas.js sets it from the first input.",
+      ],
+      [
+        "--to=<percent>",
+        "Where the fill ends. Default `100%`. aequitas.js sets it from the second input.",
+      ],
+      ["data-tone=accent|success|warning|danger|info", "Colours the fill. Default accent."],
+      [
+        "input[data-top]",
+        "Set by aequitas.js on the thumb that sits on top: the one moved last, or, at a shared value, the one that can still move away from the other.",
+      ],
+      [
+        "data-output=<id>",
+        "On either input, as on a single range: an element whose text aequitas.js keeps equal to that value.",
+      ],
+    ],
+    js: "On load and on every `input` event, aequitas.js keeps the first value at or below the second (a thumb stops where the other stands), sets `--from` and `--to` on the pair, and lifts the right thumb on top. Without it both thumbs work, but they can cross and the fill stays where `--from` and `--to` say.",
+    keys: [
+      ["Tab", "Moves from the start thumb to the end thumb: each is its own stop."],
+      ["← / ↓, → / ↑", "Moves the focused thumb by one `step`; it stops at the other thumb."],
+      ["Home / End", "Jumps to `min` or `max`, or as far as the other thumb allows."],
+      ["PageUp / PageDown", "Moves in larger steps."],
+    ],
+    a11y: [
+      'Both inputs are native sliders: each announces its own name and value. Name them for what they bound ("First bar", "Last bar"), and the group for the span.',
+      'Add `aria-valuetext` when a number needs a unit ("20 euros"), and update it from your own `input` listener: aequitas.js doesn\'t write it.',
+      'Each input still announces its full `min` and `max`, though it stops at the other thumb. Say so in its `aria-valuetext` ("40, up to 52") when the limit matters.',
+      "In right-to-left pages both the thumbs and the fill run from the right.",
+      "In forced colours the track draws in GrayText, the span between the thumbs in Highlight, and the focused thumb in Highlight too, since both inputs share one outlined box.",
+      "In a pair only the thumbs take the pointer, so they never shrink below the 24px target size, even in compact density.",
+      "Clicking the bare track does nothing: only the thumbs move. Keyboard users are unaffected.",
+    ],
+    related: ["range", "number"],
+    keywords: "slider dual two handle thumb min max span interval between",
   },
   {
     slug: "choice-card",

@@ -14,6 +14,17 @@
     display: flex;
     flex-direction: column;
     gap: var(--ae-space-4);
+
+    /* Groups divided by a hairline, a step from the line on either side. A border, not a shadow,
+       so a child's own shadow (a card's) keeps it. */
+    &[data-divided] {
+      gap: var(--ae-space-5);
+
+      & > * + * {
+        padding-block-start: var(--ae-space-5);
+        border-block-start: 1px solid var(--ae-border);
+      }
+    }
   }
 
   .cluster {

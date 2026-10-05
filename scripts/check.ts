@@ -18,7 +18,13 @@ export type Problem = {
   line: number;
   col: number;
   severity: "error" | "warning";
-  rule: "unknown-class" | "attr-value" | "attr-scope" | "unknown-token" | "icon";
+  rule:
+    | "unknown-class"
+    | "attr-value"
+    | "attr-scope"
+    | "unknown-token"
+    | "icon"
+    | "class-collision";
   message: string;
   hint?: string;
 };
@@ -466,6 +472,92 @@ export function classesIn(css: string): string[] {
   ];
 }
 
+/** Where a stylesheet redefines one of aequitas' own classes, for --css: a rule whose selector
+ *  list has the bare class (`.timeline`, not `.timeline[data-x]` or `.shell > .timeline`) and that
+ *  sets a real property, not only custom properties. That is a component of the project's own
+ *  under a name aequitas already uses; setting `.shell { --header: 3rem }` or styling
+ *  `.segmented[data-fill]` is an override and passes. Nested rules count as qualified;
+ *  @media, @supports, @layer and @container blocks are looked through. One finding per class. */
+export function collisionsIn(css: string, known: Iterable<string>): Problem[] {
+  const owned = new Set(known);
+  // Blank out comments and strings, keeping every offset, so positions point into the file.
+  const src = css.replace(/\/\*[\s\S]*?\*\/|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g, (m) =>
+    m.replace(/[^\n]/g, " "),
+  );
+  const lines = [0];
+  for (let i = 0; i < src.length; i++) if (src[i] === "\n") lines.push(i + 1);
+  const pos = (at: number) => {
+    let line = 0;
+    while (line + 1 < lines.length && lines[line + 1] <= at) line++;
+    return { line: line + 1, col: at - lines[line] + 1 };
+  };
+  const found = new Map<string, Problem>();
+  // Each open block: is it a style rule (nested selectors under it are qualified)?
+  const stack: boolean[] = [];
+  let start = 0;
+  for (let i = 0; i < src.length; i++) {
+    const c = src[i];
+    if (c === ";") start = i + 1;
+    else if (c === "}") {
+      stack.pop();
+      start = i + 1;
+    } else if (c === "{") {
+      const prelude = src.slice(start, i);
+      const isAt = prelude.trim().startsWith("@");
+      if (!isAt && !stack.includes(true)) {
+        // Only the block's own declarations: skip nested blocks.
+        let depth = 0;
+        let own = "";
+        let j = i + 1;
+        for (; j < src.length; j++) {
+          if (src[j] === "{") {
+            // A nested rule's selector is not a declaration (`a:hover` would read like one).
+            if (!depth) own = own.slice(0, own.lastIndexOf(";") + 1);
+            depth++;
+          } else if (src[j] === "}") {
+            if (!depth) break;
+            if (!--depth) own += ";";
+          } else if (!depth) own += src[j];
+        }
+        const real = own
+          .split(";")
+          .map((d) => d.trim())
+          .some((d) => /^[a-zA-Z-]+\s*:/.test(d) && !d.startsWith("--"));
+        // The selector list, split on top-level commas only: `:is(.a, .b)` is one selector.
+        const parts: string[] = [];
+        let level = 0;
+        let from = 0;
+        for (let k = 0; k < prelude.length; k++) {
+          if (prelude[k] === "(") level++;
+          else if (prelude[k] === ")") level--;
+          else if (prelude[k] === "," && !level) {
+            parts.push(prelude.slice(from, k));
+            from = k + 1;
+          }
+        }
+        parts.push(prelude.slice(from));
+        let at = start;
+        for (const part of parts) {
+          const sel = part.trim();
+          const m = /^\.(-?[_a-zA-Z][\w-]*)$/.exec(sel);
+          const where = at + part.indexOf(sel);
+          at += part.length + 1;
+          if (!real || !m || !owned.has(m[1]) || found.has(m[1])) continue;
+          found.set(m[1], {
+            ...pos(where),
+            severity: "warning",
+            rule: "class-collision",
+            message: `Class ".${m[1]}" is also an aequitas component; rename it or style the component instead.`,
+          });
+        }
+      }
+      stack.push(!isAt);
+      start = i + 1;
+    }
+  }
+  return [...found.values()].sort((a, b) => a.line - b.line || a.col - b.col);
+}
+
 /** Where a stylesheet matches data-* attributes, for --css: `.brand[data-size="l"]` makes
  *  data-size="l" valid on .brand. Approximate like classesIn: only bare `[attr]` and exact
  *  `[attr="value"]` count, matches inside :not() and friends don't, and nested `&` compounds are
@@ -538,13 +630,17 @@ function cli(argv: string[]): number {
   const allow: string[] = [];
   const attrs: Record<string, Anchor[]> = {};
   const targets: string[] = [];
+  const results: { file: string; problems: Problem[] }[] = [];
   let json = false;
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--json") json = true;
     else if (a === "--allow") allow.push(...argv[++i].split(","));
     else if (a === "--css") {
-      const css = readFileSync(argv[++i], "utf8");
+      const file = argv[++i];
+      const css = readFileSync(file, "utf8");
+      const collisions = collisionsIn(css, loadManifest().classes);
+      if (collisions.length) results.push({ file, problems: collisions });
       allow.push(...classesIn(css));
       for (const [name, anchors] of Object.entries(attrsIn(css)))
         (attrs[name] ??= []).push(...anchors);
@@ -558,7 +654,6 @@ function cli(argv: string[]): number {
   }
   if (!targets.length) return (cli(["--help"]), 2);
 
-  const results: { file: string; problems: Problem[] }[] = [];
   for (const target of targets) {
     for (const file of target === "-" ? ["-"] : files(target)) {
       const source = readFileSync(file === "-" ? 0 : file, "utf8");

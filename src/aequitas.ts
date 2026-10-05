@@ -259,10 +259,32 @@ const fill = (r: HTMLInputElement) => {
   if (out) out.textContent = r.value;
 };
 
+/** Range pair: the two ranges never cross, and the pair's --from and --to follow them. The thumb
+ *  moved last sits on top (data-top); at a shared value, the one that can still move away does. */
+const pair = (box: Element, moved?: HTMLInputElement) => {
+  const [a, b] = q<HTMLInputElement>(':scope > input[type="range"]', box);
+  if (!a || !b) return;
+  if (Number(a.value) > Number(b.value)) {
+    if (moved === b) b.value = a.value;
+    else a.value = b.value;
+  }
+  const at = (r: HTMLInputElement) => {
+    const min = Number(r.min || 0);
+    const max = Number(r.max || 100);
+    return ((Number(r.value) - min) / (max - min)) * 100;
+  };
+  (box as HTMLElement).style.setProperty("--from", `${at(a)}%`);
+  (box as HTMLElement).style.setProperty("--to", `${at(b)}%`);
+  const top = a.value === b.value ? (at(a) > 50 ? a : b) : (moved ?? b);
+  a.toggleAttribute("data-top", top === a);
+  b.toggleAttribute("data-top", top === b);
+};
+
 /** Form helpers: range fill, number stepper buttons, tag input, OTP auto-advance, pressed toggles. */
 function forms(root: Root): void {
   root.addEventListener("input", (e) => {
     const t = e.target as HTMLInputElement;
+    if (t.matches('.range-pair > input[type="range"]')) pair(t.parentElement!, t);
     if (t.matches('input[type="range"]')) fill(t);
     if (t.matches(".otp > input") && t.value) sibInput(t, "next")?.focus();
   });
@@ -376,6 +398,45 @@ function selection(root: Root): void {
     for (const b of rowBoxes(table)) b.checked = false;
     syncSelection(table);
   });
+}
+
+const carriesFiles = (e: Event) =>
+  Array.from((e as DragEvent).dataTransfer?.types ?? []).includes("Files");
+
+/** Page dropzone: .dropzone[data-page] gets data-active while files are dragged anywhere over the
+ *  page. While one exists the page is the target: dragover and drop are cancelled (except on a
+ *  file input, which takes its own drop), so the browser never opens the file; read it from
+ *  `event.dataTransfer.files` in your own drop listener. */
+function pageDrop(root: Root): void {
+  // dragenter and dragleave pair up across every element crossed; at zero the drag has left.
+  let depth = 0;
+  const zones = () => q<HTMLElement>(".dropzone[data-page]");
+  const show = (on: boolean) => {
+    for (const z of zones()) z.toggleAttribute("data-active", on);
+  };
+  const own = (e: Event) =>
+    carriesFiles(e) && zones().length > 0 && !(e.target as Element).closest?.('input[type="file"]');
+  root.addEventListener("dragenter", (e) => {
+    if (!carriesFiles(e)) return;
+    depth++;
+    show(true);
+  });
+  root.addEventListener("dragleave", (e) => {
+    if (!carriesFiles(e)) return;
+    depth = Math.max(0, depth - 1);
+    if (!depth) show(false);
+  });
+  root.addEventListener("dragover", (e) => {
+    if (!own(e)) return;
+    e.preventDefault();
+    (e as DragEvent).dataTransfer!.dropEffect = "copy";
+  });
+  for (const type of ["drop", "dragend"])
+    root.addEventListener(type, (e) => {
+      depth = 0;
+      show(false);
+      if (type === "drop" && own(e)) e.preventDefault();
+    });
 }
 
 /** Dropzone: data-active while files are dragged over it. */
@@ -726,6 +787,7 @@ export function bind(root: Root = document): void {
   password(root);
   selection(root);
   dropzone(root);
+  pageDrop(root);
   invokers(root);
   copy(root);
   tips(root);
@@ -739,6 +801,7 @@ export function enhance(root: Root = document): void {
   toc(root);
   describeTips(root);
   themeSync(root);
+  for (const p of q(".range-pair", root)) pair(p);
   for (const r of q<HTMLInputElement>('input[type="range"]', root)) fill(r);
   for (const t of q(".table", root))
     if (t.querySelector('tbody input[type="checkbox"]')) syncSelection(t);

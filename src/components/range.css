@@ -1,12 +1,20 @@
 @layer ae.components {
-  /* Set --value (e.g. 40%) to fill the track up to the thumb. */
-  input[type="range"] {
-    --value: 0%;
+  /* Shared by a range and a pair of them, so the pair's track lines up with its inputs' thumbs. */
+  :is(input[type="range"], .range-pair) {
     /* The fill grows from the inline start. */
     --_fill: 90deg;
     /* Even pixels, so the thumb's offset onto the track is a whole pixel. */
     --_track: round(var(--ae-space-2), 2px);
     --_thumb: round(var(--ae-space-5), 2px);
+
+    &:dir(rtl) {
+      --_fill: 270deg;
+    }
+  }
+
+  /* Set --value (e.g. 40%) to fill the track up to the thumb. */
+  input[type="range"] {
+    --value: 0%;
     /* The thumb marks the chosen value, so it rests on the rung every "on" state uses and steps
        one rung deeper under the pointer. */
     --_tint: var(--ae-tint-hover);
@@ -42,10 +50,6 @@
         var(--ae-tone) var(--value),
         var(--ae-fill-hover) 0
       );
-    }
-
-    &:dir(rtl) {
-      --_fill: 270deg;
     }
 
     /* The thumb is the one part of a control that floats, so it is glass: the frost of menus and
@@ -114,6 +118,74 @@
     &:disabled {
       opacity: 0.4;
       cursor: not-allowed;
+    }
+  }
+
+  /* Two native ranges over one track, for a span: <div class="range-pair"><input type="range">
+     <input type="range"></div>. The pair draws the track and fills it from --from to --to; each
+     input keeps its own thumb, keyboard and value. aequitas.js sets both and keeps them apart. */
+  .range-pair {
+    --from: 0%;
+    --to: 100%;
+    display: grid;
+    align-items: center;
+    inline-size: 100%;
+
+    /* As on one range, the fill stops at its value of the whole track, so it reaches into each
+       glass thumb exactly as far as that thumb's value. */
+    &::before {
+      content: "";
+      grid-area: 1 / 1;
+      block-size: var(--_track);
+      border-radius: var(--ae-radius-full);
+      background: linear-gradient(
+        var(--_fill),
+        var(--ae-fill-hover) var(--from),
+        var(--ae-tone) 0 var(--to),
+        var(--ae-fill-hover) 0
+      );
+    }
+
+    /* Both inputs share the cell; only the thumbs take the pointer, so either can be grabbed.
+       They are the whole target then, so never smaller than --ae-target, whatever the density. */
+    & > input[type="range"] {
+      --_thumb: max(round(var(--ae-space-5), 2px), var(--ae-target));
+      grid-area: 1 / 1;
+      pointer-events: none;
+
+      &::-webkit-slider-runnable-track {
+        background: none;
+      }
+
+      &::-moz-range-track {
+        background: none;
+      }
+
+      &::-webkit-slider-thumb {
+        pointer-events: auto;
+      }
+
+      &::-moz-range-thumb {
+        pointer-events: auto;
+      }
+
+      /* The thumb last touched sits on top, so two thumbs at one value can still be told apart and
+         grabbed: aequitas.js marks it. */
+      &[data-top] {
+        z-index: 1;
+      }
+    }
+
+    @media (forced-colors: active) {
+      &::before {
+        forced-color-adjust: none;
+        background: linear-gradient(
+          var(--_fill),
+          GrayText var(--from),
+          Highlight 0 var(--to),
+          GrayText 0
+        );
+      }
     }
   }
 }
