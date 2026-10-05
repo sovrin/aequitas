@@ -222,8 +222,16 @@
   vertical-align: middle;
   inline-size: 1.5em;
   block-size: 1.5em;
+  /* The favicon's tile: lighter and cooler at the top, deeper at the bottom (the same offsets as
+     plugins/favicon.client.ts), but from the theme's accent, so it lightens in dark mode and the
+     glyph turns to the accent's contrast ink with it. Rounded like the banner's. */
+  border-radius: 6%;
   color: var(--ae-accent-contrast);
   background: var(--ae-accent);
+  background: linear-gradient(
+    oklch(from var(--ae-accent) calc(l + 0.11) calc(c * 0.8) calc(h - 3)),
+    oklch(from var(--ae-accent) calc(l - 0.08) c calc(h + 5))
+  );
 
   & > svg {
     inline-size: 100%;
@@ -866,14 +874,7 @@
 .brand[data-size="l"] .brand-mark {
   inline-size: 2.25rem;
   block-size: 2.25rem;
-  background: linear-gradient(
-    160deg,
-    color-mix(in oklch, var(--ae-accent), white 18%),
-    var(--ae-accent) 60%
-  );
-  box-shadow:
-    inset 0 1px 0 oklch(1 0 0 / 0.35),
-    var(--ae-shadow-s);
+  box-shadow: var(--ae-shadow-s);
 }
 
 .brand-text {
