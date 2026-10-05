@@ -1,0 +1,1100 @@
+/* Docs site — page-only styles. Unlayered, so they win over the framework: never restyle a
+   library component here, or its demos stop showing what the library does. */
+.bar {
+  block-size: var(--ae-space-3);
+  inline-size: calc(1rem * pow(var(--ae-phi), var(--n)) * 3);
+  border-radius: var(--ae-radius-full);
+  background: linear-gradient(
+    90deg,
+    var(--ae-accent),
+    color-mix(in oklch, var(--ae-accent), transparent 70%)
+  );
+}
+.scale-row {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  align-items: center;
+  gap: var(--ae-space-4);
+  font-family: var(--ae-font-mono);
+  font-size: var(--ae-text-xs);
+  color: var(--ae-text-muted);
+}
+.type-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ae-space-4);
+  line-height: var(--ae-leading-tight);
+}
+.type-row code {
+  flex: none;
+  inline-size: 4.5rem;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  color: var(--ae-text-muted);
+}
+
+/* Three columns: sidebar | article | toc */
+.docs-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ae-space-6);
+  padding: var(--ae-space-5) var(--ae-gutter) 0;
+}
+
+@media (width >= 72rem) {
+  .docs-main {
+    grid-template-columns: minmax(0, 1fr) 11rem;
+  }
+}
+
+.docs-main > article {
+  min-inline-size: 0;
+  max-inline-size: 64rem;
+  /* View transitions run on the article alone (see plugins/aequitas.client.ts); the sidebar is
+     outside it and never animates. */
+  view-transition-name: article;
+}
+
+.docs-main .section {
+  padding-block: var(--ae-space-6);
+}
+
+.docs-main .section + .section {
+  box-shadow: inset 0 1px 0 var(--ae-border);
+}
+
+.docs-main .toc {
+  display: none;
+}
+
+@media (width >= 72rem) {
+  .docs-main .toc {
+    display: block;
+    /* Built from the rendered page after mount; its column is reserved, so it only fades in. */
+    transition: opacity var(--ae-duration) var(--ae-ease);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+}
+
+.overview .card h4 {
+  margin-block-end: var(--ae-space-1);
+}
+
+/* Live previews of full-height layouts */
+.preview {
+  position: relative;
+  background: var(--ae-bg-sunken);
+  box-shadow: inset 0 0 0 1px var(--ae-border);
+  overflow: hidden;
+}
+
+.preview .shell,
+.preview .cover,
+.preview .panes {
+  min-block-size: 15rem;
+}
+
+.preview .sidebar,
+.preview .inspector,
+.preview .navbar {
+  position: static;
+  max-block-size: none;
+}
+
+.ph {
+  display: grid;
+  place-items: center;
+  min-block-size: 3rem;
+  padding: var(--ae-space-3);
+  font-family: var(--ae-font-mono);
+  font-size: var(--ae-text-xs);
+  color: var(--ae-text-muted);
+  background: color-mix(in oklch, var(--ae-accent) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--ae-accent) 30%, transparent);
+}
+
+.preview main.p-5 > .ph {
+  min-block-size: 100%;
+}
+
+/* ---- Route transitions ---- */
+
+/* Pages change in place: the old one recedes, the new one settles in where it stands. No travel,
+   no morph between page heights. The out-fade is short and the in-fade waits for half of it, so
+   the two never sit on top of each other at full strength. */
+
+/* Fallback: Vue transition when the View Transitions API is unavailable. */
+.page-enter-active {
+  transition: opacity var(--ae-duration) var(--ae-ease);
+}
+
+.page-leave-active {
+  transition: opacity var(--ae-duration-fast) var(--ae-ease);
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+
+/* The box snaps to the new page instead of interpolating its size, and neither snapshot is
+   stretched to fit it: both keep their own size, pinned to the top. */
+::view-transition-group(article) {
+  animation: none;
+}
+
+::view-transition-old(article),
+::view-transition-new(article) {
+  block-size: 100%;
+  object-fit: none;
+  object-position: top;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(article) {
+  animation: docs-vt-out var(--ae-duration-fast) var(--ae-ease) both;
+}
+
+::view-transition-new(article) {
+  animation: docs-vt-in var(--ae-duration) var(--ae-ease) calc(var(--ae-duration-fast) / 2) both;
+}
+
+/* Not during a theme switch: that animation is the framework's own reveal. */
+:root:not([data-ae-restyle])::view-transition-old(root),
+:root:not([data-ae-restyle])::view-transition-new(root) {
+  animation-duration: var(--ae-duration-fast);
+}
+
+@keyframes docs-vt-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes docs-vt-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Fixed chrome shown inside previews */
+.preview :is(.dock, .tabbar, .fab) {
+  position: absolute;
+}
+
+.preview .master-detail,
+.preview .page {
+  min-block-size: 14rem;
+}
+
+/* ---- Docs app design ---- */
+
+/* Brand: the same lockup in the sidebar, the mobile topbar and the menu drawer. */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ae-space-2);
+  font-weight: 560;
+  font-size: var(--ae-text-m);
+  color: var(--ae-text);
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  /* Inline beside text (the footer), centred on the line rather than sitting on the baseline. */
+  vertical-align: middle;
+  inline-size: 1.5em;
+  block-size: 1.5em;
+  color: var(--ae-accent-contrast);
+  background: var(--ae-accent);
+
+  & > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+}
+
+/* Tools row under the brand: search and appearance */
+.sidebar-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--ae-space-1);
+  margin-block: var(--ae-space-3) var(--ae-space-2);
+}
+
+.search-btn {
+  justify-content: start;
+  min-inline-size: 0;
+  color: var(--ae-text-muted);
+}
+
+.appearance-btn {
+  color: var(--ae-text-muted);
+}
+
+.appearance-swatch {
+  display: inline-block;
+  inline-size: 0.9em;
+  block-size: 0.9em;
+  background: var(--ae-accent);
+  box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.1);
+}
+
+.popover.appearance {
+  /* vw, not %: against the anchored area it would shrink to fit instead of flipping to the open side. */
+  inline-size: min(100vw - 2 * var(--ae-gutter), 20rem);
+  max-inline-size: none;
+}
+
+/* Layout lives on a wrapper: a display on the popover itself would override the closed state's
+   display: none and leave an invisible panel over the page, swallowing clicks. */
+.appearance-body {
+  display: grid;
+  gap: var(--ae-space-5);
+
+  & section {
+    display: grid;
+    gap: var(--ae-space-2);
+  }
+
+  /* Section heads match the sidebar's group labels. */
+  & h3 {
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+    font-size: var(--ae-text-xs);
+    font-weight: 560;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ae-text-muted);
+  }
+}
+
+.ap-value {
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ae-text);
+}
+
+/* Option tiles: a preview above a name. The whole tile is the radio. */
+.ap-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ae-space-3);
+
+  & label {
+    position: relative;
+    display: grid;
+    gap: var(--ae-space-2);
+    cursor: pointer;
+  }
+}
+
+.ap-preview {
+  position: relative;
+  display: grid;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--ae-radius-m);
+  background: var(--ae-fill);
+  box-shadow: 0 0 0 1px var(--ae-border-strong);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition:
+    outline-color var(--ae-duration-fast) var(--ae-ease),
+    box-shadow var(--ae-duration-fast) var(--ae-ease);
+
+  [data-short] & {
+    aspect-ratio: 2 / 1;
+  }
+}
+
+.ap-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ae-space-1);
+  font-size: var(--ae-text-s);
+  color: var(--ae-text-muted);
+  transition: color var(--ae-duration-fast) var(--ae-ease);
+}
+
+/* Hover tints in colour, never moves: a faint accent ring, the full ring is reserved for the choice. */
+.ap-options label:hover {
+  & .ap-preview {
+    outline-color: color-mix(in oklch, var(--ae-accent) 40%, transparent);
+  }
+
+  & .ap-name {
+    color: var(--ae-text);
+  }
+}
+
+.ap-options label:has(:checked) {
+  & .ap-preview {
+    outline-color: var(--ae-accent);
+  }
+
+  & .ap-name {
+    color: var(--ae-text);
+    font-weight: 500;
+  }
+}
+
+.ap-options label:has(:focus-visible) .ap-preview {
+  box-shadow: var(--ae-ring);
+}
+
+/* Theme: a tiny page rendered in its own scheme. */
+.theme-pane {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 28% 1fr;
+  /* The page's own tokens, resolved in the pane's scheme: light-dark() follows color-scheme. */
+  background:
+    radial-gradient(
+      90% 80% at 100% 0%,
+      color-mix(in oklch, var(--ae-accent) 30%, transparent),
+      transparent
+    ),
+    var(--ae-bg);
+
+  &[data-scheme="light"] {
+    color-scheme: light;
+  }
+
+  &[data-scheme="dark"] {
+    color-scheme: dark;
+  }
+
+  /* Auto: the dark pane covers the lower-right half. */
+  & + & {
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  }
+}
+
+.theme-pane-side {
+  background: var(--ae-bg-sunken);
+  box-shadow: inset calc(var(--ae-hairline-x) * -1) 0 var(--ae-border);
+
+  &::before {
+    content: "";
+    display: block;
+    block-size: 3px;
+    margin: 30% 22% 0;
+    background: var(--ae-accent);
+  }
+}
+
+.theme-pane-card {
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  margin-block-start: 22%;
+  margin-inline: 14% 16%;
+  padding: 12% 14%;
+  background: var(--ae-surface);
+  box-shadow: var(--ae-shadow-s);
+
+  & > span {
+    block-size: 3px;
+    background: var(--ae-text);
+    opacity: 0.75;
+  }
+
+  & > span:nth-child(2) {
+    inline-size: 70%;
+    background: var(--ae-text-muted);
+    opacity: 0.5;
+  }
+
+  & > span:last-child {
+    inline-size: 45%;
+    block-size: 5px;
+    margin-block-start: 3px;
+    background: var(--ae-accent);
+    opacity: 1;
+  }
+}
+
+/* Density: three list rows, packed by the preset. */
+.density-preview {
+  --gap: 4px;
+  align-content: center;
+  gap: var(--gap);
+  padding-inline: 20%;
+
+  &[data-value="compact"] {
+    --gap: 2px;
+  }
+
+  &[data-value="spacious"] {
+    --gap: 7px;
+  }
+
+  & > span {
+    display: grid;
+    grid-template-columns: 4px 1fr;
+    align-items: center;
+    gap: calc(var(--gap) + 2px);
+  }
+
+  & > span > span {
+    block-size: 3px;
+    background: var(--ae-text-muted);
+    opacity: 0.55;
+  }
+
+  & > span > span:first-child {
+    block-size: 4px;
+    background: var(--ae-accent);
+    opacity: 1;
+  }
+}
+
+/* Shape: a card and its button, cornered by the preset (the button goes pill once corners soften). */
+.shape-preview {
+  --r: 0;
+  --pill: 0;
+  place-items: center;
+
+  &[data-value="soft"] {
+    --r: 5px;
+    --pill: 999px;
+  }
+
+  &[data-value="round"] {
+    --r: 9px;
+    --pill: 999px;
+  }
+
+  & > span {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    inline-size: 64%;
+    block-size: 64%;
+    padding: 6% 9%;
+    border-radius: var(--r);
+    background: var(--ae-surface);
+    box-shadow: var(--ae-shadow-s);
+  }
+
+  & > span > span:first-child {
+    inline-size: 60%;
+    block-size: 3px;
+    border-radius: var(--pill);
+    background: var(--ae-text-muted);
+    opacity: 0.55;
+  }
+
+  & > span > span:last-child {
+    align-self: end;
+    inline-size: 42%;
+    block-size: 6px;
+    border-radius: var(--pill);
+    background: var(--ae-accent);
+  }
+}
+
+/* Accent: one row of swatches, each the accent as it resolves in the current scheme. */
+.ap-swatches {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: var(--ae-space-2);
+
+  & label {
+    --swatch: light-dark(
+      oklch(0.55 var(--chroma, 0.2) var(--hue)),
+      oklch(0.72 calc(var(--chroma, 0.2) * 0.75) var(--hue))
+    );
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--ae-radius-s);
+    background: var(--swatch);
+    box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.1);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    cursor: pointer;
+    transition: outline-color var(--ae-duration-fast) var(--ae-ease);
+  }
+
+  & label:hover {
+    outline-color: color-mix(in oklch, var(--swatch) 45%, transparent);
+  }
+
+  & label:has(:checked) {
+    outline-color: var(--swatch);
+  }
+
+  & label:has(:focus-visible) {
+    box-shadow: var(--ae-ring);
+  }
+}
+
+.search-btn kbd {
+  margin-inline-start: auto;
+  font-size: var(--ae-text-xs);
+}
+
+.sidebar > footer {
+  gap: var(--ae-space-2);
+}
+
+/* Page intro */
+.page-intro {
+  display: grid;
+  gap: var(--ae-space-3);
+  padding-block: var(--ae-space-6) var(--ae-space-5);
+  max-inline-size: var(--ae-measure);
+}
+
+.page-intro .display {
+  font-size: var(--ae-text-3xl);
+}
+
+/* Landing hero: text beside the golden rectangle */
+.hero-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--ae-space-6);
+  align-items: center;
+  padding-block: var(--ae-space-6) var(--ae-space-7);
+}
+
+@media (width >= 64rem) {
+  .hero-split {
+    grid-template-columns: 1fr calc(var(--ae-phi) * 1fr);
+  }
+}
+
+.hero-split .display {
+  max-inline-size: 11ch;
+}
+
+/* φ tiles: 34×21 grid, every square a live component */
+.phi {
+  display: grid;
+  grid-template-columns: repeat(34, 1fr);
+  grid-template-rows: repeat(21, 1fr);
+  gap: var(--ae-space-2);
+  aspect-ratio: var(--ae-ratio);
+  inline-size: 100%;
+}
+
+.phi .tile {
+  display: grid;
+  place-items: center;
+  container-type: inline-size;
+  overflow: hidden;
+  padding: var(--ae-space-3);
+  background: var(--ae-frost-bg);
+  box-shadow: var(--ae-shadow-s), var(--ae-frost-edge);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .phi .tile {
+    backdrop-filter: var(--ae-frost-filter);
+  }
+}
+
+.phi .tile .window {
+  box-shadow: var(--ae-shadow-m);
+}
+
+@container (inline-size < 4.5rem) {
+  .phi .tile > * {
+    display: none;
+  }
+}
+
+@container (inline-size < 12rem) {
+  .phi .tile .window,
+  .phi .tile .stat {
+    display: none;
+  }
+}
+
+/* Component page: owned selectors and the JS marker under the lede; key columns in tables */
+.entry-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ae-space-2);
+  padding-block-start: var(--ae-space-2);
+}
+
+.entry-meta > a.badge {
+  text-decoration: none;
+}
+
+.entry-key {
+  inline-size: 14rem;
+  white-space: nowrap;
+}
+
+.entry-key > small {
+  display: block;
+}
+
+.entry-values {
+  inline-size: 12rem;
+}
+
+.entry-values > code {
+  margin-inline-end: var(--ae-space-1);
+}
+
+/* On a phone each row stacks: name and values on a line, the description below. */
+@media (width < 48rem) {
+  .entry-table thead {
+    display: none;
+  }
+
+  .entry-table tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--ae-space-1) var(--ae-space-3);
+    padding-block: var(--ae-space-3);
+    box-shadow: inset 0 -1px 0 var(--ae-border);
+  }
+
+  .entry-table td {
+    padding: 0;
+    box-shadow: none;
+    inline-size: auto;
+  }
+
+  .entry-table td:last-child {
+    flex-basis: 100%;
+  }
+}
+
+/* Specimens */
+.specimen {
+  display: grid;
+  gap: 0;
+  background: var(--ae-frost-bg);
+  box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .specimen {
+    backdrop-filter: var(--ae-frost-filter);
+  }
+}
+
+.specimen > header {
+  display: flex;
+  align-items: center;
+  gap: var(--ae-space-3);
+  padding-block: var(--ae-space-2);
+  padding-inline: var(--ae-space-5) var(--ae-space-2);
+  box-shadow: inset 0 -1px 0 var(--ae-border);
+}
+
+.specimen > header h3 {
+  margin: 0;
+  font-size: var(--ae-text-s);
+  font-weight: 560;
+  letter-spacing: 0;
+  color: var(--ae-text);
+}
+
+.specimen > header .btn {
+  margin-inline-start: auto;
+}
+
+.specimen-preview {
+  display: grid;
+  gap: var(--ae-space-4);
+  padding: var(--ae-space-5);
+}
+
+.specimen-preview > * + * {
+  margin: 0;
+}
+
+.specimen-code {
+  margin: 0;
+  background: var(--ae-bg-sunken);
+  box-shadow: inset 0 1px 0 var(--ae-border);
+}
+
+.specimen-code > pre {
+  max-block-size: 32rem;
+  overflow: auto;
+}
+
+/* Highlighted code (DocsCode). Shiki's theme points at these; the hues rotate off the accent, so
+   they follow the live accent and stay a family, with lightness set per scheme to hold contrast
+   on the block's fill. */
+.docs-code {
+  --hl-keyword: var(--ae-accent);
+  --hl-attr: light-dark(
+    oklch(0.5 0.15 calc(var(--ae-hue) + 70)),
+    oklch(0.8 0.11 calc(var(--ae-hue) + 70))
+  );
+  --hl-string: light-dark(
+    oklch(0.5 0.12 calc(var(--ae-hue) + 160)),
+    oklch(0.8 0.1 calc(var(--ae-hue) + 160))
+  );
+  --hl-constant: light-dark(
+    oklch(0.5 0.13 calc(var(--ae-hue) - 90)),
+    oklch(0.8 0.1 calc(var(--ae-hue) - 90))
+  );
+  --hl-function: var(--ae-text);
+  --hl-punct: var(--ae-text-muted);
+  --hl-comment: var(--ae-text-muted);
+}
+
+.docs-code > pre {
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+/* Prev / next */
+.prevnext {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ae-space-4);
+  padding-block: var(--ae-space-7) var(--ae-space-5);
+}
+
+.prevnext .card {
+  display: grid;
+  gap: var(--ae-space-1);
+  text-decoration: none;
+  color: inherit;
+}
+
+.prevnext .card > * + * {
+  margin: 0;
+}
+
+/* Quieter section rhythm inside pages */
+.docs-main article > div > .section:first-of-type {
+  padding-block-start: var(--ae-space-4);
+}
+
+/* ---- Showcases ---- */
+.showcase-bar {
+  position: fixed;
+  inset-block-end: var(--ae-gutter);
+  inset-inline: 0;
+  z-index: 40;
+  display: flex;
+  gap: var(--ae-space-1);
+  inline-size: fit-content;
+  max-inline-size: calc(100% - 2 * var(--ae-gutter));
+  margin-inline: auto;
+  padding: var(--ae-space-1);
+  background: var(--ae-frost-bg);
+  box-shadow: var(--ae-shadow-l), var(--ae-frost-edge);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .showcase-bar {
+    backdrop-filter: var(--ae-frost-filter);
+  }
+}
+
+.showcase-bar .btn {
+  white-space: nowrap;
+}
+
+/* ---- Docs navigation ---- */
+
+/* Full-height sidebar: head, scrolling nav, pinned foot. A shade darker than the page so it reads as a column. */
+.docs-sidebar {
+  --ae-frost-bg: light-dark(
+    color-mix(in oklch, var(--ae-bg-sunken) 72%, transparent),
+    color-mix(in oklch, var(--ae-bg-sunken) 78%, transparent)
+  );
+  position: sticky;
+  inset-block-start: 0;
+  display: flex;
+  flex-direction: column;
+  block-size: 100dvh;
+  max-block-size: 100dvh;
+  padding: 0;
+  overflow: hidden;
+}
+
+.docs-sidebar-head {
+  display: grid;
+  gap: var(--ae-space-3);
+  padding: var(--ae-space-5) var(--ae-space-4) var(--ae-space-3);
+  box-shadow: inset 0 -1px 0 var(--ae-border);
+}
+
+/* The sidebar's larger lockup: mark tile, name and tagline. */
+.brand[data-size="l"] {
+  display: flex;
+  align-items: center;
+  gap: var(--ae-space-3);
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand[data-size="l"] .brand-mark {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklch, var(--ae-accent), white 18%),
+    var(--ae-accent) 60%
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 0.35),
+    var(--ae-shadow-s);
+}
+
+.brand-text {
+  display: grid;
+  line-height: 1.15;
+}
+
+.brand-text b {
+  font-size: var(--ae-text-m);
+  font-weight: 560;
+  letter-spacing: -0.01em;
+}
+
+.brand-text small {
+  font-size: var(--ae-text-xs);
+  color: var(--ae-text-muted);
+}
+
+.docs-sidebar .sidebar-tools {
+  margin: 0;
+}
+
+.docs-sidebar .docs-nav {
+  flex: 1;
+  min-block-size: 0;
+  padding: var(--ae-space-3) var(--ae-space-3) var(--ae-space-5);
+}
+
+.docs-sidebar-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--ae-space-3);
+  padding: var(--ae-space-3) var(--ae-space-4);
+  box-shadow: inset 0 1px 0 var(--ae-border);
+}
+
+.docs-sidebar-foot a {
+  margin-inline-start: auto;
+}
+
+.docs-nav {
+  display: grid;
+  gap: var(--ae-space-3);
+  align-content: start;
+}
+
+.docs-nav-section {
+  display: grid;
+  gap: 1px;
+}
+
+.docs-nav-section + .docs-nav-section {
+  padding-block-start: var(--ae-space-3);
+  box-shadow: inset 0 1px 0 var(--ae-border);
+}
+
+.docs-nav-section > h6 {
+  padding: var(--ae-space-2) var(--ae-space-3) var(--ae-space-1);
+  font-size: var(--ae-text-xs);
+  font-weight: 560;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ae-text-muted);
+}
+
+.docs-nav a {
+  display: block;
+  padding: var(--ae-space-2) var(--ae-space-3);
+  font-size: var(--ae-text-s);
+  font-weight: 500;
+  color: var(--ae-text);
+  text-decoration: none;
+}
+
+.docs-nav a:hover {
+  background: var(--ae-fill);
+}
+
+.docs-nav :is(a, summary):active {
+  background: var(--ae-fill-active);
+}
+
+.docs-nav a[aria-current="page"] {
+  color: var(--ae-accent);
+  background: color-mix(in oklch, var(--ae-accent) 14%, transparent);
+  box-shadow:
+    inset var(--ae-edge-x) 0 0 var(--ae-accent),
+    var(--ae-focus, 0 0 #0000);
+}
+
+/* Groups: a row with a count and a chevron; links indent under a hairline guide */
+.docs-nav details {
+  display: block;
+}
+
+.docs-nav summary {
+  display: flex;
+  align-items: center;
+  gap: var(--ae-space-2);
+  padding: var(--ae-space-2) var(--ae-space-3);
+  font-size: var(--ae-text-s);
+  font-weight: 500;
+  color: var(--ae-text);
+  list-style: none;
+  cursor: pointer;
+  /* The framework's control timing: instant press, quick hover, unhurried release. */
+  transition: background-color var(--ae-duration) var(--ae-ease);
+}
+
+.docs-nav summary:hover {
+  background: var(--ae-fill);
+  transition-duration: var(--ae-duration-fast);
+}
+
+.docs-nav summary:active {
+  transition-duration: 0s;
+}
+
+.docs-nav summary::-webkit-details-marker {
+  display: none;
+}
+
+.docs-nav summary > .icon {
+  color: var(--ae-text-muted);
+  font-size: 1.05em;
+}
+
+.docs-nav details[open] > summary > .icon {
+  color: var(--ae-accent);
+}
+
+.docs-nav summary::after {
+  content: "";
+  flex: none;
+  inline-size: 0.35em;
+  block-size: 0.35em;
+  margin-inline-start: var(--ae-space-1);
+  border-block-end: 1.5px solid var(--ae-text-muted);
+  border-inline-end: 1.5px solid var(--ae-text-muted);
+  rotate: -45deg;
+  opacity: 0.7;
+  transition: rotate var(--ae-duration) var(--ae-ease);
+}
+
+/* The chevron is drawn on the inline-end side, so RTL mirrors the turn too. */
+.docs-nav summary:dir(rtl)::after {
+  rotate: 45deg;
+}
+
+.docs-nav details[open] > summary::after {
+  rotate: 45deg;
+}
+
+.docs-nav details[open] > summary:dir(rtl)::after {
+  rotate: -45deg;
+}
+
+.docs-nav-count {
+  margin-inline-start: auto;
+  font-size: var(--ae-text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--ae-text-muted);
+}
+
+.docs-nav-group {
+  display: grid;
+  gap: 1px;
+  margin-inline-start: calc(var(--ae-space-3) + 0.5em);
+  padding-inline-start: var(--ae-space-2);
+  margin-block: var(--ae-space-1);
+  box-shadow: inset var(--ae-hairline-x) 0 0 var(--ae-border);
+}
+
+.docs-nav-group a {
+  padding-block: calc(var(--ae-space-2) * 0.8);
+  font-weight: 400;
+}
+
+/* The docs sidebar never becomes a rail; under 64rem the topbar and drawer take over. */
+.docs-sidebar {
+  container-type: normal;
+}
+
+.docs-topbar {
+  display: none;
+}
+
+@media (width < 64rem) {
+  .docs-shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "head"
+      "main";
+  }
+
+  .docs-sidebar {
+    display: none;
+  }
+
+  .docs-topbar {
+    display: flex;
+    gap: var(--ae-space-3);
+  }
+}
+
+@media (width >= 64rem) {
+  .docs-shell {
+    --header: 0px;
+  }
+}
+
+.docs-menu {
+  --ae-frost-bg: var(--ae-surface);
+  padding: var(--ae-space-4) var(--ae-space-3);
+}
+
+.docs-menu .docs-nav {
+  padding-block: 0;
+}
+
+/* The appearance panel's options are labels over invisible native inputs. */
+:is(.ap-options, .ap-swatches) input {
+  appearance: none;
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
