@@ -7,6 +7,9 @@
     /* Even pixels, so the thumb's offset onto the track is a whole pixel. */
     --_track: round(var(--ae-space-2), 2px);
     --_thumb: round(var(--ae-space-5), 2px);
+    /* The thumb marks the chosen value, so it rests on the rung every "on" state uses and steps
+       one rung deeper under the pointer. */
+    --_tint: var(--ae-tint-hover);
     appearance: none;
     inline-size: 100%;
     block-size: var(--_thumb);
@@ -14,13 +17,20 @@
     background: transparent;
     cursor: pointer;
 
+    &:hover,
+    &:active {
+      --_tint: var(--ae-tint-press);
+    }
+
+    /* The fill stops at --value of the whole track, so under the glass thumb it reaches exactly
+       the value: none of the thumb at 0%, a quarter at 25%, all of it at 100%. */
     &::-webkit-slider-runnable-track {
       block-size: var(--_track);
       border-radius: var(--ae-radius-full);
       background: linear-gradient(
         var(--_fill),
         var(--ae-tone) var(--value),
-        var(--ae-control-edge) 0
+        var(--ae-fill-hover) 0
       );
     }
 
@@ -30,7 +40,7 @@
       background: linear-gradient(
         var(--_fill),
         var(--ae-tone) var(--value),
-        var(--ae-control-edge) 0
+        var(--ae-fill-hover) 0
       );
     }
 
@@ -38,17 +48,20 @@
       --_fill: 270deg;
     }
 
+    /* The thumb is the one part of a control that floats, so it is glass: the frost of menus and
+       popovers, tinted in the tone, with the track seen through it. */
     &::-webkit-slider-thumb {
       appearance: none;
       inline-size: var(--_thumb);
       block-size: var(--_thumb);
       margin-block-start: calc((var(--_track) - var(--_thumb)) / 2);
       border-radius: var(--ae-radius-full);
-      background: var(--ae-surface);
-      box-shadow:
-        inset 0 0 0 var(--ae-stroke) var(--ae-control-edge),
-        var(--ae-shadow-s);
-      transition: box-shadow var(--ae-duration-fast) var(--ae-ease);
+      background: color-mix(in oklab, var(--ae-tone) var(--_tint), var(--ae-frost-bg));
+      backdrop-filter: blur(var(--ae-space-0)) saturate(1.8);
+      box-shadow: var(--ae-frost-edge), var(--ae-shadow-m);
+      transition:
+        background-color var(--ae-duration-fast) var(--ae-ease),
+        box-shadow var(--ae-duration-fast) var(--ae-ease);
     }
 
     &::-moz-range-thumb {
@@ -56,34 +69,45 @@
       block-size: var(--_thumb);
       border: 0;
       border-radius: var(--ae-radius-full);
-      background: var(--ae-surface);
-      box-shadow:
-        inset 0 0 0 var(--ae-stroke) var(--ae-control-edge),
-        var(--ae-shadow-s);
+      background: color-mix(in oklab, var(--ae-tone) var(--_tint), var(--ae-frost-bg));
+      backdrop-filter: blur(var(--ae-space-0)) saturate(1.8);
+      box-shadow: var(--ae-frost-edge), var(--ae-shadow-m);
+      transition:
+        background-color var(--ae-duration-fast) var(--ae-ease),
+        box-shadow var(--ae-duration-fast) var(--ae-ease);
     }
 
-    /* Held: the thumb lifts by shadow, it does not grow. */
+    /* Held: the thumb lifts by shadow, it does not grow. Press is instant, as on every control. */
     &:active::-webkit-slider-thumb {
-      box-shadow:
-        inset 0 0 0 var(--ae-stroke) var(--ae-control-edge),
-        var(--ae-shadow-m);
+      box-shadow: var(--ae-frost-edge), var(--ae-shadow-l);
+      transition-duration: 0s;
     }
 
     &:active::-moz-range-thumb {
-      box-shadow:
-        inset 0 0 0 var(--ae-stroke) var(--ae-control-edge),
-        var(--ae-shadow-m);
+      box-shadow: var(--ae-frost-edge), var(--ae-shadow-l);
+      transition-duration: 0s;
     }
 
     &:focus-visible {
       box-shadow: none;
 
       &::-webkit-slider-thumb {
-        box-shadow: var(--ae-ring);
+        box-shadow: var(--ae-frost-edge), var(--ae-shadow-m), var(--ae-ring);
       }
 
       &::-moz-range-thumb {
-        box-shadow: var(--ae-ring);
+        box-shadow: var(--ae-frost-edge), var(--ae-shadow-m), var(--ae-ring);
+      }
+    }
+
+    /* Solid glass where frost degrades (--ae-frost-bg is already the plain surface there). */
+    @media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+      &::-webkit-slider-thumb {
+        backdrop-filter: none;
+      }
+
+      &::-moz-range-thumb {
+        backdrop-filter: none;
       }
     }
 

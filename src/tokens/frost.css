@@ -1,6 +1,6 @@
 /*
- * Frost is for layers that float: navigation, menus, dialogs, cards on the canvas.
- * Controls (buttons, inputs) are flat tints. Degrades to solid surfaces without
+ * Frost is for layers that float: navigation, menus, dialogs, cards on the canvas, and the one
+ * part of a control that floats, the range thumb. Controls (buttons, inputs) are flat tints. Degrades to solid surfaces without
  * backdrop-filter, under reduced transparency, or forced colors.
  */
 @layer ae.tokens {

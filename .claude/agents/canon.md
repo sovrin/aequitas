@@ -47,7 +47,7 @@ Rules:
 
 ### 3. The design language
 
-- **Frost is for layers that float:** navbar, menus, popovers, dialogs and drawers, plus cards on the canvas. Controls (buttons, inputs, chips, segmented) are flat tints. Frost on a control, or a flat floating layer that should be frosted, is a finding.
+- **Frost is for layers that float:** navbar, menus, popovers, dialogs and drawers, plus cards on the canvas, and the range thumb, the one part of a control that floats over it. Controls (buttons, inputs, chips, segmented) are flat tints. Frost on a control, or a flat floating layer that should be frosted, is a finding.
 - **Controls answer the pointer with tone, never movement.** Hover and press step down the tint ladder (`--ae-fill` → `--ae-fill-hover` → `--ae-fill-active`). Flag any `scale`, `translate` or `transform`, and any extra colour, on `:hover`/`:active` of a control. Motion presets in `motion.css` are for entering and leaving, not for feedback.
 - **"On" is a 2px accent edge** (`--ae-edge`, logical and RTL-aware through `--ae-edge-x`). Colour never carries meaning alone, so a toned state also needs an edge, a label or an icon.
 - **Depth is shadow, never a stroke.** Floating layers get `--ae-shadow-*` plus the specular `--ae-frost-edge`, not a heavy border.

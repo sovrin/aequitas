@@ -206,12 +206,12 @@ export const selection: Entry[] = [
     slug: "range",
     title: "Range",
     group: "Selection",
-    lede: "A thin track with a square thumb; the fill follows --value, which aequitas.js keeps in sync.",
+    lede: "A thin tinted track with a square of frosted glass for a thumb; the fill follows --value, which aequitas.js keeps in sync.",
     owns: ["input[type=range]"],
     anatomy: [
       [
         "input[type=range]",
-        "The native range, no class. The track fills with the tone up to `--value`; the thumb is a square on the surface colour.",
+        "The native range, no class. The track fills with the tone up to `--value`; the thumb is a square of glass tinted in the tone, so the fill shows through it and reaches exactly as far into it as the value. It takes a deeper tint under the pointer and a deeper shadow while held.",
       ],
       [
         "[id]",
@@ -256,6 +256,7 @@ export const selection: Entry[] = [
       "The demo's output sits inside the `<label>`, so it also becomes part of the name. That is fine for a short number; move it out of the label for anything longer.",
       'Add `aria-valuetext` when the number needs a unit to make sense ("62 percent").',
       "Focus draws the ring on the thumb.",
+      "The value reads from where the tone fill ends against the track (3:1 or more); the glass thumb itself is deliberately quiet against the page.",
     ],
     related: ["number", "progress", "meter"],
     keywords: "slider",
