@@ -1,0 +1,70 @@
+@layer ae.components {
+  /* <div class="toasts"><div class="toast" role="status" data-tone="success">…</div></div> */
+  .toasts {
+    position: fixed;
+    inset-block-end: var(--ae-gutter);
+    inset-inline-end: var(--ae-gutter);
+    z-index: 30;
+    display: grid;
+    gap: var(--ae-space-3);
+    inline-size: min(100% - 2 * var(--ae-gutter), calc(1rem * pow(var(--ae-phi), 7)));
+  }
+
+  .toasts[data-position="top-end"] {
+    inset-block: var(--ae-gutter) auto;
+  }
+
+  .toasts[data-position="top-center"],
+  .toasts[data-position="bottom-center"] {
+    inset-inline: 0;
+    margin-inline: auto;
+  }
+
+  .toasts[data-position="top-center"] {
+    inset-block: var(--ae-gutter) auto;
+  }
+
+  .toasts[data-position="bottom-start"] {
+    inset-inline: var(--ae-gutter) auto;
+  }
+
+  .toast {
+    display: flex;
+    align-items: start;
+    gap: var(--ae-space-3);
+    padding: var(--ae-space-4) var(--ae-space-5);
+    font-size: var(--ae-text-s);
+    box-shadow: var(--ae-shadow-l), var(--ae-frost-edge);
+    transition:
+      opacity var(--ae-duration) var(--ae-ease),
+      translate var(--ae-duration-slow) var(--ae-ease-spring);
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 var(--ae-space-4);
+    }
+
+    & strong {
+      color: var(--ae-tone);
+    }
+
+    &[data-tone]::before {
+      content: "";
+      flex: none;
+      inline-size: var(--ae-space-2);
+      block-size: var(--ae-space-2);
+      margin-block-start: 0.45em;
+      background: var(--ae-tone);
+    }
+
+    /* Leaves towards the inline end, whichever side that is. */
+    &[data-leaving] {
+      opacity: 0;
+      translate: var(--ae-space-4) 0;
+    }
+
+    &[data-leaving]:dir(rtl) {
+      translate: calc(var(--ae-space-4) * -1) 0;
+    }
+  }
+}

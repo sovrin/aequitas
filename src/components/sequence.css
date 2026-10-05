@@ -1,0 +1,142 @@
+@layer ae.components {
+  /* <ol class="steps"><li data-done>Account</li><li aria-current="step">Plan</li><li>Billing</li></ol> */
+  .steps {
+    display: flex;
+    gap: var(--ae-space-3);
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+
+    & > li {
+      flex: 1;
+      display: grid;
+      gap: var(--ae-space-2);
+      margin: 0;
+      font-size: var(--ae-text-s);
+      color: var(--ae-text-muted);
+      counter-increment: step;
+
+      /* The track */
+      &::before {
+        content: "";
+        order: -1;
+        block-size: 2px;
+        background: var(--ae-border-strong);
+        transition: background var(--ae-duration) var(--ae-ease);
+      }
+
+      /* The number */
+      &::after {
+        content: counter(step);
+        place-items: center;
+        inline-size: var(--ae-space-5);
+        block-size: var(--ae-space-5);
+        font-size: var(--ae-text-xs);
+        font-weight: 560;
+        font-variant-numeric: tabular-nums;
+        background: var(--ae-fill);
+        order: -1;
+        display: none;
+      }
+
+      &[data-done],
+      &[aria-current="step"] {
+        &::before {
+          background: var(--ae-accent);
+        }
+      }
+
+      &[aria-current="step"] {
+        color: var(--ae-text);
+        font-weight: 500;
+      }
+    }
+
+    /* Vertical steps have no track, so they always show the numbered markers. */
+    &:is([data-numbered], [data-vertical]) > li {
+      &::after {
+        display: grid;
+      }
+
+      &[aria-current="step"]::after {
+        color: var(--ae-accent-contrast);
+        background: var(--ae-accent);
+      }
+
+      &[data-done]::after {
+        content: "✓";
+        color: var(--ae-accent);
+        background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+      }
+    }
+  }
+
+  .steps[data-vertical] {
+    flex-direction: column;
+    gap: var(--ae-space-4);
+
+    & > li {
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: var(--ae-space-3);
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+
+  /* <ol class="timeline"><li data-tone="success"><time>09:41</time><div>…</div></li></ol> */
+  .timeline {
+    display: grid;
+    gap: var(--ae-space-4);
+    padding: 0;
+    list-style: none;
+
+    & > li {
+      position: relative;
+      display: grid;
+      grid-template-columns: 4.5rem 1fr;
+      gap: var(--ae-space-4);
+      margin: 0;
+      padding-inline-start: var(--ae-space-5);
+
+      &::before {
+        content: "";
+        position: absolute;
+        inset-inline-start: 0;
+        inset-block-start: 0.55em;
+        inline-size: var(--ae-space-2);
+        block-size: var(--ae-space-2);
+        background: var(--ae-tone);
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        /* On a whole pixel, so the hairline stays crisp; exact centre on odd markers. */
+        inset-inline-start: round(down, calc((var(--ae-space-2) - 1px) / 2), 1px);
+        inset-block-start: calc(0.55em + var(--ae-space-2) + var(--ae-space-1));
+        inset-block-end: calc(var(--ae-space-4) * -1 + var(--ae-space-1) * -1);
+        inline-size: 1px;
+        background: var(--ae-border);
+      }
+
+      &:last-child::after {
+        display: none;
+      }
+
+      & > time {
+        font-size: var(--ae-text-xs);
+        color: var(--ae-text-muted);
+        font-variant-numeric: tabular-nums;
+        padding-block-start: 0.2em;
+      }
+
+      & p {
+        font-size: var(--ae-text-s);
+        color: var(--ae-text-muted);
+      }
+    }
+  }
+}

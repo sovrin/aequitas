@@ -1,0 +1,84 @@
+@layer ae.components {
+  /* Set --value (e.g. 40%) to fill the track up to the thumb. */
+  input[type="range"] {
+    --value: 0%;
+    /* The fill grows from the inline start. */
+    --_fill: 90deg;
+    /* Even pixels, so the thumb's offset onto the track is a whole pixel. */
+    --_track: round(var(--ae-space-2), 2px);
+    --_thumb: round(var(--ae-space-5), 2px);
+    appearance: none;
+    inline-size: 100%;
+    block-size: var(--_thumb);
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+
+    &::-webkit-slider-runnable-track {
+      block-size: var(--_track);
+      background: linear-gradient(
+        var(--_fill),
+        var(--ae-tone) var(--value),
+        var(--ae-fill-hover) 0
+      );
+    }
+
+    &::-moz-range-track {
+      block-size: var(--_track);
+      background: linear-gradient(
+        var(--_fill),
+        var(--ae-tone) var(--value),
+        var(--ae-fill-hover) 0
+      );
+    }
+
+    &:dir(rtl) {
+      --_fill: 270deg;
+    }
+
+    &::-webkit-slider-thumb {
+      appearance: none;
+      inline-size: var(--_thumb);
+      block-size: var(--_thumb);
+      margin-block-start: calc((var(--_track) - var(--_thumb)) / 2);
+      background: var(--ae-surface);
+      box-shadow: var(--ae-shadow-s);
+      transition: box-shadow var(--ae-duration-fast) var(--ae-ease);
+    }
+
+    &::-moz-range-thumb {
+      inline-size: var(--_thumb);
+      block-size: var(--_thumb);
+      border: 0;
+      border-radius: 0;
+      background: var(--ae-surface);
+      box-shadow: var(--ae-shadow-s);
+    }
+
+    /* Held: the thumb lifts by shadow, it does not grow. */
+    &:active::-webkit-slider-thumb {
+      box-shadow: var(--ae-shadow-m);
+    }
+
+    &:active::-moz-range-thumb {
+      box-shadow: var(--ae-shadow-m);
+    }
+
+    &:focus-visible {
+      box-shadow: none;
+
+      &::-webkit-slider-thumb {
+        box-shadow: var(--ae-ring);
+      }
+
+      &::-moz-range-thumb {
+        box-shadow: var(--ae-ring);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}

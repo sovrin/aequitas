@@ -1,0 +1,76 @@
+@layer ae.components {
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ae-space-2);
+    padding: 0;
+    list-style: none;
+    font-size: var(--ae-text-s);
+    color: var(--ae-text-muted);
+
+    & li {
+      display: flex;
+      align-items: center;
+      gap: var(--ae-space-2);
+    }
+
+    & li + li::before {
+      content: "/";
+      opacity: 0.45;
+    }
+
+    & a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover {
+        color: var(--ae-text);
+      }
+    }
+
+    & [aria-current="page"] {
+      color: var(--ae-text);
+    }
+  }
+
+  .pagination {
+    display: inline-flex;
+    gap: var(--ae-space-1);
+
+    & > :is(a, button) {
+      display: grid;
+      place-items: center;
+      min-inline-size: var(--ae-space-6);
+      padding: var(--ae-space-2);
+      font: inherit;
+      font-size: var(--ae-text-s);
+      font-variant-numeric: tabular-nums;
+      color: var(--ae-text-muted);
+      text-decoration: none;
+      background: none;
+      border: 0;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--ae-text);
+        background: var(--ae-fill);
+      }
+
+      &:active {
+        background: var(--ae-fill-active);
+      }
+
+      &[aria-current="page"] {
+        color: var(--ae-tone-contrast);
+        background: var(--ae-tone);
+      }
+
+      &:disabled,
+      &[aria-disabled="true"] {
+        opacity: 0.4;
+        pointer-events: none;
+      }
+    }
+  }
+}

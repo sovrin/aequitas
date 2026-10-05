@@ -1,0 +1,91 @@
+@layer ae.components {
+  /* Inset grouped list. Rows may be <a>, <button> or plain <div>. */
+  .list {
+    display: grid;
+    box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
+
+    & > * {
+      display: flex;
+      align-items: center;
+      gap: var(--ae-space-3);
+      padding: var(--ae-space-3) var(--ae-space-4);
+      font: inherit;
+      text-align: start;
+      color: inherit;
+      text-decoration: none;
+      background: none;
+      border: 0;
+    }
+
+    & > * + * {
+      box-shadow:
+        inset 0 1px 0 var(--ae-border),
+        var(--ae-focus, 0 0 #0000);
+    }
+
+    /* Current row (master-detail): accent ink and tint, and the accent edge on its inline start,
+       as in the sidebar and tree. */
+    & > [aria-current]:not([aria-current="false"]) {
+      color: var(--ae-accent);
+      background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+      box-shadow:
+        inset var(--ae-edge-x) 0 0 var(--ae-accent),
+        var(--ae-focus, 0 0 #0000);
+    }
+
+    & > * + [aria-current]:not([aria-current="false"]) {
+      box-shadow:
+        inset var(--ae-edge-x) 0 0 var(--ae-accent),
+        inset 0 1px 0 var(--ae-border),
+        var(--ae-focus, 0 0 #0000);
+    }
+
+    /* Group header: <h6>Today</h6> between rows; sticks while its group scrolls. */
+    & > h6 {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 1;
+      padding-block: var(--ae-space-2);
+      background: var(--ae-frost-bg);
+      box-shadow: inset 0 -1px 0 var(--ae-border);
+
+      @supports (backdrop-filter: blur(1px)) {
+        backdrop-filter: var(--ae-frost-filter);
+      }
+    }
+
+    & > :is(a, button) {
+      cursor: pointer;
+
+      &:hover {
+        background: var(--ae-fill);
+      }
+
+      &:active {
+        background: var(--ae-fill-active);
+      }
+
+      &:disabled,
+      &[aria-disabled="true"] {
+        opacity: 0.4;
+        pointer-events: none;
+      }
+
+      &::after {
+        content: "";
+        margin-inline-start: auto;
+        inline-size: round(0.5em, 1px);
+        block-size: round(0.5em, 1px);
+        flex: none;
+        border-block-start: 1.5px solid var(--ae-text-muted);
+        border-inline-end: 1.5px solid var(--ae-text-muted);
+        rotate: 45deg;
+        opacity: 0.6;
+      }
+
+      &:dir(rtl)::after {
+        rotate: -45deg;
+      }
+    }
+  }
+}

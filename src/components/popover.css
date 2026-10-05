@@ -1,0 +1,105 @@
+@layer ae.components {
+  /* <button class="btn" popovertarget="p">…</button><div class="popover" popover id="p">…</div> */
+  .popover {
+    --ae-frost-bg: var(--ae-frost-bg-thick);
+    margin: 0;
+    padding: var(--ae-space-4) var(--ae-space-5);
+    inline-size: max-content;
+    max-inline-size: min(100% - 2 * var(--ae-gutter), calc(1rem * pow(var(--ae-phi), 7)));
+    color: inherit;
+    box-shadow: var(--ae-shadow-l), var(--ae-frost-edge);
+
+    @supports (position-area: block-end) {
+      position-area: block-end span-inline-end;
+      position-try-fallbacks: flip-block, flip-inline;
+      margin-block: var(--ae-space-2);
+    }
+
+    opacity: 0;
+    scale: 0.97;
+    transition:
+      opacity var(--ae-duration-fast) var(--ae-ease),
+      scale var(--ae-duration) var(--ae-ease-spring),
+      overlay var(--ae-duration) allow-discrete,
+      display var(--ae-duration) allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      scale: 1;
+
+      @starting-style {
+        opacity: 0;
+        scale: 0.97;
+      }
+    }
+  }
+
+  /* Count badge on anything: <button class="btn" data-count="3">Inbox</button> */
+  [data-count] {
+    position: relative;
+
+    &::after {
+      content: attr(data-count);
+      position: absolute;
+      inset-block-start: calc(var(--ae-space-2) * -1);
+      inset-inline-end: calc(var(--ae-space-2) * -1);
+      display: grid;
+      place-items: center;
+      min-inline-size: 1.25rem;
+      block-size: 1.25rem;
+      padding-inline: 0.3em;
+      font-size: var(--ae-text-xs);
+      font-weight: 560;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      color: var(--ae-danger-contrast);
+      background: var(--ae-danger);
+      box-shadow: 0 0 0 2px var(--ae-bg);
+      pointer-events: none;
+    }
+  }
+
+  /* Sticky footer actions for long forms. */
+  .action-bar {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: var(--ae-space-3);
+    padding: var(--ae-space-3) var(--ae-space-5);
+    box-shadow: 0 -1px 0 var(--ae-border);
+  }
+
+  .footer {
+    padding-block: var(--ae-space-7);
+    font-size: var(--ae-text-s);
+    color: var(--ae-text-muted);
+    box-shadow: inset 0 1px 0 var(--ae-border);
+
+    & h6 {
+      margin-block-end: var(--ae-space-2);
+    }
+
+    & ul {
+      display: grid;
+      gap: var(--ae-space-2);
+      padding: 0;
+      list-style: none;
+    }
+
+    & li {
+      margin: 0;
+    }
+
+    & a {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover {
+        color: var(--ae-text);
+      }
+    }
+  }
+}

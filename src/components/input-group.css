@@ -1,0 +1,31 @@
+@layer ae.components {
+  /* <div class="input-group"><span>https://</span><input class="input"><span>.com</span></div> */
+  .input-group {
+    display: flex;
+    background: var(--ae-fill);
+    transition: box-shadow var(--ae-duration) var(--ae-ease);
+
+    & > .input {
+      flex: 1;
+      min-inline-size: 0;
+      background: none;
+
+      &:focus-visible {
+        box-shadow: none;
+      }
+    }
+
+    & > :not(.input) {
+      display: grid;
+      place-items: center;
+      padding-inline: var(--ae-space-3);
+      font-size: var(--ae-text-s);
+      color: var(--ae-text-muted);
+      white-space: nowrap;
+    }
+
+    &:focus-within {
+      box-shadow: var(--ae-ring-field);
+    }
+  }
+}

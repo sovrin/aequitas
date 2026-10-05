@@ -1,0 +1,227 @@
+@layer ae.components {
+  /* <dialog class="drawer" data-side="end">…</dialog>. Slides in from the chosen side. */
+  dialog.drawer {
+    /* Off-screen is past the inline end (start for data-side="start"), whichever way text runs. */
+    --_out: 100%;
+    position: fixed;
+    inset-block: 0;
+    inset-inline: auto 0;
+    margin: 0;
+    inline-size: min(100%, calc(1rem * pow(var(--ae-phi), 7)));
+    block-size: 100dvh;
+    max-block-size: none;
+    padding: var(--ae-space-6) var(--ae-space-5);
+    scale: 1;
+    translate: var(--_out) 0;
+
+    &:dir(rtl) {
+      --_out: -100%;
+    }
+
+    &[open] {
+      translate: 0;
+
+      @starting-style {
+        scale: 1;
+        translate: var(--_out) 0;
+      }
+    }
+
+    &[data-side="start"] {
+      --_out: -100%;
+      inset-inline: 0 auto;
+
+      &:dir(rtl) {
+        --_out: 100%;
+      }
+    }
+
+    &[data-side="bottom"] {
+      inset-block: auto 0;
+      inset-inline: 0;
+      inline-size: 100%;
+      block-size: auto;
+      max-block-size: 85dvh;
+      translate: 0 100%;
+
+      &[open] {
+        translate: 0;
+
+        @starting-style {
+          translate: 0 100%;
+        }
+      }
+    }
+  }
+
+  /*
+   * <dialog class="palette">
+   *   <i class="icon" data-icon="search"></i> <input class="input" placeholder="Search…">
+   *   <div role="listbox">…</div> <footer>…</footer>
+   * </dialog>
+   */
+  dialog.palette {
+    /* One start line for the search text, every row and the footer. */
+    --_inset: calc(var(--ae-space-2) + var(--ae-space-4));
+    inline-size: min(100% - 2 * var(--ae-gutter), calc(1rem * pow(var(--ae-phi), 8)));
+    margin-block-start: 12dvh;
+    padding: 0;
+    overflow: hidden;
+
+    /* Summoned dozens of times a day, so quicker than a dialog: it grows from its top edge
+       instead of rising into place. */
+    transform-origin: 50% 0;
+    translate: 0;
+    scale: 0.98;
+    transition-duration: var(--ae-duration-fast);
+
+    &[open] {
+      scale: 1;
+
+      @starting-style {
+        translate: 0;
+        scale: 0.98;
+      }
+    }
+
+    & > .input {
+      padding: var(--ae-space-4) var(--_inset);
+      font-size: var(--ae-text-l);
+      background: none;
+      box-shadow: inset 0 -1px 0 var(--ae-border);
+
+      &:focus-visible {
+        box-shadow: inset 0 -1px 0 var(--ae-border);
+      }
+    }
+
+    /* Optional glyph before the input: muted until there is something to search for. Sized like
+       the option icons, so glyphs and text each make one column down the palette. */
+    & > .icon:first-child {
+      position: absolute;
+      inset-block-start: var(--ae-space-4);
+      inset-inline-start: var(--_inset);
+      block-size: calc(var(--ae-text-l) * var(--ae-leading-normal));
+      font-size: var(--ae-text-m);
+      color: var(--ae-text-muted);
+      pointer-events: none;
+      transition: color var(--ae-duration-fast) var(--ae-ease);
+
+      & + .input {
+        padding-inline-start: calc(var(--_inset) + var(--ae-text-m) + var(--ae-space-3));
+      }
+    }
+
+    &:has(> .input:not(:placeholder-shown)) > .icon:first-child {
+      color: var(--ae-text);
+    }
+
+    & [role="listbox"] {
+      display: grid;
+      gap: 1px;
+      max-block-size: 50dvh;
+      padding: var(--ae-space-2);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+
+      /* Nothing left to show: no empty band above the empty state. */
+      &:not(:has(> :not([hidden]))) {
+        display: none;
+      }
+    }
+
+    & [role="option"] {
+      display: flex;
+      align-items: center;
+      gap: var(--ae-space-3);
+      padding: var(--ae-space-3) var(--ae-space-4);
+      font-size: var(--ae-text-m);
+      border-radius: var(--ae-radius-s);
+      cursor: pointer;
+
+      /* The row Enter will run takes the accent tone, as in a menu. */
+      &:hover,
+      &[aria-selected="true"] {
+        background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+      }
+
+      &[aria-selected="true"] {
+        box-shadow: inset var(--ae-edge-x) 0 0 var(--ae-accent);
+      }
+
+      /* Once there is a highlight the pointer moves it (aequitas.js), so a resting cursor must not
+         paint a second row while the arrow keys move on. */
+      [role="listbox"]:has([aria-selected="true"]) &:hover:not([aria-selected="true"]) {
+        background: none;
+      }
+
+      &:active {
+        background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-press), transparent);
+      }
+
+      & > .icon,
+      & small,
+      & kbd {
+        color: var(--ae-text-muted);
+        transition: color var(--ae-duration-fast) var(--ae-ease);
+      }
+
+      &[aria-selected="true"] > .icon,
+      &[aria-selected="true"] :is(small, kbd) {
+        color: var(--ae-text);
+      }
+
+      /* A step larger than in a menu: the palette is read at a glance, from further back. */
+      & kbd {
+        margin-inline-start: auto;
+        font-size: var(--ae-text-s);
+      }
+    }
+
+    & h6 {
+      padding: var(--ae-space-3) var(--ae-space-4) var(--ae-space-1);
+      font-size: var(--ae-text-xs);
+    }
+
+    & .empty {
+      padding-block: var(--ae-space-5);
+    }
+
+    /* Optional key legend. Hidden where there is no keyboard to press the keys on. */
+    & > footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--ae-space-1) var(--ae-space-5);
+      padding: var(--ae-space-2) var(--_inset);
+      font-size: var(--ae-text-xs);
+      color: var(--ae-text-muted);
+      box-shadow: inset 0 1px 0 var(--ae-border);
+
+      /* Keycaps a step above the fine print, so the arrows read as keys. */
+      & kbd {
+        display: inline-block;
+        min-inline-size: 1.6em;
+        margin-inline-end: var(--ae-space-1);
+        font-size: var(--ae-text-s);
+        text-align: center;
+      }
+
+      @media (hover: none) and (pointer: coarse) {
+        display: none;
+      }
+    }
+  }
+
+  /* What you typed, traced through the results (aequitas.js, via the Custom Highlight API). */
+  ::highlight(ae-match) {
+    color: var(--ae-accent);
+  }
+
+  @media (forced-colors: active) {
+    ::highlight(ae-match) {
+      color: MarkText;
+      background-color: Mark;
+    }
+  }
+}

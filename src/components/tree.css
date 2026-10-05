@@ -1,0 +1,129 @@
+@layer ae.components {
+  /* <ul class="tree"><li><details open><summary>src</summary><ul><li><a>index.ts</a></li></ul></details></li></ul> */
+  .tree {
+    &,
+    & ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    & li {
+      margin: 0;
+    }
+
+    & ul {
+      margin-inline-start: calc(var(--ae-space-2) + 0.3em);
+      padding-inline-start: var(--ae-space-3);
+      box-shadow: inset var(--ae-hairline-x) 0 0 var(--ae-border);
+    }
+
+    & :is(li > a, li > span, summary) {
+      display: flex;
+      align-items: center;
+      gap: var(--ae-space-2);
+      padding: var(--ae-space-1) var(--ae-space-2);
+      font-size: var(--ae-text-s);
+      color: var(--ae-text);
+      text-decoration: none;
+      transition: background var(--ae-duration-fast) var(--ae-ease);
+    }
+
+    & summary {
+      list-style: none;
+      cursor: pointer;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::before {
+        content: "";
+        flex: none;
+        inline-size: round(0.35em, 1px);
+        block-size: round(0.35em, 1px);
+        margin-inline: 0.1em 0.2em;
+        border-block-end: 1.5px solid var(--ae-text-muted);
+        border-inline-end: 1.5px solid var(--ae-text-muted);
+        rotate: -45deg;
+        transition: rotate var(--ae-duration) var(--ae-ease);
+      }
+    }
+
+    & details[open] > summary::before {
+      rotate: 45deg;
+    }
+
+    /* The chevron is drawn on the inline-end side, so RTL mirrors the turn too. */
+    & summary:dir(rtl)::before {
+      rotate: 45deg;
+    }
+
+    & details[open] > summary:dir(rtl)::before {
+      rotate: -45deg;
+    }
+
+    & :is(li > a, summary):hover {
+      background: var(--ae-fill);
+    }
+
+    & :is(li > a, summary):active {
+      background: var(--ae-fill-active);
+    }
+
+    & li > a[aria-current]:not([aria-current="false"]) {
+      color: var(--ae-accent);
+      background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+      box-shadow:
+        inset var(--ae-edge-x) 0 0 var(--ae-accent),
+        var(--ae-focus, 0 0 #0000);
+    }
+  }
+
+  /* <nav class="toc"><ul><li><a aria-current="true">…</a><ul>…</ul></li></ul></nav> */
+  .toc {
+    position: sticky;
+    inset-block-start: var(--ae-space-6);
+    align-self: start;
+    font-size: var(--ae-text-s);
+
+    & ul {
+      display: grid;
+      gap: 1px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    & li {
+      margin: 0;
+    }
+
+    & a {
+      display: block;
+      padding: var(--ae-space-1) var(--ae-space-3);
+      color: var(--ae-text-muted);
+      text-decoration: none;
+      box-shadow:
+        inset var(--ae-edge-x) 0 0 var(--ae-border),
+        var(--ae-focus, 0 0 #0000);
+      /* Ink only: the edge moves at once, like every state edge. */
+      transition: color var(--ae-duration) var(--ae-ease);
+
+      &:hover {
+        color: var(--ae-text);
+      }
+
+      &[aria-current]:not([aria-current="false"]) {
+        color: var(--ae-text);
+        box-shadow:
+          inset var(--ae-edge-x) 0 0 var(--ae-accent),
+          var(--ae-focus, 0 0 #0000);
+      }
+    }
+
+    & ul ul a {
+      padding-inline-start: var(--ae-space-5);
+    }
+  }
+}

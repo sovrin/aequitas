@@ -1,0 +1,345 @@
+@layer ae.components {
+  /*
+   * <div class="shell"><nav class="sidebar">…</nav><main>…</main></div>
+   *   data-rail          narrow icon sidebar
+   *   data-collapsible   full sidebar, becomes a rail under 64rem
+   *   data-header        a .navbar as first child spans the full width; set --header to its height
+   *   data-inspector     a trailing .inspector panel as third column
+   *   data-side="end"    sidebar on the trailing side
+   *   data-float         sidebar floats as an inset glass panel
+   */
+  .shell {
+    --sidebar: calc(1rem * pow(var(--ae-phi), 6)); /* ≈ 18 rem */
+    --rail: calc(1rem * pow(var(--ae-phi), 3)); /* ≈ 4.2 rem */
+    --inspector: calc(1rem * pow(var(--ae-phi), 6));
+    --header: 0px;
+    display: grid;
+    grid-template-columns: var(--sidebar) minmax(0, 1fr);
+    grid-template-areas: "side main";
+    min-block-size: 100dvh;
+
+    & > .sidebar {
+      grid-area: side;
+    }
+
+    & > :is(main, .main) {
+      grid-area: main;
+      min-inline-size: 0;
+    }
+
+    & > .navbar {
+      grid-area: head;
+    }
+
+    & > .inspector {
+      grid-area: inspect;
+    }
+
+    &[data-rail] {
+      --sidebar: var(--rail);
+    }
+
+    @media (width < 64rem) {
+      &[data-collapsible] {
+        --sidebar: var(--rail);
+      }
+    }
+
+    &[data-header] {
+      grid-template-rows: auto minmax(0, 1fr);
+      grid-template-areas:
+        "head head"
+        "side main";
+    }
+
+    &[data-inspector] {
+      grid-template-columns: var(--sidebar) minmax(0, 1fr) var(--inspector);
+      grid-template-areas: "side main inspect";
+    }
+
+    &[data-header][data-inspector] {
+      grid-template-areas:
+        "head head head"
+        "side main inspect";
+    }
+
+    &[data-side="end"] {
+      grid-template-columns: minmax(0, 1fr) var(--sidebar);
+      grid-template-areas: "main side";
+
+      &[data-header] {
+        grid-template-areas:
+          "head head"
+          "main side";
+      }
+
+      & > .sidebar {
+        box-shadow: inset var(--ae-hairline-x) 0 0 var(--ae-border);
+      }
+
+      /* With an inspector, the two side panels swap ends: inspector first, sidebar last. */
+      &[data-inspector] {
+        grid-template-columns: var(--inspector) minmax(0, 1fr) var(--sidebar);
+        grid-template-areas: "inspect main side";
+
+        & > .inspector {
+          box-shadow: inset calc(var(--ae-hairline-x) * -1) 0 0 var(--ae-border);
+        }
+      }
+
+      &[data-header][data-inspector] {
+        grid-template-areas:
+          "head head head"
+          "inspect main side";
+      }
+    }
+
+    &[data-float] {
+      gap: var(--ae-space-4);
+      padding: var(--ae-space-4);
+
+      & > .sidebar {
+        inset-block-start: calc(var(--header) + var(--ae-space-4));
+        max-block-size: calc(100dvh - var(--header) - 2 * var(--ae-space-4));
+        box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
+      }
+    }
+
+    /* Narrow: everything stacks in source order; the sidebar becomes a scrolling row. */
+    @media (width < 48rem) {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding: 0;
+    }
+  }
+
+  .sidebar,
+  .inspector {
+    position: sticky;
+    inset-block-start: var(--header, 0px);
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    max-block-size: calc(100dvh - var(--header, 0px));
+    padding: var(--ae-space-5) var(--ae-space-3);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .sidebar {
+    container-type: inline-size;
+    box-shadow: inset calc(var(--ae-hairline-x) * -1) 0 0 var(--ae-border);
+
+    & h6,
+    & details > summary {
+      padding: var(--ae-space-4) var(--ae-space-3) var(--ae-space-1);
+      font-size: var(--ae-text-xs);
+      color: var(--ae-text-muted);
+    }
+
+    /* Collapsible group: <details open><summary>Workspace</summary><a>…</a></details> */
+    & details {
+      display: contents;
+    }
+
+    & details > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 560;
+      list-style: none;
+      cursor: pointer;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::after {
+        content: "";
+        inline-size: round(0.35em, 1px);
+        block-size: round(0.35em, 1px);
+        margin-inline-end: 0.2em;
+        border-block-end: 1.5px solid currentColor;
+        border-inline-end: 1.5px solid currentColor;
+        rotate: 45deg;
+        opacity: 0.6;
+        transition: rotate var(--ae-duration) var(--ae-ease);
+      }
+    }
+
+    & details:not([open]) > summary::after {
+      rotate: -45deg;
+    }
+
+    /* The chevron is drawn on the inline-end side, so RTL mirrors the turn too. */
+    & summary:dir(rtl)::after {
+      rotate: -45deg;
+    }
+
+    & details:not([open]) > summary:dir(rtl)::after {
+      rotate: 45deg;
+    }
+
+    & a {
+      display: flex;
+      align-items: center;
+      gap: var(--ae-space-3);
+      padding: var(--ae-space-2) var(--ae-space-3);
+      font-size: var(--ae-text-s);
+      font-weight: 500;
+      color: var(--ae-text);
+      text-decoration: none;
+
+      &:hover {
+        background: var(--ae-fill);
+      }
+
+      &:active {
+        background: var(--ae-fill-active);
+      }
+
+      &[aria-current="page"] {
+        color: var(--ae-accent);
+        background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+        box-shadow:
+          inset var(--ae-edge-x) 0 0 var(--ae-accent),
+          var(--ae-focus, 0 0 #0000);
+      }
+
+      /* Optional icon slot: <a><i>◧</i><span>Pages</span></a> */
+      & > i {
+        display: grid;
+        place-items: center;
+        flex: none;
+        inline-size: 1.25em;
+        font-style: normal;
+      }
+    }
+
+    & > footer {
+      margin-block-start: auto;
+      padding-block-start: var(--ae-space-4);
+    }
+
+    /* Rail: when the sidebar itself is narrow, labels drop under icons and headings vanish. */
+    @container (inline-size < 7rem) {
+      & h6,
+      & details > summary,
+      & .segmented {
+        display: none;
+      }
+
+      & a {
+        flex-direction: column;
+        gap: 2px;
+        padding: var(--ae-space-2) var(--ae-space-1);
+        font-size: var(--ae-text-xs);
+        text-align: center;
+
+        & > i {
+          font-size: var(--ae-text-l);
+        }
+      }
+
+      &[data-labels="hidden"] a > span {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+      }
+    }
+
+    @media (width < 48rem) {
+      position: static;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--ae-space-1);
+      max-block-size: none;
+      padding: var(--ae-space-2) var(--ae-gutter);
+      overflow-x: auto;
+      scrollbar-width: none;
+      box-shadow: inset 0 -1px 0 var(--ae-border);
+
+      & h6,
+      & details > summary,
+      & .segmented,
+      & > footer {
+        display: none;
+      }
+
+      & a {
+        flex-direction: row;
+        font-size: var(--ae-text-s);
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .inspector {
+    gap: var(--ae-space-4);
+    padding-inline: var(--ae-space-5);
+    box-shadow: inset var(--ae-hairline-x) 0 0 var(--ae-border);
+
+    @media (width < 48rem) {
+      position: static;
+      max-block-size: none;
+      box-shadow: inset 0 1px 0 var(--ae-border);
+    }
+  }
+
+  .page-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--ae-space-4);
+
+    & > div > h6 {
+      margin-block-end: var(--ae-space-1);
+    }
+  }
+
+  /* <div class="toolbar"><button class="btn" data-icon>…</button><hr>…</div> */
+  .toolbar {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ae-space-1);
+    padding: var(--ae-space-1);
+    background: var(--ae-fill);
+
+    /* Bare until touched; hover, press and "on" come from .btn itself. */
+    & > .btn {
+      --_py: var(--ae-space-2);
+
+      &:not(:hover, :active, [aria-pressed="true"]) {
+        background: none;
+      }
+    }
+
+    & > hr {
+      inline-size: 1px;
+      block-size: 1.25em;
+      margin-inline: var(--ae-space-1);
+      background: var(--ae-border-strong);
+    }
+  }
+
+  .banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ae-space-3);
+    padding: var(--ae-space-2) var(--ae-gutter);
+    font-size: var(--ae-text-s);
+    font-weight: 500;
+    color: var(--ae-tone-contrast);
+    background: var(--ae-tone);
+
+    & a {
+      color: inherit;
+    }
+  }
+}

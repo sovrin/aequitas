@@ -1,0 +1,65 @@
+@layer ae.components {
+  /* <div class="tabs" role="tablist"><button role="tab" aria-selected="true">…</button></div> */
+  .tabs {
+    display: flex;
+    gap: var(--ae-space-5);
+    box-shadow: inset 0 -1px 0 var(--ae-border);
+
+    & > [role="tab"] {
+      padding: var(--ae-space-3) 0;
+      font-size: var(--ae-text-m);
+      font-weight: 500;
+      color: var(--ae-text-muted);
+      background: none;
+      border: 0;
+      cursor: pointer;
+      transition: color var(--ae-duration) var(--ae-ease);
+
+      &:hover {
+        color: var(--ae-text);
+      }
+
+      &[aria-selected="true"] {
+        color: var(--ae-text);
+      }
+    }
+
+    /* Without anchor positioning the underline sits on the selected tab and just appears. */
+    @supports not (anchor-scope: all) {
+      & > [role="tab"][aria-selected="true"] {
+        box-shadow:
+          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-accent),
+          var(--ae-focus, 0 0 #0000);
+      }
+    }
+
+    /* With it, one shared underline slides to whichever tab is selected. */
+    @supports (anchor-scope: all) {
+      position: relative;
+      anchor-scope: --ae-tab;
+
+      &::after {
+        content: "";
+        position: absolute;
+        position-anchor: --ae-tab;
+        inset: auto anchor(right) anchor(bottom) anchor(left);
+        block-size: var(--ae-edge);
+        background: var(--ae-accent);
+        pointer-events: none;
+        transition: inset var(--ae-duration) var(--ae-ease);
+      }
+
+      &:not(:has(> [aria-selected="true"]))::after {
+        display: none;
+      }
+
+      & > [role="tab"][aria-selected="true"] {
+        anchor-name: --ae-tab;
+      }
+    }
+  }
+
+  [role="tabpanel"][hidden] {
+    display: none;
+  }
+}

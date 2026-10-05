@@ -1,0 +1,91 @@
+@layer ae.components {
+  /* <div class="segmented"><label><input type="radio" name="x"><span>One</span></label>…</div> */
+  .segmented {
+    display: inline-flex;
+    padding: var(--ae-space-1);
+    gap: var(--ae-space-1);
+    border-radius: var(--ae-radius-full);
+    background: var(--ae-fill);
+
+    & label {
+      position: relative;
+      display: grid;
+      cursor: pointer;
+    }
+
+    & input {
+      appearance: none;
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      border-radius: inherit;
+      background: none;
+      border: 0;
+      box-shadow: none;
+      cursor: pointer;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    & span {
+      padding: var(--ae-space-2) var(--ae-space-4);
+      font-size: var(--ae-text-s);
+      font-weight: 500;
+      color: var(--ae-text-muted);
+      border-radius: var(--ae-radius-full);
+      transition:
+        background var(--ae-duration) var(--ae-ease),
+        color var(--ae-duration) var(--ae-ease),
+        box-shadow var(--ae-duration) var(--ae-ease);
+      pointer-events: none;
+    }
+
+    & label:has(:checked) span {
+      color: var(--ae-text);
+    }
+
+    /* Without anchor positioning the pill sits on the checked segment and just appears. */
+    @supports not (anchor-scope: all) {
+      & label:has(:checked) span {
+        background: var(--ae-surface);
+        box-shadow: var(--ae-shadow-s);
+      }
+    }
+
+    /* With it, one shared pill slides to whichever segment is checked. */
+    @supports (anchor-scope: all) {
+      position: relative;
+      anchor-scope: --ae-segment;
+
+      &::before {
+        content: "";
+        position: absolute;
+        position-anchor: --ae-segment;
+        inset: anchor(top) anchor(right) anchor(bottom) anchor(left);
+        border-radius: var(--ae-radius-full);
+        background: var(--ae-surface);
+        box-shadow: var(--ae-shadow-s);
+        transition: inset var(--ae-duration) var(--ae-ease);
+      }
+
+      &:not(:has(:checked))::before {
+        display: none;
+      }
+
+      & label:has(:checked) {
+        anchor-name: --ae-segment;
+      }
+    }
+
+    & label:has(:focus-visible) span {
+      box-shadow: var(--ae-ring);
+    }
+
+    & label:has(:disabled) {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+  }
+}

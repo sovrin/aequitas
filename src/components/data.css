@@ -1,0 +1,284 @@
+@layer ae.components {
+  /* <label class="dropzone"><input type="file"><strong>Drop files</strong> or click to browse</label> */
+  .dropzone {
+    position: relative;
+    display: grid;
+    place-items: center;
+    gap: var(--ae-space-1);
+    padding: var(--ae-space-6) var(--ae-space-5);
+    font-size: var(--ae-text-s);
+    text-align: center;
+    color: var(--ae-text-muted);
+    background: var(--ae-fill);
+    outline: 1px dashed var(--ae-border-strong);
+    outline-offset: -1px;
+    cursor: pointer;
+    transition:
+      background var(--ae-duration) var(--ae-ease),
+      outline-color var(--ae-duration) var(--ae-ease);
+
+    & > input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    & strong {
+      color: var(--ae-text);
+    }
+
+    &:hover,
+    &[data-active],
+    &:has(:focus-visible) {
+      background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+      outline-color: var(--ae-accent);
+    }
+  }
+
+  /* <figure class="code"><figcaption>build.ts <button class="btn" data-size="s">Copy</button></figcaption><pre>…</pre></figure> */
+  .code {
+    display: grid;
+    background: var(--ae-fill);
+
+    & > figcaption {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--ae-space-3);
+      margin: 0;
+      padding-block: var(--ae-space-2);
+      padding-inline: var(--ae-space-5) var(--ae-space-2);
+      font-family: var(--ae-font-mono);
+      font-size: var(--ae-text-s);
+      color: var(--ae-text-muted);
+      box-shadow: inset 0 -1px 0 var(--ae-border);
+    }
+
+    & > pre {
+      background: none;
+    }
+  }
+
+  /* <div class="number"><button aria-label="Decrease">−</button><input type="number"><button aria-label="Increase">+</button></div> */
+  .number {
+    display: inline-flex;
+    background: var(--ae-fill);
+    transition: box-shadow var(--ae-duration) var(--ae-ease);
+
+    & > input {
+      appearance: textfield;
+      inline-size: 4ch;
+      padding: var(--ae-space-2) 0;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      background: none;
+      border: 0;
+
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        appearance: none;
+      }
+
+      &:focus-visible {
+        box-shadow: none;
+      }
+    }
+
+    & > button {
+      display: grid;
+      place-items: center;
+      inline-size: var(--ae-space-6);
+      color: var(--ae-text-muted);
+      background: none;
+      border: 0;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--ae-text);
+        background: var(--ae-fill-hover);
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        pointer-events: none;
+      }
+
+      &:active {
+        background: var(--ae-fill-active);
+      }
+    }
+
+    &:focus-within {
+      box-shadow: var(--ae-ring-field);
+    }
+  }
+
+  /* Horizontal scroll-snap carousel. Native scroll markers where supported. */
+  .carousel {
+    display: flex;
+    gap: var(--ae-space-4);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+
+    & > * {
+      flex: 0 0 var(--item, min(100%, calc(1rem * pow(var(--ae-phi), 6))));
+      scroll-snap-align: start;
+    }
+
+    @supports (scroll-marker-group: after) {
+      scroll-marker-group: after;
+
+      &::scroll-marker-group {
+        display: flex;
+        justify-content: center;
+        gap: var(--ae-space-2);
+        padding-block-start: var(--ae-space-3);
+      }
+
+      & > *::scroll-marker {
+        content: "";
+        inline-size: var(--ae-space-2);
+        block-size: var(--ae-space-2);
+        background: var(--ae-border-strong);
+      }
+
+      & > *::scroll-marker:target-current {
+        background: var(--ae-accent);
+      }
+    }
+  }
+
+  /* <figure class="media"><img …><figcaption>…</figcaption></figure> — golden by default */
+  .media {
+    position: relative;
+    aspect-ratio: var(--ae-ratio);
+    overflow: hidden;
+    background: var(--ae-fill);
+
+    & > :is(img, video, div) {
+      inline-size: 100%;
+      block-size: 100%;
+      object-fit: cover;
+    }
+
+    & > figcaption {
+      position: absolute;
+      inset: auto 0 0 0;
+      margin: 0;
+      padding: var(--ae-space-6) var(--ae-space-4) var(--ae-space-3);
+      font-size: var(--ae-text-s);
+      color: oklch(0.98 0 0);
+      background: linear-gradient(transparent, oklch(0 0 0 / 0.55));
+    }
+  }
+
+  /* Token documentation. <div class="swatch" style="--swatch: var(--ae-accent)">accent</div> */
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(1rem * pow(var(--ae-phi), 4)), 1fr));
+    gap: var(--ae-space-3);
+  }
+
+  .swatch {
+    display: grid;
+    gap: var(--ae-space-2);
+    font-family: var(--ae-font-mono);
+    font-size: var(--ae-text-xs);
+    color: var(--ae-text-muted);
+
+    &::before {
+      content: "";
+      aspect-ratio: var(--ae-ratio);
+      background: var(--swatch);
+      box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.06);
+    }
+  }
+
+  /* <span class="dot" data-tone="success"></span> — status indicator */
+  .dot {
+    display: inline-block;
+    inline-size: var(--ae-space-2);
+    block-size: var(--ae-space-2);
+    vertical-align: middle;
+    background: var(--ae-tone);
+  }
+
+  .avatar[data-status] {
+    position: relative;
+    overflow: visible;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset-block-end: 0;
+      inset-inline-end: 0;
+      inline-size: round(30%, 1px);
+      block-size: round(30%, 1px);
+      box-shadow: 0 0 0 2px var(--ae-bg);
+      background: var(--ae-text-muted);
+    }
+
+    &[data-status="online"]::after {
+      background: var(--ae-success);
+    }
+    &[data-status="away"]::after {
+      background: var(--ae-warning);
+    }
+    &[data-status="busy"]::after {
+      background: var(--ae-danger);
+    }
+  }
+}
+
+@layer ae.components {
+  /* <dl class="properties"><dt>Owner</dt><dd>Ada</dd>…</dl>: key-value rows, one dd per dt. */
+  .properties {
+    display: grid;
+    grid-template-columns: minmax(max-content, 1fr) minmax(0, 2fr);
+    gap: 0;
+    font-size: var(--ae-text-s);
+
+    & > dt,
+    & > dd {
+      margin: 0;
+      padding-block: var(--ae-space-3);
+      box-shadow: inset 0 1px 0 var(--ae-border);
+    }
+
+    & > dt {
+      padding-inline-end: var(--ae-space-5);
+      color: var(--ae-text-muted);
+    }
+
+    & > dd {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--ae-space-2);
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
+    }
+
+    & > dt:first-child,
+    & > dt:first-child + dd {
+      box-shadow: none;
+    }
+
+    /* Label above value: narrow panes and inspectors. */
+    &[data-stacked] {
+      grid-template-columns: minmax(0, 1fr);
+
+      & > dt {
+        padding-block-end: 0;
+      }
+
+      & > dd {
+        padding-block-start: var(--ae-space-1);
+        box-shadow: none;
+      }
+    }
+  }
+}

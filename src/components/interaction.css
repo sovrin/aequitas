@@ -1,0 +1,41 @@
+@layer ae.components {
+  /*
+   * One interaction for every control: tone, never movement. Hover steps one rung down the tone
+   * ladder (--ae-tint-*), press lands on the deepest. Press is instant, so the click is felt
+   * before the button is released; hover answers quickly; letting go is unhurried, so even a
+   * short click leaves a visible beat of the pressed tone. Each component sets its own fills;
+   * this file only sets the timing, and is imported last so it wins over theirs.
+   */
+  :is(
+    .btn,
+    .fab,
+    .chip:has(> input),
+    .chip > button,
+    .menu :is(a, button),
+    .menubar > :is(a, button),
+    .list > :is(a, button),
+    .sidebar a,
+    .tree :is(li > a, summary),
+    .pagination > :is(a, button),
+    .calendar-grid > button,
+    .number > button,
+    .dock > :is(a, button),
+    .choice,
+    .combobox-list [role="option"],
+    dialog.palette [role="option"]
+  ) {
+    /* Fills and ink only: focus rings and state edges are drawn with box-shadow and appear at
+       once, never faded in. */
+    transition-property: background-color, color;
+    transition-duration: var(--ae-duration);
+    transition-timing-function: var(--ae-ease);
+
+    &:hover {
+      transition-duration: var(--ae-duration-fast);
+    }
+
+    &:active {
+      transition-duration: 0s;
+    }
+  }
+}

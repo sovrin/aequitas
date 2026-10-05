@@ -1,0 +1,36 @@
+@layer ae.components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ae-space-2);
+    padding: var(--ae-space-1) calc(var(--ae-space-1) * var(--ae-phi) * var(--ae-phi));
+    font-size: var(--ae-text-xs);
+    font-weight: 500;
+    line-height: var(--ae-phi);
+    color: color-mix(in oklch, var(--ae-tone) 80%, var(--ae-text));
+    background: color-mix(in oklch, var(--ae-tone) 14%, transparent);
+    border-radius: var(--ae-radius-full);
+
+    &[data-variant="solid"] {
+      color: var(--ae-tone-contrast);
+      background: var(--ae-tone);
+    }
+
+    &[data-variant="outline"] {
+      background: none;
+      box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--ae-tone) 40%, transparent);
+    }
+
+    &[data-dot]::before {
+      content: "";
+      inline-size: round(0.45em, 1px);
+      block-size: round(0.45em, 1px);
+      background: var(--ae-tone);
+    }
+
+    &[data-size="l"] {
+      padding: var(--ae-space-2) var(--ae-space-3);
+      font-size: var(--ae-text-s);
+    }
+  }
+}

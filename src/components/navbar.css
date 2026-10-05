@@ -1,0 +1,38 @@
+@layer ae.components {
+  /* A toolbar: full-bleed material with one hairline below. Content aligns to the container. */
+  .navbar {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: var(--ae-space-5);
+    padding-block: var(--ae-space-3);
+    padding-inline: max(var(--ae-gutter), (100% - var(--ae-container)) / 2);
+    box-shadow: 0 1px 0 var(--ae-border);
+    backdrop-filter: var(--ae-frost-filter-l);
+
+    & a {
+      color: var(--ae-text-muted);
+      text-decoration: none;
+      font-size: var(--ae-text-s);
+      font-weight: 500;
+      text-decoration-line: underline;
+      text-decoration-thickness: var(--ae-edge);
+      text-decoration-color: transparent;
+      text-underline-offset: 0.6em;
+      transition:
+        color var(--ae-duration) var(--ae-ease),
+        text-decoration-color var(--ae-duration) var(--ae-ease);
+
+      &:hover,
+      &[aria-current="page"] {
+        color: var(--ae-text);
+      }
+
+      &[aria-current="page"] {
+        text-decoration-color: var(--ae-accent);
+      }
+    }
+  }
+}

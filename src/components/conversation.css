@@ -1,0 +1,108 @@
+@layer ae.components {
+  /* <div class="thread"><div class="bubble">…</div><div class="bubble" data-self>…</div></div> */
+  .thread {
+    display: grid;
+    gap: var(--ae-space-2);
+  }
+
+  .bubble {
+    justify-self: start;
+    max-inline-size: min(100%, var(--ae-measure));
+    padding: var(--ae-space-3) var(--ae-space-4);
+    background: var(--ae-fill);
+    text-wrap: pretty;
+
+    & > time,
+    & > small {
+      display: block;
+      margin-block-start: var(--ae-space-1);
+      font-size: var(--ae-text-xs);
+      color: var(--ae-text-muted);
+    }
+
+    &[data-self] {
+      justify-self: end;
+      color: var(--ae-tone-contrast);
+      background: var(--ae-tone);
+
+      & > time,
+      & > small {
+        color: color-mix(in oklch, var(--ae-tone-contrast) 75%, transparent);
+      }
+    }
+
+    & + .bubble {
+      margin-block-start: calc(var(--ae-space-1) * -1);
+    }
+
+    &[data-self] + .bubble:not([data-self]),
+    &:not([data-self]) + .bubble[data-self] {
+      margin-block-start: var(--ae-space-2);
+    }
+  }
+
+  /* <article class="comment"><span class="avatar">AL</span><div><header><b>Ada</b><time>2h</time></header><p>…</p><footer>…</footer></div></article> */
+  .comment {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--ae-space-3);
+
+    & > div {
+      display: grid;
+      gap: var(--ae-space-1);
+      min-inline-size: 0;
+    }
+
+    & header {
+      display: flex;
+      align-items: baseline;
+      gap: var(--ae-space-2);
+      font-size: var(--ae-text-s);
+
+      & time {
+        color: var(--ae-text-muted);
+        font-size: var(--ae-text-xs);
+      }
+    }
+
+    & footer {
+      display: flex;
+      gap: var(--ae-space-3);
+      font-size: var(--ae-text-xs);
+      color: var(--ae-text-muted);
+
+      & button {
+        padding: 0;
+        font: inherit;
+        color: inherit;
+        background: none;
+        border: 0;
+        cursor: pointer;
+
+        &:hover {
+          color: var(--ae-text);
+        }
+      }
+    }
+
+    /* Replies */
+    & .comment {
+      margin-block-start: var(--ae-space-3);
+      padding-inline-start: var(--ae-space-3);
+      box-shadow: inset var(--ae-hairline-x) 0 0 var(--ae-border);
+    }
+  }
+
+  /* Composer: <form class="composer"><textarea class="input"></textarea><button class="btn" data-variant="primary" data-icon>↑</button></form> */
+  .composer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: var(--ae-space-2);
+
+    & > .input {
+      min-block-size: 0;
+      max-block-size: 8lh;
+    }
+  }
+}

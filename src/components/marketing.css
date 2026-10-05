@@ -1,0 +1,221 @@
+@layer ae.components {
+  /* <section class="hero"><h6>Eyebrow</h6><h1>…</h1><p>…</p><div class="cluster">…</div></section> */
+  .hero {
+    display: grid;
+    gap: var(--ae-space-5);
+    padding-block: var(--ae-space-8) var(--ae-space-7);
+
+    & > h1 {
+      max-inline-size: 14ch;
+    }
+
+    & > p {
+      max-inline-size: var(--ae-measure);
+      font-size: var(--ae-text-l);
+      color: var(--ae-text-muted);
+    }
+
+    &[data-center] {
+      justify-items: center;
+      text-align: center;
+    }
+  }
+
+  /* <div class="stats"><div class="stat">…</div>…</div> */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(calc(1rem * pow(var(--ae-phi), 5)), 1fr));
+    gap: var(--ae-space-5);
+
+    @media (width >= 48rem) {
+      & > * + * {
+        padding-inline-start: var(--ae-space-5);
+        box-shadow: inset var(--ae-hairline-x) 0 0 var(--ae-border);
+      }
+    }
+  }
+
+  /* <div class="pricing"><div class="card" data-featured><h4>Pro</h4><p class="price">€12<small>/mo</small></p><ul>…</ul><button class="btn">…</button></div></div> */
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(calc(1rem * pow(var(--ae-phi), 6)), 100%), 1fr)
+    );
+    gap: var(--ae-space-4);
+    align-items: start;
+
+    & > .card {
+      display: grid;
+      gap: var(--ae-space-4);
+
+      & > * + * {
+        margin-block-start: 0;
+      }
+
+      & ul {
+        display: grid;
+        gap: var(--ae-space-2);
+        padding: 0;
+        list-style: none;
+        font-size: var(--ae-text-s);
+
+        & li {
+          margin: 0;
+          padding-inline-start: 1.4em;
+          text-indent: -1.4em;
+
+          &::before {
+            content: "✓";
+            display: inline-block;
+            inline-size: 1.4em;
+            text-indent: 0;
+            color: var(--ae-accent);
+          }
+        }
+      }
+
+      &[data-featured] {
+        --ae-text-muted: color-mix(in oklch, var(--ae-tone-contrast) 72%, transparent);
+        color: var(--ae-tone-contrast);
+        background: var(--ae-tone);
+        backdrop-filter: none;
+
+        & li::before {
+          color: inherit;
+        }
+
+        & .btn {
+          color: var(--ae-tone);
+          background: var(--ae-tone-contrast);
+        }
+      }
+    }
+  }
+
+  .price {
+    font-size: var(--ae-text-3xl);
+    font-weight: 420;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+
+    & small {
+      font-size: var(--ae-text-s);
+      font-weight: 400;
+      letter-spacing: 0;
+      color: var(--ae-text-muted);
+    }
+  }
+
+  /* <div class="logos"><span>Acme</span><span>Globex</span>…</div> */
+  .logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--ae-space-5) var(--ae-space-7);
+    font-weight: 540;
+    letter-spacing: -0.01em;
+    color: var(--ae-text-muted);
+
+    & > * {
+      opacity: 0.7;
+      filter: grayscale(1);
+      transition: opacity var(--ae-duration) var(--ae-ease);
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@layer ae.components {
+  /* <div class="features"><div><i class="icon" data-icon="zap"></i><h4>Fast</h4><p>…</p></div>…</div> */
+  .features {
+    --min: calc(1rem * pow(var(--ae-phi), 6));
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--min), 100%), 1fr));
+    gap: var(--ae-space-6) var(--ae-space-5);
+
+    & > * {
+      display: grid;
+      align-content: start;
+      gap: var(--ae-space-2);
+    }
+
+    & > * > * {
+      margin: 0;
+    }
+
+    & > * > .icon:first-child {
+      margin-block-end: var(--ae-space-2);
+      font-size: 1.5em;
+      color: var(--ae-tone);
+    }
+
+    & h4 {
+      font-size: var(--ae-text-l);
+    }
+
+    & p {
+      color: var(--ae-text-muted);
+    }
+
+    &[data-center] > * {
+      justify-items: center;
+      text-align: center;
+    }
+  }
+
+  /* <figure class="testimonial"><blockquote>…</blockquote><figcaption><span class="avatar">AL</span><span><b>Ada</b> Role</span></figcaption></figure> */
+  .testimonial {
+    display: grid;
+    align-content: start;
+    gap: var(--ae-space-4);
+    margin: 0;
+
+    & > blockquote {
+      margin: 0;
+      padding: 0;
+      font-size: var(--ae-text-l);
+      color: var(--ae-text);
+      box-shadow: none;
+      quotes: "\201C" "\201D";
+
+      &::before {
+        content: open-quote;
+      }
+
+      &::after {
+        content: close-quote;
+      }
+    }
+
+    & > figcaption {
+      display: flex;
+      align-items: center;
+      gap: var(--ae-space-3);
+      font-size: var(--ae-text-s);
+      color: var(--ae-text-muted);
+
+      & b {
+        display: block;
+        font-weight: 500;
+        color: var(--ae-text);
+      }
+    }
+
+    &[data-size="l"] > blockquote {
+      font-size: var(--ae-text-2xl);
+      letter-spacing: -0.02em;
+      line-height: var(--ae-leading-tight);
+    }
+
+    &[data-center] {
+      justify-items: center;
+      text-align: center;
+    }
+  }
+}

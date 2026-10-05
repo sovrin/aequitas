@@ -1,0 +1,54 @@
+@layer ae.components {
+  .card {
+    container-type: inline-size;
+    padding: var(--ae-space-5);
+    border-radius: var(--ae-radius-l);
+    corner-shape: var(--ae-corner);
+    box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
+
+    &[data-solid] {
+      background: var(--ae-surface);
+      backdrop-filter: none;
+    }
+
+    &[data-interactive] {
+      transition: box-shadow var(--ae-duration) var(--ae-ease);
+
+      &:hover {
+        box-shadow: var(--ae-shadow-l), var(--ae-frost-edge);
+      }
+    }
+
+    & > * + * {
+      margin-block-start: var(--ae-space-3);
+    }
+
+    /* Media card: a leading image bleeds to the edges. */
+    & > :is(img, .media, .frame):first-child {
+      margin: calc(var(--ae-space-5) * -1) calc(var(--ae-space-5) * -1) 0;
+      inline-size: calc(100% + 2 * var(--ae-space-5));
+      max-inline-size: none;
+    }
+
+    & > :is(img, .media, .frame):first-child + * {
+      margin-block-start: var(--ae-space-4);
+    }
+
+    /* Fit: sizes to its content, for a card in a header, a toolbar or an auto column.
+       A size container can't take its width from its children, so a fitted card stops being one. */
+    &[data-fit] {
+      container-type: normal;
+      inline-size: fit-content;
+    }
+
+    &[data-size="s"] {
+      padding: var(--ae-space-4);
+    }
+
+    /* Flush: no padding, contents clipped to the corners, for a table or image that fills it. */
+    &[data-flush] {
+      padding: 0;
+      overflow: hidden;
+    }
+  }
+}

@@ -1,0 +1,41 @@
+@layer ae.components {
+  /* <span class="avatar">AL</span> or <span class="avatar"><img …></span> */
+  .avatar {
+    --_size: round(calc(1rem * pow(var(--ae-phi), 2)), 2px);
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    font-size: calc(var(--_size) * 0.38);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--ae-tone);
+    background: color-mix(in oklch, var(--ae-tone) 16%, transparent);
+    overflow: hidden;
+    user-select: none;
+
+    & > img {
+      inline-size: 100%;
+      block-size: 100%;
+      object-fit: cover;
+    }
+
+    &[data-size="s"] {
+      --_size: round(calc(1rem * var(--ae-phi)), 2px);
+    }
+
+    &[data-size="l"] {
+      --_size: round(calc(1rem * pow(var(--ae-phi), 3)), 2px);
+    }
+  }
+
+  .avatar-group {
+    display: flex;
+
+    & > * + * {
+      margin-inline-start: calc(var(--ae-space-2) * -1);
+      box-shadow: 0 0 0 2px var(--ae-bg);
+    }
+  }
+}

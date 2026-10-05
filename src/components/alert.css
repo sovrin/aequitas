@@ -1,0 +1,14 @@
+@layer ae.components {
+  .alert {
+    display: flex;
+    gap: var(--ae-space-4);
+    padding: var(--ae-space-4) var(--ae-space-5);
+    border-radius: var(--ae-radius-m);
+    corner-shape: var(--ae-corner);
+    background-color: color-mix(in oklch, var(--ae-tone) 10%, transparent);
+
+    & strong {
+      color: var(--ae-tone);
+    }
+  }
+}

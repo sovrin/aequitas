@@ -1,0 +1,82 @@
+@layer ae.components {
+  /* Height snaps to even pixels, so every bar renders equally tall wherever it lands. */
+  progress,
+  meter {
+    appearance: none;
+    inline-size: 100%;
+    block-size: round(var(--ae-space-2), 2px);
+    border: 0;
+    border-radius: var(--ae-radius-full);
+    background: var(--ae-border);
+    overflow: hidden;
+  }
+
+  progress::-webkit-progress-bar {
+    background: var(--ae-border);
+  }
+
+  progress::-webkit-progress-value {
+    background: var(--ae-tone);
+    border-radius: var(--ae-radius-full);
+    transition: inline-size var(--ae-duration-slow) var(--ae-ease);
+  }
+
+  progress::-moz-progress-bar {
+    background: var(--ae-tone);
+    border-radius: var(--ae-radius-full);
+  }
+
+  progress:indeterminate {
+    background: var(--ae-border);
+
+    &::-webkit-progress-bar {
+      background:
+        linear-gradient(90deg, transparent, var(--ae-tone), transparent) 0 0 / 40% 100% no-repeat,
+        var(--ae-border);
+      animation: ae-indeterminate 1.4s var(--ae-ease) infinite;
+    }
+
+    &::-moz-progress-bar {
+      background: linear-gradient(90deg, transparent, var(--ae-tone), transparent);
+      animation: ae-indeterminate 1.4s var(--ae-ease) infinite;
+    }
+  }
+
+  @keyframes ae-indeterminate {
+    from {
+      background-position: -100% 0;
+    }
+    to {
+      background-position: 200% 0;
+    }
+  }
+
+  meter {
+    &::-webkit-meter-bar {
+      background: var(--ae-border);
+      border: 0;
+      border-radius: 0;
+    }
+    &::-webkit-meter-optimum-value {
+      background: var(--ae-success);
+    }
+    &::-webkit-meter-suboptimum-value {
+      background: var(--ae-warning);
+    }
+    &::-webkit-meter-even-less-good-value {
+      background: var(--ae-danger);
+    }
+    &::-moz-meter-bar {
+      background: var(--ae-success);
+    }
+  }
+
+  /* Firefox marks the band on the element, not the bar. One rule each: unknown pseudos drop a list. */
+  meter:-moz-meter-sub-optimum::-moz-meter-bar {
+    background: var(--ae-warning);
+  }
+
+  meter:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+    background: var(--ae-danger);
+  }
+}

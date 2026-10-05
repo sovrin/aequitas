@@ -1,0 +1,350 @@
+@layer ae.components {
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ae-space-2);
+
+    & > label {
+      font-size: var(--ae-text-s);
+      font-weight: 500;
+    }
+
+    & > small {
+      color: var(--ae-text-muted);
+    }
+  }
+
+  /* Error text shows only once the field has been touched and is invalid. */
+  .field > [data-error] {
+    display: none;
+    font-size: var(--ae-text-s);
+    color: var(--ae-danger);
+  }
+
+  /* Inline field: label beside the control. */
+  .field[data-inline] {
+    grid-template-columns: max-content minmax(0, 1fr);
+    display: grid;
+    align-items: center;
+    column-gap: var(--ae-space-4);
+
+    & > label {
+      min-inline-size: 8rem;
+    }
+
+    & > :is(small, [data-error]) {
+      grid-column: 2;
+    }
+  }
+
+  label[data-required]::after {
+    content: " *";
+    color: var(--ae-danger);
+  }
+
+  .field:has(:user-invalid),
+  .field:has([aria-invalid="true"]) {
+    & > [data-error] {
+      display: block;
+    }
+
+    & > small:not([data-error]) {
+      display: none;
+    }
+  }
+
+  fieldset {
+    display: grid;
+    gap: var(--ae-space-3);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  legend {
+    padding: 0;
+    margin-block-end: var(--ae-space-2);
+    font-size: var(--ae-text-s);
+    font-weight: 500;
+  }
+
+  .input {
+    inline-size: 100%;
+    padding: var(--ae-space-3) calc(var(--ae-space-3) * var(--ae-phi));
+    background: var(--ae-fill);
+    border: 0;
+    border-radius: var(--ae-radius-m);
+    transition:
+      background var(--ae-duration-fast) var(--ae-ease),
+      box-shadow var(--ae-duration) var(--ae-ease);
+
+    &::placeholder {
+      color: var(--ae-text-muted);
+      opacity: 0.8;
+    }
+
+    &:hover {
+      background: var(--ae-fill-hover);
+    }
+
+    &:focus-visible {
+      background: var(--ae-fill);
+      box-shadow: var(--ae-ring-field);
+    }
+
+    &:user-invalid,
+    &[aria-invalid="true"] {
+      box-shadow: inset 0 0 0 1.5px var(--ae-danger);
+
+      /* Still invalid while focused: the field ring, in the danger tone. */
+      &:focus-visible {
+        box-shadow:
+          inset 0 0 0 1.5px var(--ae-danger),
+          0 0 0 4px color-mix(in oklch, var(--ae-danger) 28%, transparent);
+      }
+    }
+
+    /* Form controls dim like buttons but keep the not-allowed cursor, as checkboxes do. */
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Sizes follow .btn: block padding steps on the space scale, inline is block × φ. */
+    &[data-size="s"] {
+      padding: var(--ae-space-2) calc(var(--ae-space-2) * var(--ae-phi));
+      font-size: var(--ae-text-s);
+    }
+
+    &[data-size="l"] {
+      padding: var(--ae-space-4) calc(var(--ae-space-4) * var(--ae-phi));
+      font-size: var(--ae-text-l);
+    }
+  }
+
+  /* Native pickers */
+  .input::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  /* The native indicator is drawn dark; invert it on dark themes. */
+  :root[data-theme="dark"] .input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .input::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+    }
+  }
+
+  input[type="search"].input::-webkit-search-cancel-button {
+    appearance: none;
+    inline-size: 0.7em;
+    block-size: 0.7em;
+    background: var(--ae-text-muted);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1 1l8 8M9 1L1 9' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    cursor: pointer;
+  }
+
+  input[type="color"].input {
+    inline-size: var(--ae-space-6);
+    block-size: var(--ae-space-6);
+    padding: var(--ae-space-1);
+    cursor: pointer;
+
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    /* Separate rules: a browser drops a whole selector list with a pseudo it doesn't know. */
+    &::-webkit-color-swatch {
+      border: 0;
+    }
+
+    &::-moz-color-swatch {
+      border: 0;
+    }
+  }
+
+  /* Checkbox & radio. Box and mark snap to even pixels, so the inset between them is a whole
+     pixel and the mark stays centred wherever the box lands on a fractional position. */
+  :where(input[type="checkbox"]:not([role="switch"]), input[type="radio"]) {
+    --_s: round(var(--ae-space-5), 2px);
+    appearance: none;
+    flex: none;
+    inline-size: var(--_s);
+    block-size: var(--_s);
+    display: inline-grid;
+    place-content: center;
+    vertical-align: middle;
+    background: var(--ae-fill-hover);
+    border: 0;
+    border-radius: var(--ae-radius-s);
+    cursor: pointer;
+    transition: background var(--ae-duration) var(--ae-ease);
+
+    &::after {
+      content: "";
+      inline-size: round(calc(var(--_s) / var(--ae-phi)), 2px);
+      block-size: round(calc(var(--_s) / var(--ae-phi)), 2px);
+      background: var(--ae-accent-contrast);
+      clip-path: polygon(14% 52%, 0 66%, 38% 100%, 100% 22%, 86% 8%, 38% 72%);
+      scale: 0;
+      transition: scale var(--ae-duration) var(--ae-ease-spring);
+    }
+
+    &:checked {
+      background: var(--ae-accent);
+
+      &::after {
+        scale: 1;
+      }
+    }
+
+    /* Indeterminate (set from script): a bar instead of the tick. */
+    &:indeterminate {
+      background: var(--ae-accent);
+
+      &::after {
+        block-size: 2px;
+        clip-path: none;
+        scale: 1;
+      }
+    }
+  }
+
+  input[type="radio"] {
+    border-radius: var(--ae-radius-full);
+
+    &::after {
+      clip-path: none;
+      inline-size: round(calc(var(--_s) / pow(var(--ae-phi), 2)), 2px);
+      block-size: round(calc(var(--_s) / pow(var(--ae-phi), 2)), 2px);
+    }
+  }
+
+  /* Switch: <input type="checkbox" role="switch"> — track is φ:1, snapped to even pixels */
+  input[role="switch"] {
+    --_h: round(var(--ae-space-5), 2px);
+    --_w: round(calc(var(--_h) * var(--ae-phi)), 2px);
+    appearance: none;
+    flex: none;
+    inline-size: var(--_w);
+    block-size: var(--_h);
+    padding: 2px;
+    display: inline-flex;
+    vertical-align: middle;
+    background: var(--ae-border-strong);
+    border-radius: var(--ae-radius-full);
+    cursor: pointer;
+    transition: background var(--ae-duration) var(--ae-ease);
+
+    &::after {
+      content: "";
+      aspect-ratio: 1;
+      block-size: 100%;
+      border-radius: inherit;
+      background: white;
+      box-shadow: var(--ae-shadow-s);
+      transition: translate var(--ae-duration-slow) var(--ae-ease-spring);
+    }
+
+    &:checked {
+      background: var(--ae-accent);
+
+      &::after {
+        /* Travel is track width minus track height; padding cancels out (border-box). */
+        translate: calc(var(--_w) - var(--_h)) 0;
+      }
+
+      &:dir(rtl)::after {
+        translate: calc(var(--_h) - var(--_w)) 0;
+      }
+    }
+  }
+
+  /* Disabled choice controls: dimmed, no pointer, and their label follows. */
+  :is(input[type="checkbox"], input[type="radio"]):disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  label:has(> input[type="checkbox"]:disabled, > input[type="radio"]:disabled) {
+    color: var(--ae-text-muted);
+    cursor: not-allowed;
+  }
+
+  label:has(> input[type="checkbox"], > input[type="radio"]) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ae-space-3);
+    cursor: pointer;
+  }
+}
+
+@layer ae.components {
+  /* <input class="input" type="file">: the browse button is a flat fill like .btn. */
+  .input[type="file"] {
+    padding: var(--ae-space-2);
+    font-size: var(--ae-text-s);
+    color: var(--ae-text-muted);
+    cursor: pointer;
+
+    &::file-selector-button {
+      margin-inline-end: var(--ae-space-3);
+      padding: var(--ae-space-2) calc(var(--ae-space-2) * var(--ae-phi));
+      font: inherit;
+      font-weight: 500;
+      color: var(--ae-text);
+      background: var(--ae-fill);
+      border: 0;
+      border-radius: var(--ae-radius-full);
+      cursor: pointer;
+      transition: background var(--ae-duration) var(--ae-ease);
+    }
+
+    /* The .btn ladder and timing: quick hover, instant press. */
+    &:hover::file-selector-button {
+      background: var(--ae-fill-hover);
+      transition-duration: var(--ae-duration-fast);
+    }
+
+    &:active::file-selector-button {
+      background: var(--ae-fill-active);
+      transition-duration: 0s;
+    }
+  }
+
+  /* <div class="input-group"><input class="input" type="password"><button class="btn" data-icon data-password aria-pressed="false" aria-label="Show password"><i class="icon" data-icon="eye"></i><i class="icon" data-icon="eye-off"></i></button></div> */
+  .input-group > [data-password] {
+    --_edge: 0 0 #0000;
+    color: var(--ae-text-muted);
+    background: none;
+
+    &:hover {
+      color: var(--ae-text);
+    }
+
+    & > .icon + .icon,
+    &[aria-pressed="true"] > .icon:first-child {
+      display: none;
+    }
+
+    &[aria-pressed="true"] > .icon + .icon {
+      display: inline-block;
+    }
+  }
+
+  /* The browser's own reveal button would double ours. */
+  .input-group:has(> [data-password]) > .input::-ms-reveal {
+    display: none;
+  }
+}

@@ -1,0 +1,143 @@
+@layer ae.components {
+  /* Wrap wide tables: <div class="table-scroll"><table class="table">…</table></div> */
+  .table-scroll {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    overscroll-behavior-x: contain;
+  }
+
+  .table {
+    inline-size: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-variant-numeric: tabular-nums;
+
+    & th,
+    & td {
+      padding: var(--ae-space-3) var(--ae-space-4);
+      text-align: start;
+      border-block-end: 1px solid var(--ae-border);
+    }
+
+    & th {
+      font-size: var(--ae-text-s);
+      font-weight: 500;
+      color: var(--ae-text-muted);
+    }
+
+    & tbody tr:hover {
+      background: var(--ae-fill);
+    }
+
+    /* <th aria-sort="ascending|descending|none"> */
+    & th[aria-sort] {
+      cursor: pointer;
+      user-select: none;
+
+      &::after {
+        content: "";
+        display: inline-block;
+        inline-size: round(0.45em, 1px);
+        block-size: round(0.45em, 1px);
+        margin-inline-start: 0.4em;
+        vertical-align: middle;
+        background: currentColor;
+        clip-path: polygon(50% 0, 100% 100%, 0 100%);
+        opacity: 0.3;
+        transition: rotate var(--ae-duration) var(--ae-ease);
+      }
+
+      &[aria-sort="ascending"]::after {
+        opacity: 1;
+      }
+
+      &[aria-sort="descending"]::after {
+        opacity: 1;
+        rotate: 180deg;
+      }
+    }
+
+    /* Selection column collapses to its checkbox. */
+    & :is(th, td):has(> input[type="checkbox"]) {
+      inline-size: 1%;
+      padding-inline-end: 0;
+    }
+
+    & tr[aria-selected="true"] {
+      background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+    }
+
+    & :is(th, td)[data-num] {
+      text-align: end;
+    }
+
+    &[data-striped] tbody tr:nth-child(even) {
+      background: color-mix(in oklch, var(--ae-text) 3.5%, transparent);
+    }
+
+    &[data-size="s"] :is(th, td) {
+      padding: var(--ae-space-2) var(--ae-space-3);
+      font-size: var(--ae-text-s);
+    }
+
+    &[data-fixed] {
+      table-layout: fixed;
+    }
+
+    &[data-hover="false"] tbody tr:hover {
+      background: none;
+    }
+
+    &[data-sticky] thead th {
+      position: sticky;
+      inset-block-start: 0;
+      background: var(--ae-surface);
+    }
+  }
+}
+
+@layer ae.components {
+  /* <div class="selection-bar" hidden><span><b data-selected>0</b> selected</span><hr><button class="btn">…</button></div>
+     Sits after a .table (or its .table-scroll) in the same parent; aequitas.js shows it while rows are checked. */
+  .selection-bar {
+    position: sticky;
+    inset-block-end: var(--ae-space-4);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: var(--ae-space-2);
+    inline-size: fit-content;
+    max-inline-size: 100%;
+    margin: var(--ae-space-4) auto 0;
+    padding-block: var(--ae-space-2);
+    padding-inline: var(--ae-space-5) var(--ae-space-2);
+    font-size: var(--ae-text-s);
+    box-shadow: var(--ae-shadow-l), var(--ae-frost-edge);
+    transition:
+      opacity var(--ae-duration) var(--ae-ease),
+      translate var(--ae-duration-slow) var(--ae-ease-spring);
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 var(--ae-space-4);
+    }
+
+    & > span {
+      margin-inline-end: var(--ae-space-3);
+      white-space: nowrap;
+    }
+
+    & [data-selected] {
+      font-variant-numeric: tabular-nums;
+    }
+
+    & > hr {
+      align-self: stretch;
+      inline-size: 1px;
+      block-size: auto;
+      margin: var(--ae-space-1) var(--ae-space-2);
+      background: var(--ae-border);
+      border: 0;
+    }
+  }
+}

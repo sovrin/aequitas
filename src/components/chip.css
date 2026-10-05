@@ -1,0 +1,88 @@
+@layer ae.components {
+  /* <span class="chip">Design <button aria-label="Remove Design">×</button></span> */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ae-space-2);
+    padding: var(--ae-space-1) var(--ae-space-3);
+    font-size: var(--ae-text-s);
+    font-weight: 500;
+    line-height: var(--ae-phi);
+    background: var(--ae-fill);
+
+    & > button {
+      display: grid;
+      place-items: center;
+      inline-size: 1.25em;
+      aspect-ratio: 1;
+      margin-inline-end: calc(var(--ae-space-1) * -1);
+      padding: 0;
+      font-size: 1em;
+      line-height: 1;
+      color: var(--ae-text-muted);
+      background: none;
+      border: 0;
+      cursor: pointer;
+
+      &:hover {
+        color: var(--ae-text);
+        background: var(--ae-fill-hover);
+      }
+
+      &:active {
+        background: var(--ae-fill-active);
+      }
+    }
+  }
+
+  /* Filter chip: <label class="chip"><input type="checkbox">Design</label> */
+  .chip:has(> input) {
+    position: relative;
+    cursor: pointer;
+
+    & > input {
+      position: absolute;
+      inset: 0;
+      inline-size: 100%;
+      block-size: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: pointer;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    &:hover {
+      background: var(--ae-fill-hover);
+    }
+
+    &:active {
+      background: var(--ae-fill-active);
+    }
+
+    /* On: tinted, with the bottom edge. An edge rather than a check mark, so the label never
+       shifts when it toggles. */
+    &:has(:checked) {
+      --_edge: inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone);
+      color: var(--ae-tone);
+      background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
+
+      &:active {
+        background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-press), transparent);
+      }
+    }
+
+    box-shadow: var(--_edge, 0 0 #0000);
+
+    &:has(:disabled) {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    &:has(:focus-visible) {
+      box-shadow: var(--_edge, 0 0 #0000), var(--ae-ring);
+    }
+  }
+}

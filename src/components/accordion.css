@@ -1,0 +1,67 @@
+@layer ae.components {
+  /* <details class="accordion"><summary>…</summary>…</details>. Animates via interpolate-size. */
+  .accordion {
+    & > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--ae-space-4);
+      padding-block: var(--ae-space-3);
+      font-weight: 500;
+      list-style: none;
+      cursor: pointer;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::after {
+        content: "";
+        flex: none;
+        inline-size: round(0.5em, 1px);
+        block-size: round(0.5em, 1px);
+        margin-inline-end: 0.25em;
+        border-block-end: 1.5px solid var(--ae-text-muted);
+        border-inline-end: 1.5px solid var(--ae-text-muted);
+        rotate: 45deg;
+        transition: rotate var(--ae-duration) var(--ae-ease);
+      }
+    }
+
+    &[open] > summary::after {
+      rotate: -135deg;
+    }
+
+    /* The chevron is drawn on the inline-end side, so RTL mirrors the turn too. */
+    & > summary:dir(rtl)::after {
+      rotate: -45deg;
+    }
+
+    &[open] > summary:dir(rtl)::after {
+      rotate: 135deg;
+    }
+
+    &::details-content {
+      block-size: 0;
+      overflow: clip;
+      color: var(--ae-text-muted);
+      transition:
+        block-size var(--ae-duration) var(--ae-ease),
+        content-visibility var(--ae-duration) allow-discrete;
+
+      /* The reset only shortens animations; this is a transition, so it opts out here. */
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
+    }
+
+    &[open]::details-content {
+      block-size: auto;
+      padding-block-end: var(--ae-space-4);
+    }
+
+    & + .accordion {
+      box-shadow: inset 0 1px 0 var(--ae-border);
+    }
+  }
+}

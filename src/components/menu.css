@@ -1,0 +1,98 @@
+@layer ae.components {
+  /* <button popovertarget="m"> + <div popover class="menu" id="m"> */
+  .menu {
+    margin: 0;
+    padding: var(--ae-space-2);
+    min-inline-size: calc(1rem * pow(var(--ae-phi), 5));
+    color: inherit;
+    border-radius: var(--ae-radius-l);
+    corner-shape: var(--ae-corner);
+    box-shadow: var(--ae-shadow-l), var(--ae-frost-edge);
+
+    /* Anchored to the invoking button (implicit anchor), flips if clipped. */
+    @supports (position-area: block-end) {
+      position-area: block-end span-inline-end;
+      position-try-fallbacks: flip-block, flip-inline;
+      margin-block: var(--ae-space-2);
+    }
+
+    opacity: 0;
+    scale: 0.96;
+    transition:
+      opacity var(--ae-duration-fast) var(--ae-ease),
+      scale var(--ae-duration) var(--ae-ease-spring),
+      overlay var(--ae-duration) allow-discrete,
+      display var(--ae-duration) allow-discrete;
+
+    &:popover-open {
+      opacity: 1;
+      scale: 1;
+
+      @starting-style {
+        opacity: 0;
+        scale: 0.96;
+      }
+    }
+
+    & :is(a, button) {
+      display: flex;
+      align-items: center;
+      gap: var(--ae-space-3);
+      inline-size: 100%;
+      padding: var(--ae-space-2) var(--ae-space-3);
+      text-align: start;
+      text-decoration: none;
+      color: var(--ae-text);
+      background: none;
+      border: 0;
+      border-radius: var(--ae-radius-s);
+      cursor: pointer;
+
+      /* Toned like ghost buttons: --ae-tone is the accent unless the item sets data-tone. */
+      &:hover,
+      &:focus-visible {
+        background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
+      }
+
+      &:focus-visible {
+        box-shadow: inset var(--ae-edge-x) 0 0 var(--ae-tone);
+      }
+
+      &:active {
+        background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-press), transparent);
+      }
+
+      &[data-tone] {
+        color: var(--ae-tone);
+      }
+
+      &[aria-checked]::before {
+        content: "";
+        inline-size: 1em;
+        font-size: 0.85em;
+        text-align: center;
+      }
+
+      &[aria-checked="true"]::before {
+        content: "✓";
+      }
+
+      & kbd {
+        margin-inline-start: auto;
+        font-size: var(--ae-text-xs);
+        color: var(--ae-text-muted);
+        background: none;
+      }
+    }
+
+    & hr {
+      margin-block: var(--ae-space-2);
+      margin-inline: calc(var(--ae-space-2) * -1);
+    }
+
+    & h6 {
+      padding: var(--ae-space-2) var(--ae-space-3) var(--ae-space-1);
+      font-size: var(--ae-text-xs);
+    }
+  }
+}

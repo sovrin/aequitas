@@ -1,0 +1,61 @@
+@layer ae.components {
+  /* <button data-tip="Saves to disk">…</button> — shown on hover and keyboard focus. */
+  [data-tip] {
+    /* Physical translations, mirrored for right-to-left text so the tip stays on its anchor. */
+    --_dir: 1;
+    position: relative;
+
+    &:dir(rtl) {
+      --_dir: -1;
+    }
+
+    &::after {
+      content: attr(data-tip);
+      position: absolute;
+      inset-block-end: calc(100% + var(--ae-space-2));
+      inset-inline-start: 50%;
+      translate: calc(-50% * var(--_dir)) var(--ae-space-1);
+      padding: var(--ae-space-2) var(--ae-space-3);
+      font-size: var(--ae-text-xs);
+      font-weight: 400;
+      line-height: var(--ae-leading-tight);
+      white-space: nowrap;
+      color: var(--ae-text);
+      background: var(--ae-surface);
+      box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 20;
+      transition:
+        opacity var(--ae-duration-fast) var(--ae-ease),
+        translate var(--ae-duration-fast) var(--ae-ease);
+      transition-delay: 0s;
+    }
+
+    &:hover::after,
+    &:focus-visible::after {
+      opacity: 1;
+      translate: calc(-50% * var(--_dir)) 0;
+      transition-delay: 400ms;
+    }
+
+    &[data-tip-side="bottom"]::after {
+      inset-block: calc(100% + var(--ae-space-2)) auto;
+      translate: calc(-50% * var(--_dir)) calc(var(--ae-space-1) * -1);
+    }
+
+    &[data-tip-side="bottom"]:is(:hover, :focus-visible)::after {
+      translate: calc(-50% * var(--_dir)) 0;
+    }
+
+    &[data-tip-side="end"]::after {
+      inset-block: 50% auto;
+      inset-inline-start: calc(100% + var(--ae-space-2));
+      translate: calc(var(--ae-space-1) * -1 * var(--_dir)) -50%;
+    }
+
+    &[data-tip-side="end"]:is(:hover, :focus-visible)::after {
+      translate: 0 -50%;
+    }
+  }
+}

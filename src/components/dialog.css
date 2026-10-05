@@ -1,0 +1,78 @@
+@layer ae.components {
+  dialog {
+    /* Modal layers use thicker material than cards: content must stay legible over anything. */
+    --ae-frost-bg: var(--ae-frost-bg-thick);
+    inline-size: min(100% - 2 * var(--ae-gutter), var(--ae-measure));
+    /* The reset zeroes every margin, which would pin modals to the top-left corner. */
+    margin: auto;
+    padding: var(--ae-space-5);
+    color: inherit;
+    border-radius: var(--ae-radius-xl);
+    corner-shape: var(--ae-corner);
+    box-shadow: var(--ae-shadow-l), var(--ae-frost-edge);
+    backdrop-filter: var(--ae-frost-filter-l);
+
+    /* Enter/exit with discrete-property transitions. */
+    opacity: 0;
+    translate: 0 var(--ae-space-4);
+    scale: 0.96;
+    transition:
+      opacity var(--ae-duration) var(--ae-ease),
+      translate var(--ae-duration-slow) var(--ae-ease-spring),
+      scale var(--ae-duration-slow) var(--ae-ease-spring),
+      overlay var(--ae-duration) allow-discrete,
+      display var(--ae-duration) allow-discrete;
+
+    &[open] {
+      opacity: 1;
+      translate: 0;
+      scale: 1;
+
+      @starting-style {
+        opacity: 0;
+        translate: 0 var(--ae-space-4);
+        scale: 0.96;
+      }
+    }
+
+    &[data-size="s"] {
+      inline-size: min(100% - 2 * var(--ae-gutter), calc(1rem * pow(var(--ae-phi), 7)));
+    }
+
+    &[data-size="l"] {
+      inline-size: min(100% - 2 * var(--ae-gutter), var(--ae-container));
+    }
+
+    &[data-size="full"] {
+      inline-size: 100%;
+      block-size: 100dvh;
+      max-inline-size: none;
+      max-block-size: none;
+      margin: 0;
+    }
+
+    &::backdrop {
+      background: color-mix(in oklch, var(--ae-shadow-ink) 35%, transparent);
+      transition:
+        background var(--ae-duration) var(--ae-ease),
+        backdrop-filter var(--ae-duration) var(--ae-ease),
+        overlay var(--ae-duration) allow-discrete,
+        display var(--ae-duration) allow-discrete;
+    }
+
+    &[open]::backdrop {
+      backdrop-filter: blur(var(--ae-blur-s));
+      @starting-style {
+        background: transparent;
+        backdrop-filter: blur(0);
+      }
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    dialog[open]::backdrop {
+      backdrop-filter: none;
+      background: color-mix(in oklch, var(--ae-shadow-ink) 60%, transparent);
+    }
+  }
+}
