@@ -230,10 +230,10 @@ export async function ai(): Promise<void> {
     return readme.slice(start + 1, end === -1 ? undefined : end).trim();
   };
   const behaviours = [
-    section("Behaviours (optional)").replace(/^## .*\n/, ""),
+    section("Behaviours").replace(/^## .*\n+/, ""),
     "### API\n\n" + fence("ts", dts),
   ].join("\n\n");
-  const concepts = ["The golden ratio", "Theming", "Frost", "Layers"]
+  const concepts = ["One number", "Theming"]
     .map(section)
     .filter(Boolean)
     .map((s) => s.replace(/^## /, "### "))
@@ -264,7 +264,7 @@ export async function ai(): Promise<void> {
   );
 
   const summary =
-    "> A minimal CSS design language with frost and blur, proportioned on the golden ratio (φ). Plain modern CSS: semantic HTML, a component class, variants as data-* attributes, an optional 7 kB ESM module for behaviours.";
+    "> A CSS design language proportioned on the golden ratio (φ), with frosted glass where things float. Plain modern CSS: semantic HTML, a component class, variants as data-* attributes, an optional 5 kB (gzipped) ESM module for behaviours.";
   const files = [
     "Files: `aequitas.css` (components, layouts, utilities), `aequitas.core.css` (no utilities),",
     "`aequitas.icons.css` (icons, separate), `aequitas.js` (optional behaviours, ESM, self-initialising).",

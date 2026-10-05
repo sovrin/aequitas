@@ -17,15 +17,20 @@
 --ae-phi: 1.618034;
 ```
 
-Every measure is a power of it.
+Every proportion is a power of it.
 
-| Token                | Rule                                    |
-| -------------------- | --------------------------------------- |
-| space                | `1rem · φⁿ`                             |
-| type                 | `base · φ^(n/2)`, line-height `φ`       |
-| radius, blur, motion | `base · φⁿ`                             |
-| tint                 | `7% · φⁿ` for rest, hover, press        |
-| layout               | `.split` at `1 : φ`, container `φ⁹ rem` |
+| Token  | Rule                                                                                           |
+| ------ | ---------------------------------------------------------------------------------------------- |
+| space  | `--ae-unit · φⁿ` (1rem by default), n = −4…4, snapped to whole pixels                          |
+| type   | `base · φ^(n/2)`; leading `φ` for body, `φ^¼` for headings, `φ^⅛` for display                  |
+| radius | `--ae-radius-m · φⁿ` (0 by default)                                                            |
+| blur   | `1rem · φⁿ`                                                                                    |
+| motion | `--ae-duration · φⁿ`, stagger `φ⁻³`                                                            |
+| shadow | key and ambient offsets on the space scale, each blur two steps above                          |
+| tint   | `7% · φⁿ` for rest, hover, press                                                               |
+| layout | `.split` and `.panes` at `1 : φ`, `.golden` at `φ : 1`, container `φ⁹ rem`, measure `40ch · φ` |
+
+Not on the scale, by design: hairlines, the 1.5px stroke, the 2px state edge and focus rings (device pixels), the 24px minimum pointer target (an accessibility floor), breakpoints (media queries can't read tokens), viewport caps such as `85dvh`, colour and alpha, and the geometry of glyphs and markers.
 
 ## Use
 
@@ -41,15 +46,17 @@ Variants are `data-*` attributes and state is ARIA: there is no `.btn-primary` a
 
 ## Components
 
-| Group     | Classes                                                                                                                  |
-| --------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Controls  | `.btn`, `.input`, `.select`, `.input-group`, checkbox, radio, switch, range, `.segmented`, `.tabs`, `.chip`, `.combobox` |
-| Surfaces  | `.card`, `.list`, `.alert`, `.toast`, `.menu`, `.popover`, `dialog`, `dialog.drawer`, `dialog.palette`, `.navbar`        |
-| Content   | `.badge`, `.avatar`, `.accordion`, `.table`, `.stat`, `progress`, `meter`, `.skeleton`, `.spinner`, `.empty`, `.steps`   |
-| App       | `.shell`, `.sidebar`, `.page-header`, `.toolbar`, `.settings`, `.master-detail`, `.calendar`, `.tree`, `.thread`         |
-| Layout    | `.container`, `.measure`, `.stack`, `.cluster`, `.split`, `.grid`, `.golden`, `.section`, `.center`, `.gap-1…8`          |
-| Utilities | spacing, display, flex, grid, type and colour, with `s:` `m:` `l:` `xl:` breakpoint and `cq-*:` container variants       |
-| Icons     | `<i class="icon" data-icon="search">`, 377 mask icons in `currentColor`, in a separate stylesheet                        |
+| Group     | Classes                                                                                                                                                                                                  |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Controls  | `.btn`, `.input`, `.select`, `.input-group`, checkbox, radio, switch, range, `.segmented`, `.tabs`, `.chip`, `.combobox`                                                                                 |
+| Surfaces  | `.card`, `.list`, `.alert`, `.toast`, `.menu`, `.popover`, `dialog`, `dialog.drawer`, `dialog.palette`, `.navbar`                                                                                        |
+| Content   | `.badge`, `.avatar`, `.accordion`, `.table`, `.stat`, `progress`, `meter`, `.skeleton`, `.spinner`, `.empty`, `.steps`                                                                                   |
+| App       | `.shell`, `.sidebar`, `.page-header`, `.toolbar`, `.settings`, `.master-detail`, `.calendar`, `.tree`, `.thread`                                                                                         |
+| Chrome    | `.window`, `.menubar`, `.statusbar`, `.dock`, `.tabbar`, `.footer`, `.resizable`                                                                                                                         |
+| Marketing | `.hero`, `.features`, `.pricing`, `.testimonial`, `.logos`                                                                                                                                               |
+| Layout    | `.container`, `.measure`, `.stack`, `.cluster`, `.split`, `.grid`, `.golden`, `.section`, `.center`, `.switcher`, `.cover`, `.with-aside`, `.panes`, `.bento`, `.masonry`, `.prose`, `.snap`, `.gap-1…8` |
+| Utilities | spacing, display, flex, grid, type and colour, with `s:` `m:` `l:` `xl:` breakpoint and `cq-*:` container variants                                                                                       |
+| Icons     | `<i class="icon" data-icon="search">`, 377 mask icons in `currentColor`, in a separate stylesheet                                                                                                        |
 
 The docs have a page for each, with live specimens, anatomy and the full API.
 
@@ -73,16 +80,24 @@ Controls answer the pointer with tone, never movement, and persistent states add
 
 `aequitas.js` is optional: about 5 kB gzipped, ESM, typed. It initialises itself; add `data-ae-manual` to `<html>` and call `init()` (or `bind()` once and `enhance()` after each render) to drive it yourself.
 
-| Markup                                 | Does                                           |
-| -------------------------------------- | ---------------------------------------------- |
-| `[role=tablist]`                       | switches tabs on click and arrow keys          |
-| `[data-open="#id"]`, `[data-close]`    | opens and closes dialogs and popovers          |
-| `dialog[data-light-dismiss]`           | closes on a backdrop click                     |
-| `[data-dismiss]`                       | removes the nearest alert, toast or chip       |
-| `[data-toast]`                         | shows a toast with that message                |
-| `[data-theme-set="light\|dark\|auto"]` | switches and remembers the theme               |
-| `.combobox`, `dialog.palette`          | filters as you type, with arrow keys and Enter |
-| `[data-copy]`                          | copies a code block                            |
+| Markup                                 | Does                                                                        |
+| -------------------------------------- | --------------------------------------------------------------------------- |
+| `[role=tablist]`                       | switches tabs on click and arrow keys                                       |
+| `[data-open="#id"]`, `[data-close]`    | opens and closes dialogs and popovers                                       |
+| `dialog[data-light-dismiss]`           | closes on a backdrop click                                                  |
+| `[data-dismiss]`                       | removes the nearest alert, toast or chip, or the ancestor its value selects |
+| `[data-toast]`                         | shows a toast with that message                                             |
+| `[data-theme-set="light\|dark\|auto"]` | switches and remembers the theme                                            |
+| `.combobox`, `dialog.palette`          | filters as you type, with arrow keys and Enter                              |
+| `[data-copy]`                          | copies a code block                                                         |
+| `[data-toggle][aria-pressed]`          | flips `aria-pressed` on click                                               |
+| `.number > button[data-step]`          | steps the input up or down                                                  |
+| `input[type=range][data-output]`       | keeps the track fill and an output element in sync                          |
+| `.tag-input`, `.otp`                   | turns Enter into chips; advances between code cells and takes pastes        |
+| `.input-group > [data-password]`       | shows or hides a password                                                   |
+| `.table` with row checkboxes           | select-all, `aria-selected` and a `.selection-bar` count                    |
+| `.dropzone`                            | sets `data-active` while files are dragged over it                          |
+| `.toc`                                 | marks the link whose section is in view                                     |
 
 ```js
 import { toast, setTheme } from "./aequitas.js";
@@ -97,14 +112,16 @@ pnpm dev          # dist/ on change, docs on :3000
 pnpm build:site   # static docs in site/.output/public
 ```
 
-| File in `dist/`                    | Contains                                           |
-| ---------------------------------- | -------------------------------------------------- |
-| `aequitas.css`                     | components, layouts and utilities                  |
-| `aequitas.core.css`                | the same without utilities                         |
-| `aequitas.icons.css`               | the icon set                                       |
-| `aequitas.js`, `aequitas.d.ts`     | the behaviours                                     |
-| `tokens.json`                      | every `--ae-*` token with its raw value            |
-| `llms.txt`, `AGENTS.md`, `skills/` | the reference, written for coding agents           |
-| `aequitas-check.mjs`               | checks markup against what the CSS actually styles |
+| File in `dist/`                                     | Contains                                                  |
+| --------------------------------------------------- | --------------------------------------------------------- |
+| `aequitas.css`                                      | components, layouts and utilities                         |
+| `aequitas.core.css`                                 | the same without utilities                                |
+| `aequitas.icons.css`                                | the icon set                                              |
+| `aequitas.js`, `aequitas.d.ts`                      | the behaviours                                            |
+| `tokens.json`                                       | every token declared in `src/tokens/`, with its raw value |
+| `manifest.json`                                     | every class, `data-*` value and token the CSS styles      |
+| `llms.txt`, `llms-full.txt`, `AGENTS.md`, `skills/` | the reference, written for coding agents                  |
+| `aequitas-check.mjs`                                | checks markup against what the CSS actually styles        |
+| `fonts/`                                            | Geist, referenced by the stylesheets                      |
 
-Each stylesheet also ships as `.min.css`.
+Each stylesheet also ships as `.min.css`, and the behaviours as `aequitas.min.js`.

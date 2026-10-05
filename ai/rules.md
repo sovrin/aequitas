@@ -19,7 +19,7 @@
    - `.center` centres content.
    - Set gaps with `.gap-1` … `.gap-8`. `.end` pushes an item to the far end of a cluster.
 5. **All spacing is on the φ scale.** Use steps 1–8 (`.p-4`, `.mb-3`, `.gap-5`, `var(--ae-space-4)`). Never use px or arbitrary rem values.
-6. **Colour, radius, shadow, blur and type come from tokens.** Use `var(--ae-text)`, `--ae-text-muted`, `--ae-surface`, `--ae-accent`, `--ae-border`, `--ae-radius-m`, `--ae-shadow-m` and so on. Never hard-code hex, rgb or oklch values. To retheme, set `--ae-hue` / `--ae-neutral-hue`, or `data-accent` on `<html>`.
+6. **Colour, radius, shadow, blur and type come from tokens.** Use `var(--ae-text)`, `--ae-text-muted`, `--ae-surface`, `--ae-accent`, `--ae-border`, `--ae-radius-m`, `--ae-shadow-m` and so on. For text in a tone, use its ink (`--ae-accent-ink`, `--ae-danger-ink`, `--ae-tone-ink`, …): the tone itself is for fills, edges and rings and is too light to read as text. Never hard-code hex, rgb or oklch values. To retheme, set `--ae-hue` / `--ae-neutral-hue`, or `data-accent` on `<html>`.
 7. **Use the global presets on `<html>`:**
    - `data-theme="light|dark"` (omit to follow the OS)
    - `data-accent`, `data-density="compact|spacious"`, `data-radius="soft|round"`, `data-type="serif|humanist|mono"`
@@ -27,12 +27,15 @@
 9. **Overrides go in unlayered CSS.** aequitas lives in `@layer ae.*`, so any unlayered rule wins. Never use `!important`, and never restyle a component that already has the variant you need.
 10. **Behaviours are attributes too** (with `aequitas.js`):
     - `[data-open="#id"]` opens a dialog or popover, `[data-close]` closes it, and `dialog[data-light-dismiss]` closes on a backdrop click.
-    - `[data-dismiss]` removes the nearest alert, toast or chip.
+    - `[data-dismiss]` removes the nearest alert, toast or chip (or the ancestor its value selects).
     - `[data-theme-set]` switches the theme.
     - `[role=tablist]` makes tabs work.
     - `[data-copy]` copies a code block.
     - `[data-password]` in an `.input-group` reveals a password; a `.table` with row checkboxes gets select-all and drives a sibling `.selection-bar`.
     - `toast()`, `setTheme()` and `markMatches()` are exported from the module, with `init()`, `bind()` and `enhance()` for driving it yourself.
+    - `[data-toast="message"]` shows a toast (`data-toast-title`, `data-toast-tone`). `[data-theme-set]` works on buttons and on radios.
+    - `[data-toggle]` on a button with `aria-pressed` flips it; `.number > button[data-step]` steps its input; `input[type=range][data-output="id"]` writes its value into that element.
+    - `.combobox` and `dialog.palette` filter and highlight as you type (`dialog.palette[data-manual]` opts out); `.tag-input` turns Enter into chips; `.otp` advances between cells and takes pastes; `.dropzone` gets `data-active` during a drag; `.toc` sets `aria-current` on the link whose section is in view.
     - Don't write JavaScript for these.
 11. **Don't invent anything.** If a class, attribute value or token isn't in this reference, it doesn't exist. Compose existing pieces instead.
 12. **Verify.** Run `{{check}} <files>` on every file you write, and fix every error before you finish. Pass `--css <file>` for the project's own stylesheet so its classes, and the `data-*` values it styles on them, count as known.

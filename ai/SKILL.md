@@ -5,7 +5,7 @@ description: Write UI markup with the aequitas CSS framework, a frosted-glass de
 
 # aequitas
 
-aequitas is plain modern CSS. You write semantic HTML, add a component class, and choose variants with `data-*` attributes. Every space, size, radius and duration comes from the golden ratio, so there is nothing to tune by hand. An optional ESM module, `aequitas.js`, wires up behaviours declared through attributes.
+aequitas is plain modern CSS. You write semantic HTML, add a component class, and choose variants with `data-*` attributes. Space, type, radius, blur and motion all step by powers of the golden ratio, so there is nothing to tune by hand. An optional ESM module, `aequitas.js`, wires up behaviours declared through attributes.
 
 {{rules}}
 
