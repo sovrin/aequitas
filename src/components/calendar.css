@@ -4,7 +4,7 @@
    *   <header><b>October 2026</b><div class="btn-group">…</div></header>
    *   <div class="calendar-grid">
    *     <span>Mo</span>…<button data-outside>28</button>…<button aria-current="date">1</button>
-   *     <button data-range>…</button><button aria-selected="true">…</button>
+   *     <button data-range>…</button><button aria-pressed="true">…</button>
    *   </div>
    * </div>
    */
@@ -23,10 +23,10 @@
   }
 
   .calendar-grid {
-    --_cell: calc(1rem * pow(var(--ae-phi), 1.5));
+    --_cell: round(calc(var(--ae-unit) * pow(var(--ae-phi), 1.5)), 1px);
     display: grid;
     grid-template-columns: repeat(7, var(--_cell));
-    gap: 2px;
+    gap: var(--ae-space-0);
     font-variant-numeric: tabular-nums;
 
     & > span {
@@ -48,7 +48,7 @@
       cursor: pointer;
 
       &:hover {
-        background: var(--ae-fill);
+        background: var(--ae-fill-hover);
       }
 
       &:active {
@@ -57,12 +57,11 @@
 
       &[data-outside] {
         color: var(--ae-text-muted);
-        opacity: 0.5;
       }
 
       &[aria-current="date"] {
         font-weight: 560;
-        color: var(--ae-accent);
+        color: var(--ae-accent-ink);
         box-shadow:
           inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-accent),
           var(--ae-focus, 0 0 #0000);
@@ -72,7 +71,7 @@
         background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
       }
 
-      &[aria-selected="true"] {
+      &:is([aria-pressed="true"], [aria-selected="true"]) {
         color: var(--ae-accent-contrast);
         background: var(--ae-accent);
         box-shadow: var(--ae-focus, 0 0 #0000);

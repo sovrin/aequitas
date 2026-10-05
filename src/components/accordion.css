@@ -21,8 +21,8 @@
         inline-size: round(0.5em, 1px);
         block-size: round(0.5em, 1px);
         margin-inline-end: 0.25em;
-        border-block-end: 1.5px solid var(--ae-text-muted);
-        border-inline-end: 1.5px solid var(--ae-text-muted);
+        border-block-end: var(--ae-stroke) solid var(--ae-text-muted);
+        border-inline-end: var(--ae-stroke) solid var(--ae-text-muted);
         rotate: 45deg;
         transition: rotate var(--ae-duration) var(--ae-ease);
       }

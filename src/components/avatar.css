@@ -1,17 +1,17 @@
 @layer ae.components {
   /* <span class="avatar">AL</span> or <span class="avatar"><img …></span> */
   .avatar {
-    --_size: round(calc(1rem * pow(var(--ae-phi), 2)), 2px);
+    --_size: round(calc(var(--ae-unit) * pow(var(--ae-phi), 2)), 2px);
     display: inline-grid;
     place-items: center;
     flex: none;
     inline-size: var(--_size);
     block-size: var(--_size);
-    font-size: calc(var(--_size) * 0.38);
+    font-size: calc(var(--_size) / pow(var(--ae-phi), 2));
     font-weight: 600;
     letter-spacing: -0.02em;
-    color: var(--ae-tone);
-    background: color-mix(in oklch, var(--ae-tone) 16%, transparent);
+    color: var(--ae-tone-ink);
+    background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-press), transparent);
     overflow: hidden;
     user-select: none;
 
@@ -22,11 +22,11 @@
     }
 
     &[data-size="s"] {
-      --_size: round(calc(1rem * var(--ae-phi)), 2px);
+      --_size: round(calc(var(--ae-unit) * var(--ae-phi)), 2px);
     }
 
     &[data-size="l"] {
-      --_size: round(calc(1rem * pow(var(--ae-phi), 3)), 2px);
+      --_size: round(calc(var(--ae-unit) * pow(var(--ae-phi), 3)), 2px);
     }
   }
 

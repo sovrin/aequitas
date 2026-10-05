@@ -16,8 +16,8 @@
       inset-inline-end: var(--ae-space-4);
       inset-block: 0;
       margin-block: auto;
-      inline-size: round(0.6em, 1px);
-      block-size: round(0.6em, 1px);
+      inline-size: round(calc(1em / var(--ae-phi)), 1px);
+      block-size: round(calc(1em / var(--ae-phi)), 1px);
       background: var(--ae-text-muted);
       mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1 3l4 4 4-4' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E")
         center / contain no-repeat;

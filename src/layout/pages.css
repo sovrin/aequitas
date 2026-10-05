@@ -5,7 +5,7 @@
   }
 
   .container[data-size="l"] {
-    --ae-container: 96rem;
+    --ae-container: calc(1rem * pow(var(--ae-phi), 9.5)); /* ≈ 97 rem */
   }
 
   .container[data-size="full"] {
@@ -66,15 +66,17 @@
     }
   }
 
-  /* Side by side until narrower than --threshold, then stacked. */
+  /* Side by side until narrower than --threshold, then stacked. Knobs are set on the component
+     itself, so an ancestor's value never leaks in. */
   .switcher {
+    --threshold: calc(1rem * pow(var(--ae-phi), 7.5)); /* ≈ 37 rem */
     display: flex;
     flex-wrap: wrap;
     gap: var(--ae-space-4);
 
     & > * {
       flex-grow: 1;
-      flex-basis: calc((var(--threshold, 40rem) - 100%) * 999);
+      flex-basis: calc((var(--threshold) - 100%) * 999);
     }
   }
 
@@ -132,10 +134,12 @@
     }
 
     @media (width >= 64rem) {
-      grid-template-columns: 1fr calc(var(--ae-phi) * 1fr);
+      /* 1 : φ with no gap, so the narrow pane is exactly 1 / (1 + φ) = φ⁻² of the row.
+         (fr can't go inside calc(), so the ratio is spelled as a percentage.) */
+      grid-template-columns: calc(100% / pow(var(--ae-phi), 2)) minmax(0, 1fr);
 
       &[data-flip] {
-        grid-template-columns: calc(var(--ae-phi) * 1fr) 1fr;
+        grid-template-columns: minmax(0, 1fr) calc(100% / pow(var(--ae-phi), 2));
       }
     }
   }
@@ -254,12 +258,22 @@
     place-items: center;
     background: color-mix(in oklch, var(--ae-bg) 60%, transparent);
     backdrop-filter: blur(var(--ae-blur-s));
+
+    @media (prefers-reduced-transparency: reduce),
+      (prefers-contrast: more),
+      (forced-colors: active) {
+      background: var(--ae-bg);
+      backdrop-filter: none;
+    }
   }
 
   /* Form grid: fields flow into columns; data-span="full" takes the row. */
   .form-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(calc(1rem * pow(var(--ae-phi), 5.5)), 100%), 1fr)
+    );
     gap: var(--ae-space-4) var(--ae-space-5);
 
     & > [data-span="full"] {
@@ -281,7 +295,7 @@
 
       & > div {
         display: grid;
-        gap: 2px;
+        gap: var(--ae-space-0);
         min-inline-size: 0;
       }
 
@@ -318,7 +332,7 @@
     @media (width < 48rem) {
       grid-template-columns: minmax(0, 1fr);
 
-      &:not([data-view="detail"]) > :last-child,
+      &:is([data-view="list"], :not([data-view="detail"])) > :last-child,
       &[data-view="detail"] > :first-child {
         display: none;
       }
@@ -366,6 +380,10 @@
   }
 
   /* Gentle parallax: --depth from -1 (slower) to 1 (faster). */
+  .parallax {
+    --depth: 0.5;
+  }
+
   @supports (animation-timeline: scroll()) {
     @media (prefers-reduced-motion: no-preference) {
       .parallax {
@@ -377,7 +395,7 @@
 
   @keyframes ae-parallax {
     to {
-      translate: 0 calc(var(--depth, 0.5) * -20vh);
+      translate: 0 calc(var(--depth) * -20vh);
     }
   }
 }

@@ -24,7 +24,7 @@
     inset-block-start: 0;
     inset-inline: 0;
     z-index: 100;
-    block-size: 2px;
+    block-size: var(--ae-edge);
     background: var(--ae-accent);
     transform-origin: 0 50%;
     scale: 0 1;
@@ -38,7 +38,8 @@
     /* data-done wins, so setting it without removing data-active still finishes the bar. */
     &[data-active]:not([data-done]) {
       opacity: 1;
-      animation: ae-loading 2.5s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+      animation: ae-loading calc(var(--ae-duration) * pow(var(--ae-phi), 5))
+        cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
     }
 
     &[data-done] {

@@ -37,8 +37,7 @@
       border-radius: var(--ae-radius-full);
       transition:
         background var(--ae-duration) var(--ae-ease),
-        color var(--ae-duration) var(--ae-ease),
-        box-shadow var(--ae-duration) var(--ae-ease);
+        color var(--ae-duration) var(--ae-ease);
       pointer-events: none;
     }
 
@@ -50,7 +49,9 @@
     @supports not (anchor-scope: all) {
       & label:has(:checked) span {
         background: var(--ae-surface);
-        box-shadow: var(--ae-shadow-s);
+        box-shadow:
+          var(--ae-shadow-s),
+          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-accent);
       }
     }
 
@@ -66,7 +67,10 @@
         inset: anchor(top) anchor(right) anchor(bottom) anchor(left);
         border-radius: var(--ae-radius-full);
         background: var(--ae-surface);
-        box-shadow: var(--ae-shadow-s);
+        /* Like every persistent "on": the pill also carries the 2px accent edge. */
+        box-shadow:
+          var(--ae-shadow-s),
+          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-accent);
         transition: inset var(--ae-duration) var(--ae-ease);
       }
 

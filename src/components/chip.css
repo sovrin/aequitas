@@ -13,7 +13,7 @@
     & > button {
       display: grid;
       place-items: center;
-      inline-size: 1.25em;
+      inline-size: calc(1em * pow(var(--ae-phi), 0.5));
       aspect-ratio: 1;
       margin-inline-end: calc(var(--ae-space-1) * -1);
       padding: 0;
@@ -66,7 +66,7 @@
        shifts when it toggles. */
     &:has(:checked) {
       --_edge: inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone);
-      color: var(--ae-tone);
+      color: var(--ae-tone-ink);
       background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
 
       &:active {

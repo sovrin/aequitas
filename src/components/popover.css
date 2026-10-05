@@ -16,7 +16,7 @@
     }
 
     opacity: 0;
-    scale: 0.97;
+    scale: 0.96;
     transition:
       opacity var(--ae-duration-fast) var(--ae-ease),
       scale var(--ae-duration) var(--ae-ease-spring),
@@ -29,7 +29,7 @@
 
       @starting-style {
         opacity: 0;
-        scale: 0.97;
+        scale: 0.96;
       }
     }
   }
@@ -45,9 +45,10 @@
       inset-inline-end: calc(var(--ae-space-2) * -1);
       display: grid;
       place-items: center;
-      min-inline-size: 1.25rem;
-      block-size: 1.25rem;
-      padding-inline: 0.3em;
+      --_size: round(calc(1rem * pow(var(--ae-phi), 0.5)), 2px);
+      min-inline-size: var(--_size);
+      block-size: var(--_size);
+      padding-inline: var(--ae-space-1);
       font-size: var(--ae-text-xs);
       font-weight: 560;
       line-height: 1;

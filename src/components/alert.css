@@ -5,10 +5,10 @@
     padding: var(--ae-space-4) var(--ae-space-5);
     border-radius: var(--ae-radius-m);
     corner-shape: var(--ae-corner);
-    background-color: color-mix(in oklch, var(--ae-tone) 10%, transparent);
+    background-color: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
 
     & strong {
-      color: var(--ae-tone);
+      color: var(--ae-tone-ink);
     }
   }
 }

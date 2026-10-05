@@ -16,7 +16,7 @@
     }
 
     & li + li::before {
-      content: "/";
+      content: "/" / "";
       opacity: 0.45;
     }
 
@@ -54,7 +54,7 @@
 
       &:hover {
         color: var(--ae-text);
-        background: var(--ae-fill);
+        background: var(--ae-fill-hover);
       }
 
       &:active {

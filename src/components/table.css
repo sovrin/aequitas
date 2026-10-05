@@ -47,6 +47,14 @@
         transition: rotate var(--ae-duration) var(--ae-ease);
       }
 
+      /* The header text is a button, so the sort is reachable by keyboard. */
+      & > button {
+        color: inherit;
+        font: inherit;
+        text-decoration: none;
+        cursor: inherit;
+      }
+
       &[aria-sort="ascending"]::after {
         opacity: 1;
       }
@@ -72,7 +80,11 @@
     }
 
     &[data-striped] tbody tr:nth-child(even) {
-      background: color-mix(in oklch, var(--ae-text) 3.5%, transparent);
+      background: color-mix(
+        in oklch,
+        var(--ae-text) calc(var(--ae-tint-rest) / var(--ae-phi)),
+        transparent
+      );
     }
 
     &[data-size="s"] :is(th, td) {

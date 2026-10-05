@@ -121,7 +121,7 @@
 
     & > span {
       display: grid;
-      gap: 2px;
+      gap: var(--ae-space-0);
     }
 
     & small {
@@ -144,11 +144,18 @@
     /* Selection is the one state that earns a ring. */
     &:has(:checked) {
       background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
-      box-shadow: inset 0 0 0 1.5px var(--ae-accent);
+      box-shadow: inset 0 0 0 var(--ae-stroke) var(--ae-accent);
     }
 
+    /* Focus adds the ring without dropping the checked stroke. */
     &:has(:focus-visible) {
       box-shadow: var(--ae-ring);
+    }
+
+    &:has(:checked):has(:focus-visible) {
+      box-shadow:
+        inset 0 0 0 var(--ae-stroke) var(--ae-accent),
+        var(--ae-ring);
     }
   }
 
@@ -163,6 +170,7 @@
       inline-size: var(--ae-space-5);
       block-size: var(--ae-space-5);
       background: var(--ae-fill-hover);
+      box-shadow: inset 0 0 0 var(--ae-stroke) var(--ae-control-edge);
       cursor: pointer;
       transition: background var(--ae-duration-fast) var(--ae-ease);
     }
@@ -184,6 +192,7 @@
     & label:has(:checked),
     & label:has(~ label :checked) {
       background: var(--ae-warning);
+      box-shadow: none;
     }
 
     &:hover label {

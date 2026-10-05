@@ -7,6 +7,7 @@
     justify-content: center;
     gap: var(--ae-space-3);
     padding: var(--_py) calc(var(--_py) * var(--ae-phi));
+    min-block-size: var(--ae-target);
     font-size: var(--ae-text-m);
     font-weight: 500;
     line-height: 1;
@@ -38,7 +39,7 @@
     /* On: tinted, and an edge along the bottom so it reads without colour. */
     &[aria-pressed="true"] {
       --_edge: inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone);
-      color: var(--ae-tone);
+      color: var(--ae-tone-ink);
       background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
 
       &:active {
@@ -61,7 +62,7 @@
     }
 
     &[data-variant="ghost"] {
-      color: var(--ae-tone);
+      color: var(--ae-tone-ink);
       background: transparent;
 
       &:hover {
@@ -82,19 +83,19 @@
 
       /* Even pixels throughout, so the middle square lands on a whole pixel like the outer two. */
       &::after {
-        --_sq: round(0.4em, 2px);
-        --_sm: round(0.22em, 2px);
+        --_sq: round(calc(1em / pow(var(--ae-phi), 2)), 2px);
+        --_sm: round(calc(1em * pow(var(--ae-phi), -3)), 2px);
         content: "";
         position: absolute;
         inset: 0;
         margin: auto;
-        inline-size: round(1.5em, 2px);
+        inline-size: round(calc(1em * var(--ae-phi)), 2px);
         block-size: var(--_sq);
         background:
           linear-gradient(var(--_busy) 0 0) 0 50% / var(--_sq) var(--_sq) no-repeat,
           linear-gradient(var(--_busy) 0 0) 50% 50% / var(--_sq) var(--_sq) no-repeat,
           linear-gradient(var(--_busy) 0 0) 100% 50% / var(--_sq) var(--_sq) no-repeat;
-        animation: ae-busy 0.9s ease-in-out infinite;
+        animation: ae-busy calc(var(--ae-duration) * pow(var(--ae-phi), 3)) ease-in-out infinite;
       }
     }
 
@@ -111,6 +112,7 @@
     &[data-icon] {
       padding: var(--_py);
       aspect-ratio: 1;
+      min-inline-size: var(--ae-target);
     }
   }
 

@@ -2,6 +2,8 @@
   /* Inset grouped list. Rows may be <a>, <button> or plain <div>. */
   .list {
     display: grid;
+    /* Keep a focused row clear of the sticky group header. */
+    scroll-padding-block-start: 2lh;
     box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
 
     & > * {
@@ -26,7 +28,7 @@
     /* Current row (master-detail): accent ink and tint, and the accent edge on its inline start,
        as in the sidebar and tree. */
     & > [aria-current]:not([aria-current="false"]) {
-      color: var(--ae-accent);
+      color: var(--ae-accent-ink);
       background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
       box-shadow:
         inset var(--ae-edge-x) 0 0 var(--ae-accent),
@@ -58,7 +60,7 @@
       cursor: pointer;
 
       &:hover {
-        background: var(--ae-fill);
+        background: var(--ae-fill-hover);
       }
 
       &:active {
@@ -77,8 +79,8 @@
         inline-size: round(0.5em, 1px);
         block-size: round(0.5em, 1px);
         flex: none;
-        border-block-start: 1.5px solid var(--ae-text-muted);
-        border-inline-end: 1.5px solid var(--ae-text-muted);
+        border-block-start: var(--ae-stroke) solid var(--ae-text-muted);
+        border-inline-end: var(--ae-stroke) solid var(--ae-text-muted);
         rotate: 45deg;
         opacity: 0.6;
       }

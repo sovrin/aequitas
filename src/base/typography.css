@@ -8,8 +8,10 @@
 
 @layer ae.base {
   html {
+    /* Sticky and fixed bars must not cover what keyboard focus scrolls to. */
+    scroll-padding-block: var(--ae-scroll-start, 0px) var(--ae-scroll-end, 0px);
     background: var(--ae-bg);
-    scrollbar-color: var(--ae-border-strong) transparent;
+    scrollbar-color: var(--ae-control-edge) transparent;
     accent-color: var(--ae-accent);
   }
 
@@ -81,7 +83,8 @@
     pointer-events: none;
 
     @media (prefers-reduced-motion: no-preference) {
-      animation: ae-drift 48s ease-in-out infinite alternate;
+      animation: ae-drift calc(var(--ae-duration) * pow(var(--ae-phi), 11)) ease-in-out infinite
+        alternate;
     }
   }
 
@@ -104,12 +107,26 @@
     text-wrap: balance;
   }
 
+  /* Long words in large type break rather than push a narrow page sideways. */
+  :is(h1, h2, .display) {
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  :root:has(.navbar) {
+    --ae-scroll-start: var(--ae-space-7);
+  }
+
+  :root:has(.tabbar, .dock, .action-bar) {
+    --ae-scroll-end: var(--ae-space-7);
+  }
+
   /* Large type gets lighter and tighter, not heavier: size carries the weight. */
   h1 {
     font-size: var(--ae-text-4xl);
     font-weight: 460;
     letter-spacing: -0.038em;
-    line-height: 1.04;
+    line-height: var(--ae-leading-display);
   }
   h2 {
     font-weight: 480;
@@ -147,7 +164,7 @@
   }
 
   a {
-    color: var(--ae-accent);
+    color: var(--ae-accent-ink);
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 35%, transparent);
     text-underline-offset: 0.25em;
@@ -168,7 +185,7 @@
   samp,
   pre {
     font-family: var(--ae-font-mono);
-    font-size: 0.9em;
+    font-size: calc(1em / pow(var(--ae-phi), 0.25));
   }
 
   code,
@@ -198,7 +215,7 @@
 
   ul,
   ol {
-    padding-inline-start: 1.25em;
+    padding-inline-start: calc(1em * pow(var(--ae-phi), 0.5));
   }
 
   li + li {
@@ -266,7 +283,7 @@
   .display {
     font-size: var(--ae-text-4xl);
     font-weight: 420;
-    line-height: 1.04;
+    line-height: var(--ae-leading-display);
     letter-spacing: -0.042em;
     text-wrap: balance;
   }
@@ -303,13 +320,13 @@
     list-style: none;
 
     & > li {
-      padding-inline-start: 1.4em;
-      text-indent: -1.4em;
+      padding-inline-start: calc(1em * pow(var(--ae-phi), 0.75));
+      text-indent: calc(-1em * pow(var(--ae-phi), 0.75));
 
       &::before {
-        content: "✓";
+        content: "✓" / "";
         display: inline-block;
-        inline-size: 1.4em;
+        inline-size: calc(1em * pow(var(--ae-phi), 0.75));
         text-indent: 0;
         color: var(--ae-accent);
       }
@@ -330,7 +347,7 @@
   .link {
     padding: 0;
     font: inherit;
-    color: var(--ae-accent);
+    color: var(--ae-accent-ink);
     background: none;
     border: 0;
     text-decoration: underline;

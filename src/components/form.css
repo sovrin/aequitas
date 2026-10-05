@@ -18,7 +18,7 @@
   .field > [data-error] {
     display: none;
     font-size: var(--ae-text-s);
-    color: var(--ae-danger);
+    color: var(--ae-danger-ink);
   }
 
   /* Inline field: label beside the control. */
@@ -29,7 +29,7 @@
     column-gap: var(--ae-space-4);
 
     & > label {
-      min-inline-size: 8rem;
+      min-inline-size: calc(1rem * pow(var(--ae-phi), 4.5));
     }
 
     & > :is(small, [data-error]) {
@@ -39,7 +39,7 @@
 
   label[data-required]::after {
     content: " *";
-    color: var(--ae-danger);
+    color: var(--ae-danger-ink);
   }
 
   .field:has(:user-invalid),
@@ -75,13 +75,14 @@
     background: var(--ae-fill);
     border: 0;
     border-radius: var(--ae-radius-m);
+    /* A rule along the bottom, so an empty field can still be found. Focus and invalid replace it. */
+    box-shadow: inset 0 -1px 0 var(--ae-control-edge);
     transition:
       background var(--ae-duration-fast) var(--ae-ease),
       box-shadow var(--ae-duration) var(--ae-ease);
 
     &::placeholder {
       color: var(--ae-text-muted);
-      opacity: 0.8;
     }
 
     &:hover {
@@ -95,12 +96,12 @@
 
     &:user-invalid,
     &[aria-invalid="true"] {
-      box-shadow: inset 0 0 0 1.5px var(--ae-danger);
+      box-shadow: inset 0 0 0 var(--ae-stroke) var(--ae-danger);
 
       /* Still invalid while focused: the field ring, in the danger tone. */
       &:focus-visible {
         box-shadow:
-          inset 0 0 0 1.5px var(--ae-danger),
+          inset 0 0 0 var(--ae-stroke) var(--ae-danger),
           0 0 0 4px color-mix(in oklch, var(--ae-danger) 28%, transparent);
       }
     }
@@ -149,7 +150,7 @@
     inline-size: 0.7em;
     block-size: 0.7em;
     background: var(--ae-text-muted);
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1 1l8 8M9 1L1 9' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E")
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M1 1l8 8M9 1L1 9' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E")
       center / contain no-repeat;
     cursor: pointer;
   }
@@ -188,6 +189,10 @@
     background: var(--ae-fill-hover);
     border: 0;
     border-radius: var(--ae-radius-s);
+    /* Unchecked, the box needs an edge to be found at all. */
+    box-shadow:
+      inset 0 0 0 var(--ae-stroke) var(--ae-control-edge),
+      var(--ae-focus, 0 0 #0000);
     cursor: pointer;
     transition: background var(--ae-duration) var(--ae-ease);
 
@@ -203,6 +208,7 @@
 
     &:checked {
       background: var(--ae-accent);
+      box-shadow: var(--ae-focus, 0 0 #0000);
 
       &::after {
         scale: 1;
@@ -212,9 +218,10 @@
     /* Indeterminate (set from script): a bar instead of the tick. */
     &:indeterminate {
       background: var(--ae-accent);
+      box-shadow: var(--ae-focus, 0 0 #0000);
 
       &::after {
-        block-size: 2px;
+        block-size: var(--ae-edge);
         clip-path: none;
         scale: 1;
       }
@@ -239,10 +246,10 @@
     flex: none;
     inline-size: var(--_w);
     block-size: var(--_h);
-    padding: 2px;
+    padding: var(--ae-space-0);
     display: inline-flex;
     vertical-align: middle;
-    background: var(--ae-border-strong);
+    background: var(--ae-control-edge);
     border-radius: var(--ae-radius-full);
     cursor: pointer;
     transition: background var(--ae-duration) var(--ae-ease);
@@ -252,7 +259,7 @@
       aspect-ratio: 1;
       block-size: 100%;
       border-radius: inherit;
-      background: white;
+      background: var(--ae-thumb);
       box-shadow: var(--ae-shadow-s);
       transition: translate var(--ae-duration-slow) var(--ae-ease-spring);
     }
@@ -261,6 +268,8 @@
       background: var(--ae-accent);
 
       &::after {
+        /* The thumb takes the accent's own contrast colour, so it reads on light and dark accents. */
+        background: var(--ae-accent-contrast);
         /* Travel is track width minus track height; padding cancels out (border-box). */
         translate: calc(var(--_w) - var(--_h)) 0;
       }

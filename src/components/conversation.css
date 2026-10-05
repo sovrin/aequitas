@@ -27,7 +27,7 @@
 
       & > time,
       & > small {
-        color: color-mix(in oklch, var(--ae-tone-contrast) 75%, transparent);
+        color: var(--ae-tone-contrast);
       }
     }
 

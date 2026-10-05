@@ -5,8 +5,8 @@
     }
 
     body {
-      background: #fff;
-      color: #000;
+      background: var(--ae-surface);
+      color: var(--ae-text);
     }
 
     body::before,
@@ -30,7 +30,7 @@
     .alert {
       background: none;
       box-shadow: none;
-      outline: 1px solid #ddd;
+      outline: 1px solid var(--ae-border-strong);
       break-inside: avoid;
     }
 
@@ -40,8 +40,8 @@
 
     a[href^="http"]::after {
       content: " (" attr(href) ")";
-      font-size: 0.85em;
-      color: #666;
+      font-size: var(--ae-text-s);
+      color: var(--ae-text-muted);
     }
   }
 }

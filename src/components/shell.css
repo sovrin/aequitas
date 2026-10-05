@@ -161,8 +161,8 @@
         inline-size: round(0.35em, 1px);
         block-size: round(0.35em, 1px);
         margin-inline-end: 0.2em;
-        border-block-end: 1.5px solid currentColor;
-        border-inline-end: 1.5px solid currentColor;
+        border-block-end: var(--ae-stroke) solid currentColor;
+        border-inline-end: var(--ae-stroke) solid currentColor;
         rotate: 45deg;
         opacity: 0.6;
         transition: rotate var(--ae-duration) var(--ae-ease);
@@ -193,7 +193,7 @@
       text-decoration: none;
 
       &:hover {
-        background: var(--ae-fill);
+        background: var(--ae-fill-hover);
       }
 
       &:active {
@@ -201,7 +201,7 @@
       }
 
       &[aria-current="page"] {
-        color: var(--ae-accent);
+        color: var(--ae-accent-ink);
         background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
         box-shadow:
           inset var(--ae-edge-x) 0 0 var(--ae-accent),
@@ -213,7 +213,7 @@
         display: grid;
         place-items: center;
         flex: none;
-        inline-size: 1.25em;
+        inline-size: calc(1em * pow(var(--ae-phi), 0.5));
         font-style: normal;
       }
     }
@@ -231,9 +231,14 @@
         display: none;
       }
 
+      /* With its summary gone a closed group could never be opened: show its links anyway. */
+      & details:not([open])::details-content {
+        content-visibility: visible;
+      }
+
       & a {
         flex-direction: column;
-        gap: 2px;
+        gap: var(--ae-space-0);
         padding: var(--ae-space-2) var(--ae-space-1);
         font-size: var(--ae-text-xs);
         text-align: center;
@@ -268,6 +273,10 @@
       & .segmented,
       & > footer {
         display: none;
+      }
+
+      & details:not([open])::details-content {
+        content-visibility: visible;
       }
 
       & a {
@@ -321,7 +330,7 @@
 
     & > hr {
       inline-size: 1px;
-      block-size: 1.25em;
+      block-size: calc(1em * pow(var(--ae-phi), 0.5));
       margin-inline: var(--ae-space-1);
       background: var(--ae-border-strong);
     }

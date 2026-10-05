@@ -20,7 +20,7 @@
       text-decoration-line: underline;
       text-decoration-thickness: var(--ae-edge);
       text-decoration-color: transparent;
-      text-underline-offset: 0.6em;
+      text-underline-offset: calc(1em / var(--ae-phi));
       transition:
         color var(--ae-duration) var(--ae-ease),
         text-decoration-color var(--ae-duration) var(--ae-ease);

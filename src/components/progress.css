@@ -8,6 +8,8 @@
     border: 0;
     border-radius: var(--ae-radius-full);
     background: var(--ae-border);
+    /* The track's full extent stays visible, so the value reads as a share of it. */
+    box-shadow: inset 0 0 0 1px var(--ae-control-edge);
     overflow: hidden;
   }
 
@@ -33,12 +35,14 @@
       background:
         linear-gradient(90deg, transparent, var(--ae-tone), transparent) 0 0 / 40% 100% no-repeat,
         var(--ae-border);
-      animation: ae-indeterminate 1.4s var(--ae-ease) infinite;
+      animation: ae-indeterminate calc(var(--ae-duration) * pow(var(--ae-phi), 4)) var(--ae-ease)
+        infinite;
     }
 
     &::-moz-progress-bar {
       background: linear-gradient(90deg, transparent, var(--ae-tone), transparent);
-      animation: ae-indeterminate 1.4s var(--ae-ease) infinite;
+      animation: ae-indeterminate calc(var(--ae-duration) * pow(var(--ae-phi), 4)) var(--ae-ease)
+        infinite;
     }
   }
 

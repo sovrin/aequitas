@@ -46,7 +46,7 @@
     animation-duration: var(--ae-duration-slow);
     animation-timing-function: var(--ae-ease);
     animation-fill-mode: both;
-    animation-delay: calc(var(--i, 0) * 60ms);
+    animation-delay: calc(var(--i, 0) * var(--ae-stagger));
   }
 
   .animate-fade-in {
@@ -63,34 +63,34 @@
   }
 
   .animate-spin {
-    animation: ae-spin 1s linear infinite;
+    animation: ae-spin calc(var(--ae-duration) * pow(var(--ae-phi), 3)) linear infinite;
   }
 
   .animate-blink {
-    animation: ae-blink 1.2s ease-in-out infinite;
+    animation: ae-blink calc(var(--ae-duration) * pow(var(--ae-phi), 3.5)) ease-in-out infinite;
   }
 
   /* Stagger children: <ul data-stagger><li class="animate-slide-up">…</li></ul> */
-  @supports (--x: sibling-index()) {
+  @supports (order: sibling-index()) {
     [data-stagger] > * {
       --i: sibling-index();
     }
   }
 
   .delay-1 {
-    animation-delay: 60ms;
+    animation-delay: var(--ae-stagger);
   }
   .delay-2 {
-    animation-delay: 120ms;
+    animation-delay: calc(var(--ae-stagger) * 2);
   }
   .delay-3 {
-    animation-delay: 180ms;
+    animation-delay: calc(var(--ae-stagger) * 3);
   }
   .delay-4 {
-    animation-delay: 240ms;
+    animation-delay: calc(var(--ae-stagger) * 4);
   }
   .delay-5 {
-    animation-delay: 300ms;
+    animation-delay: calc(var(--ae-stagger) * 5);
   }
 
   @media (prefers-reduced-motion: reduce) {

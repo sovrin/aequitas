@@ -43,8 +43,8 @@
         inline-size: round(0.35em, 1px);
         block-size: round(0.35em, 1px);
         margin-inline: 0.1em 0.2em;
-        border-block-end: 1.5px solid var(--ae-text-muted);
-        border-inline-end: 1.5px solid var(--ae-text-muted);
+        border-block-end: var(--ae-stroke) solid var(--ae-text-muted);
+        border-inline-end: var(--ae-stroke) solid var(--ae-text-muted);
         rotate: -45deg;
         transition: rotate var(--ae-duration) var(--ae-ease);
       }
@@ -64,7 +64,7 @@
     }
 
     & :is(li > a, summary):hover {
-      background: var(--ae-fill);
+      background: var(--ae-fill-hover);
     }
 
     & :is(li > a, summary):active {
@@ -72,7 +72,7 @@
     }
 
     & li > a[aria-current]:not([aria-current="false"]) {
-      color: var(--ae-accent);
+      color: var(--ae-accent-ink);
       background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
       box-shadow:
         inset var(--ae-edge-x) 0 0 var(--ae-accent),

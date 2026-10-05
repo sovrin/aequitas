@@ -45,7 +45,7 @@
     }
 
     & strong {
-      color: var(--ae-tone);
+      color: var(--ae-tone-ink);
     }
 
     &[data-tone]::before {

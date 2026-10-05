@@ -63,17 +63,17 @@
       }
 
       &[data-tone] {
-        color: var(--ae-tone);
+        color: var(--ae-tone-ink);
       }
 
-      &[aria-checked]::before {
+      &:is([aria-pressed], [aria-checked])::before {
         content: "";
         inline-size: 1em;
         font-size: 0.85em;
         text-align: center;
       }
 
-      &[aria-checked="true"]::before {
+      &:is([aria-pressed="true"], [aria-checked="true"])::before {
         content: "✓";
       }
 

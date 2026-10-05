@@ -6,7 +6,7 @@
     padding-block: var(--ae-space-8) var(--ae-space-7);
 
     & > h1 {
-      max-inline-size: 14ch;
+      max-inline-size: calc(var(--ae-measure) / pow(var(--ae-phi), 3));
     }
 
     & > p {
@@ -62,13 +62,13 @@
 
         & li {
           margin: 0;
-          padding-inline-start: 1.4em;
-          text-indent: -1.4em;
+          padding-inline-start: calc(1em * pow(var(--ae-phi), 0.75));
+          text-indent: calc(-1em * pow(var(--ae-phi), 0.75));
 
           &::before {
-            content: "✓";
+            content: "✓" / "";
             display: inline-block;
-            inline-size: 1.4em;
+            inline-size: calc(1em * pow(var(--ae-phi), 0.75));
             text-indent: 0;
             color: var(--ae-accent);
           }
@@ -76,7 +76,7 @@
       }
 
       &[data-featured] {
-        --ae-text-muted: color-mix(in oklch, var(--ae-tone-contrast) 72%, transparent);
+        --ae-text-muted: color-mix(in oklch, var(--ae-tone-contrast) 92%, transparent);
         color: var(--ae-tone-contrast);
         background: var(--ae-tone);
         backdrop-filter: none;
@@ -151,7 +151,7 @@
 
     & > * > .icon:first-child {
       margin-block-end: var(--ae-space-2);
-      font-size: 1.5em;
+      font-size: calc(1em * var(--ae-phi));
       color: var(--ae-tone);
     }
 

@@ -23,7 +23,9 @@
     gap: var(--ae-space-3);
   }
 
-  /* The golden split: two columns grow 1 : φ, wrap when narrower than 2 × basis. */
+  /* The golden split: two columns at exactly 1 : φ whenever they share a row. The narrow side
+     keeps at least --basis and the wide side --basis · φ, so the row wraps below basis · φ² + gap
+     instead of squeezing the ratio. */
   .split {
     --basis: calc(1rem * pow(var(--ae-phi), 6)); /* ≈ 18 rem */
     display: flex;
@@ -41,14 +43,17 @@
 
     & > :last-child {
       flex: var(--ae-phi) 1 0;
+      min-inline-size: min(calc(var(--basis) * var(--ae-phi)), 100%);
     }
 
     &[data-flip] > :first-child {
       flex-grow: var(--ae-phi);
+      min-inline-size: min(calc(var(--basis) * var(--ae-phi)), 100%);
     }
 
     &[data-flip] > :last-child {
       flex-grow: 1;
+      min-inline-size: min(var(--basis), 100%);
     }
   }
 
