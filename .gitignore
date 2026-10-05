@@ -8,3 +8,8 @@ src/_generated
 site/app/generated
 site/public/llms.txt
 site/public/llms-full.txt
+
+# Share agent definitions; everything else in .claude stays local
+!/.claude/
+/.claude/*
+!/.claude/agents/
