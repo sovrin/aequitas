@@ -138,6 +138,11 @@
     --ae-ease: cubic-bezier(0.2, 0, 0, 1);
     /* "Spring" settles without overshoot: a long, decelerating arrival, never a bounce. */
     --ae-ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+    /* Busy squares for a single pseudo-element (.btn, .card, .list and .table with aria-busy): a
+       vector mask with .spinner's pulse inside it, so the squares scale smoothly instead of
+       stepping through repainted pixels. Squares are φ⁻² and gaps φ⁻³ of the width's φ; the beat
+       is .spinner's, φ³ × 220ms, baked in because a data URI can't read tokens. */
+    --ae-busy-squares: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 161.8 38.2'%3E%3Cstyle%3Erect{transform-box:fill-box;transform-origin:center;animation:p .932s ease-in-out infinite}rect:nth-child(1){animation-delay:-.311s}rect:nth-child(2){animation-delay:-.155s}@keyframes p{0%25,80%25,100%25{opacity:.25;transform:scale(.75)}40%25{opacity:1;transform:scale(1)}}%3C/style%3E%3Crect width='38.2' height='38.2'/%3E%3Crect x='61.8' width='38.2' height='38.2'/%3E%3Crect x='123.6' width='38.2' height='38.2'/%3E%3C/svg%3E");
 
     /* Layout */
     --ae-container: calc(1rem * pow(var(--ae-phi), 9)); /* ≈ 76 rem */
@@ -162,6 +167,7 @@
   @media (prefers-reduced-motion: reduce) {
     :root {
       --ae-duration: 1ms;
+      --ae-busy-squares: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 161.8 38.2'%3E%3Crect width='38.2' height='38.2'/%3E%3Crect x='61.8' width='38.2' height='38.2'/%3E%3Crect x='123.6' width='38.2' height='38.2'/%3E%3C/svg%3E");
     }
   }
 }

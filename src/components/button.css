@@ -2,6 +2,8 @@
   /* Padding: inline = block × φ. Flat tinted fills; only primary is solid. */
   .btn {
     --_py: var(--ae-space-3);
+    /* Colour of the busy squares; the primary variant swaps it for the tone's contrast. */
+    --_busy: var(--ae-text);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -76,26 +78,20 @@
 
     /* Busy: label goes transparent, three squares pulse in its place. */
     &[aria-busy="true"] {
-      --_busy: var(--ae-text);
       position: relative;
       color: transparent;
       pointer-events: none;
 
-      /* Even pixels throughout, so the middle square lands on a whole pixel like the outer two. */
+      /* The squares are a vector mask (--ae-busy-squares) filled with the busy colour. */
       &::after {
-        --_sq: round(calc(1em / pow(var(--ae-phi), 2)), 2px);
-        --_sm: round(calc(1em * pow(var(--ae-phi), -3)), 2px);
         content: "";
         position: absolute;
         inset: 0;
         margin: auto;
-        inline-size: round(calc(1em * var(--ae-phi)), 2px);
-        block-size: var(--_sq);
-        background:
-          linear-gradient(var(--_busy) 0 0) 0 50% / var(--_sq) var(--_sq) no-repeat,
-          linear-gradient(var(--_busy) 0 0) 50% 50% / var(--_sq) var(--_sq) no-repeat,
-          linear-gradient(var(--_busy) 0 0) 100% 50% / var(--_sq) var(--_sq) no-repeat;
-        animation: ae-busy calc(var(--ae-duration) * pow(var(--ae-phi), 3)) ease-in-out infinite;
+        inline-size: calc(1em * var(--ae-phi));
+        block-size: calc(1em / pow(var(--ae-phi), 2));
+        background: var(--_busy);
+        mask: var(--ae-busy-squares) center / contain no-repeat;
       }
     }
 
@@ -138,28 +134,6 @@
     & > .btn:not(:last-child) {
       border-start-end-radius: 0;
       border-end-end-radius: 0;
-    }
-  }
-
-  @keyframes ae-busy {
-    0%,
-    100% {
-      background-size:
-        var(--_sq) var(--_sq),
-        var(--_sm) var(--_sm),
-        var(--_sm) var(--_sm);
-    }
-    33% {
-      background-size:
-        var(--_sm) var(--_sm),
-        var(--_sq) var(--_sq),
-        var(--_sm) var(--_sm);
-    }
-    66% {
-      background-size:
-        var(--_sm) var(--_sm),
-        var(--_sm) var(--_sm),
-        var(--_sq) var(--_sq);
     }
   }
 }

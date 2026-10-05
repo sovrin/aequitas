@@ -81,21 +81,16 @@
         filter var(--ae-duration) var(--ae-ease);
     }
 
-    /* Even pixels, as on .btn[aria-busy]: the middle square lands on a whole pixel. */
+    /* The same squares as .btn[aria-busy] and .spinner, at the spinner's size. */
     &::after {
-      --_sq: round(var(--ae-space-2), 2px);
-      --_sm: round(var(--ae-space-1), 2px);
       content: "";
       position: absolute;
       inset: 0;
       margin: auto;
-      inline-size: round(var(--ae-space-5), 2px);
-      block-size: var(--_sq);
-      background:
-        linear-gradient(var(--ae-text) 0 0) 0 50% / var(--_sq) var(--_sq) no-repeat,
-        linear-gradient(var(--ae-text) 0 0) 50% 50% / var(--_sq) var(--_sq) no-repeat,
-        linear-gradient(var(--ae-text) 0 0) 100% 50% / var(--_sq) var(--_sq) no-repeat;
-      animation: ae-busy calc(var(--ae-duration) * pow(var(--ae-phi), 3)) ease-in-out infinite;
+      inline-size: var(--ae-space-5);
+      block-size: var(--ae-space-2);
+      background: var(--ae-text);
+      mask: var(--ae-busy-squares) center / contain no-repeat;
     }
   }
 

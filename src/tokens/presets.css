@@ -177,7 +177,8 @@
       .delta::before,
       .tabs::after,
       input[role="switch"]::after,
-      .steps > li:is([data-done], [aria-current="step"])::before
+      .steps > li:is([data-done], [aria-current="step"])::before,
+      :is(.btn, .card, .list, .table)[aria-busy="true"]::after
     ) {
       background-color: CanvasText !important;
     }
@@ -192,7 +193,8 @@
       )
       .icon,
     input:is([type="checkbox"], [type="radio"]):is(:checked, :indeterminate)::after,
-    input[role="switch"]:checked::after {
+    input[role="switch"]:checked::after,
+    .btn[data-variant="primary"][aria-busy="true"]::after {
       background-color: HighlightText !important;
     }
     a:any-link .icon {
