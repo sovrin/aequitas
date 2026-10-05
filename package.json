@@ -1,0 +1,30 @@
+{
+  "name": "aequitas",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A minimal CSS design language with frost and blur.",
+  "bin": {
+    "aequitas-check": "dist/aequitas-check.mjs"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "dev": "tsx scripts/dev.ts",
+    "build:site": "pnpm build && pnpm --dir site generate",
+    "preview:site": "pnpm --dir site preview",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "typecheck": "tsc --noEmit",
+    "check": "node dist/aequitas-check.mjs"
+  },
+  "devDependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "@types/node": "^26.6.3",
+    "esbuild": "^0.28.2",
+    "lightningcss": "^1.33.0",
+    "oxfmt": "^0.71.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
