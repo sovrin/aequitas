@@ -15,28 +15,29 @@ You review; you never edit files. You may run read-only commands (`grep`, `pnpm 
 
 The claim, as published in `README.md`, `src/tokens/scale.css` (header comment), `site/app/pages/foundations/proportion.vue`, `ai/rules.md` and `ai/SKILL.md`:
 
-| Measure | Rule                                                                                                                     |
-| ------- | ------------------------------------------------------------------------------------------------------------------------ |
-| space   | `--ae-unit · φⁿ`, n = −3…4, snapped with `round(…, 1px)`                                                                 |
-| type    | `--ae-text-base · φ^(n/2)`, body leading `φ`, tight leading `φ^¼`                                                        |
-| radius  | `--ae-radius-m · φⁿ`                                                                                                     |
-| blur    | `1rem · φⁿ`                                                                                                              |
-| motion  | `--ae-duration · φⁿ`                                                                                                     |
-| tint    | `7% · φⁿ` for rest, hover and press (7, 11.3, 18.3)                                                                      |
-| layout  | `.split` at `1 : φ`, `.golden` aspect `φ`, container `φ⁹ rem`, measure `40ch · φ`, basis and centre widths `φ⁶`/`φ⁷ rem` |
+| Measure | Rule                                                                                                                          |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| space   | `--ae-unit · φⁿ`, n = −4…4 (`--ae-space-0` … `-8`), snapped with `round(…, 1px)`                                              |
+| type    | `--ae-text-base · φ^(n/2)`, leading `φ` body, `φ^¼` tight, `φ^⅛` display                                                      |
+| radius  | `--ae-radius-m · φⁿ`                                                                                                          |
+| blur    | `1rem · φⁿ`                                                                                                                   |
+| motion  | `--ae-duration · φⁿ`, stagger `--ae-stagger` = `φ⁻³`                                                                          |
+| shadow  | key and ambient offsets on `--ae-space-*`, each blur two steps (φ²) above its offset; contact layers and spreads whole pixels |
+| tint    | `--ae-tint-rest · φⁿ` for rest, hover and press (7, 11.3, 18.3; 12, 19.4, 31.4 under `prefers-contrast`)                      |
+| layout  | `.split` at `1 : φ`, `.golden` aspect `φ`, container `φ⁹ rem`, measure `40ch · φ`, basis and centre widths `φ⁶`/`φ⁷ rem`      |
 
 Rules:
 
 - **Measures must be derived, not just close.** Prefer `var(--ae-space-n)`, `var(--ae-text-*)`, `var(--ae-radius-*)`, `var(--ae-duration*)` or an explicit `pow(var(--ae-phi), n)`. A literal that merely equals a φ power, like `11.3%`, `1.618rem` or `0.618`, is drift waiting to happen: flag it and suggest the derivation, unless a comment explains why it has to be a literal (`@property` initial values have to be absolute, for example).
 - **Check the arithmetic.** When a comment states a value (`/* ≈ 76 rem */`, `/* 0.236 */`), compute it with `node -e` and flag anything off by more than rounding.
-- **Know what isn't a measure.** Some values are not covered by the claim, and that's fine: colour (oklch lightness, chroma, hue), alpha and mix percentages for surfaces and borders, `saturate()`, easing curves, z-index, and physical hairlines. These are the 1px border or hairline, the 2px `--ae-edge`, and the 2px/4px focus ring offsets. Hairlines are about device pixels, not proportion. Don't flag them, but do flag a new hairline-sized literal that isn't there for crispness.
+- **Know what isn't a measure.** Some values are not covered by the claim, and that's fine: colour (oklch lightness, chroma, hue), alpha and mix percentages for surfaces and borders, `saturate()`, easing curves, z-index, and physical hairlines. These are the 1px border or hairline, the 1.5px `--ae-stroke`, the 2px `--ae-edge`, the 24px `--ae-target` floor, and the 2px/4px focus ring offsets. Hairlines are about device pixels, not proportion. Don't flag them, but do flag a new hairline-sized literal that isn't there for crispness.
 - **Grey zones need a decision, not silence.** Shadow offsets and blurs in `--ae-shadow-*` mix φ terms with pixel literals. Component-local paddings, offsets and sizes in raw `px`/`rem` fall here too. For each one, say whether it should be derived, or whether it's a deliberate exception that the docs should name. If the README says "every measure" and a measure isn't φ, that's a finding.
 - **The claim may not grow quietly.** If a doc, comment or catalog entry newly claims something is golden ("perfectly proportioned", "φ everywhere", a new row in a table), verify it in the CSS. Docs that promise more than the code delivers are the most serious kind of drift.
 
 ### 2. The architecture
 
 - **Cascade layers.** Everything lives in `@layer ae.reset, ae.tokens, ae.base, ae.layout, ae.components, ae.utilities` (declared in `src/aequitas.css` and `src/core.css`). No unlayered rules in `src/` except `@property` registrations. Each file belongs to the right layer: tokens only declare custom properties, components never set tokens globally on `:root`, and utilities stay single-purpose.
-- **`!important`** appears only to enforce hiding (`[hidden]`, the responsive `hide-*` utilities, `.light-only`/`.dark-only`, print) and reduced motion. Anything else is a finding. Inside layers, `!important` inverts priority and beats the user's unlayered CSS, which breaks the "unlayered wins" promise.
+- **`!important`** appears only to enforce hiding (`[hidden]`, the responsive `hide-*` utilities, `.light-only`/`.dark-only`, print), reduced motion, the single-frame theme swap on `[data-ae-restyle]` (`src/base/typography.css`), and the `forced-colors: active` block in `src/tokens/presets.css`, which must beat the component layer. Anything else is a finding. Inside layers, `!important` inverts priority and beats the user's unlayered CSS, which breaks the "unlayered wins" promise.
 - **Entry points stay in sync.** `src/core.css` has the same import list as `src/aequitas.css`, minus `_generated/utilities.css`. Every file in `src/components/` and `src/layout/` is imported by both. Icons stay in `src/icons.css` only.
 - **Tokens are the only source.** Components use `var(--ae-*)`. No hex, rgb or hsl values and no raw oklch outside `src/tokens/`. No new token without the `--ae-` prefix. A token that affects proportion must derive from `--ae-phi` or from another token that does.
 - **Variants are `data-*`, state is ARIA.** No modifier classes (`.btn-primary`, `.is-active`, `.disabled`). Reuse the shared vocabulary from `ai/rules.md` (`data-variant`, `data-size` s/l, `data-tone`, `data-side`) rather than inventing a synonym. If a new attribute value is styled, it has to show up in the catalog, so the manifest, the checker and the AI docs learn about it.
