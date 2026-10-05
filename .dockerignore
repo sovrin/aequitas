@@ -1,0 +1,15 @@
+**/node_modules
+.git
+.idea
+.claude
+dist
+site/dist
+site/.nuxt
+site/.output
+site/.data
+src/_generated
+site/app/generated
+site/public/llms.txt
+site/public/llms-full.txt
+docker-compose.yaml
+Dockerfile
