@@ -53,6 +53,10 @@ Rules:
 - **Square by default.** `--ae-radius-m: 0`; roundness comes only from `data-radius` presets. A hard-coded `border-radius` bypasses that.
 - **Graceful degradation everywhere.** Frost falls back to solid surfaces without `backdrop-filter`, under `prefers-reduced-transparency` and under `forced-colors`. Every new component also respects `prefers-contrast`, `forced-colors` (system colours, visible boundaries) and `prefers-reduced-motion`. Spacing uses logical properties (`inline`/`block`), so RTL works.
 
+## Boundaries
+
+Accessibility (contrast, forced colours, keyboard, ARIA) belongs to the `a11y` advisor. Whether the catalog, docs pages, README and AI docs match the code belongs to `catalog-sync`. You own the φ claim wherever it appears, including in docs. When you notice something in the other two areas in passing, add one line naming the advisor instead of reviewing it yourself.
+
 ## How to review
 
 1. **Scope it.** Run `git diff` and `git diff --cached` (or `git show <rev>`) and review what changed, plus whatever it touches. For a full audit, walk `src/tokens` → `src/base` → `src/layout` → `src/components` → `src/utilities.css`, `motion.css` → the claims in README, the docs and `ai/`.
