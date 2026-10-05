@@ -1,0 +1,190 @@
+@property --ae-fade-a {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --ae-fade-b {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@layer ae.utilities {
+  /* Frost anything: add .frost (shared glass lives in tokens/frost.css). */
+  .frost {
+    box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
+  }
+
+  /* Scroll-driven reveal. No JS; ignored where unsupported. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      [data-reveal] {
+        animation: ae-scroll-reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 5% entry 55%;
+      }
+    }
+  }
+
+  @keyframes ae-scroll-reveal {
+    from {
+      opacity: 0;
+      translate: 0 var(--ae-space-5);
+      filter: blur(var(--ae-blur-s));
+    }
+  }
+
+  /* Scroll fades: edges fade only while there is more to scroll in that direction. */
+  .scroll-x,
+  .scroll-y {
+    --_fade: var(--ae-space-6);
+    scrollbar-width: none;
+  }
+
+  .scroll-x {
+    overflow-x: auto;
+    mask: linear-gradient(
+      90deg,
+      transparent,
+      #000 var(--ae-fade-a),
+      #000 calc(100% - var(--ae-fade-b)),
+      transparent
+    );
+  }
+
+  .scroll-y {
+    overflow-y: auto;
+    mask: linear-gradient(
+      180deg,
+      transparent,
+      #000 var(--ae-fade-a),
+      #000 calc(100% - var(--ae-fade-b)),
+      transparent
+    );
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .scroll-x {
+      animation: ae-fade linear both;
+      animation-timeline: scroll(self x);
+    }
+
+    .scroll-y {
+      animation: ae-fade linear both;
+      animation-timeline: scroll(self y);
+    }
+  }
+
+  /* Fade length is --_fade (φ² rem by default): override it on the scroller. */
+  @keyframes ae-fade {
+    from {
+      --ae-fade-a: 0px;
+      --ae-fade-b: var(--_fade);
+    }
+    to {
+      --ae-fade-a: var(--_fade);
+      --ae-fade-b: 0px;
+    }
+  }
+
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .clamp-2,
+  .clamp-3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .clamp-2 {
+    -webkit-line-clamp: 2;
+  }
+
+  .clamp-3 {
+    -webkit-line-clamp: 3;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mono {
+    font-family: var(--ae-font-mono);
+  }
+
+  .text-xs {
+    font-size: var(--ae-text-xs);
+  }
+
+  .text-s {
+    font-size: var(--ae-text-s);
+  }
+
+  .text-l {
+    font-size: var(--ae-text-l);
+  }
+
+  @media (width < 48rem) {
+    .hide-s {
+      display: none !important;
+    }
+  }
+
+  @media (width >= 48rem) {
+    .hide-l {
+      display: none !important;
+    }
+  }
+
+  .text-muted {
+    color: var(--ae-text-muted);
+  }
+
+  .end {
+    margin-inline-start: auto;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Gap overrides map to the φ space scale: .gap-1 … .gap-8 */
+  .gap-1 {
+    gap: var(--ae-space-1);
+  }
+  .gap-2 {
+    gap: var(--ae-space-2);
+  }
+  .gap-3 {
+    gap: var(--ae-space-3);
+  }
+  .gap-4 {
+    gap: var(--ae-space-4);
+  }
+  .gap-5 {
+    gap: var(--ae-space-5);
+  }
+  .gap-6 {
+    gap: var(--ae-space-6);
+  }
+  .gap-7 {
+    gap: var(--ae-space-7);
+  }
+  .gap-8 {
+    gap: var(--ae-space-8);
+  }
+}

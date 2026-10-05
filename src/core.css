@@ -1,0 +1,58 @@
+/*! aequitas core — components and layouts without the utility layer and icons */
+
+/* Cascade order. Anything you write unlayered beats the whole framework. */
+@layer ae.reset, ae.tokens, ae.base, ae.layout, ae.components, ae.utilities;
+
+@import "./tokens/color.css";
+@import "./tokens/scale.css";
+@import "./tokens/frost.css";
+@import "./tokens/presets.css";
+
+@import "./base/fonts.css";
+@import "./base/reset.css";
+@import "./base/typography.css";
+@import "./base/print.css";
+
+@import "./layout/layout.css";
+@import "./layout/pages.css";
+
+@import "./components/button.css";
+@import "./components/form.css";
+@import "./components/card.css";
+@import "./components/badge.css";
+@import "./components/alert.css";
+@import "./components/navbar.css";
+@import "./components/dialog.css";
+@import "./components/menu.css";
+@import "./components/segmented.css";
+@import "./components/select.css";
+@import "./components/range.css";
+@import "./components/input-group.css";
+@import "./components/tabs.css";
+@import "./components/tooltip.css";
+@import "./components/toast.css";
+@import "./components/avatar.css";
+@import "./components/list.css";
+@import "./components/accordion.css";
+@import "./components/chip.css";
+@import "./components/navigation.css";
+@import "./components/feedback.css";
+@import "./components/shell.css";
+@import "./components/drawer.css";
+@import "./components/sequence.css";
+@import "./components/data.css";
+@import "./components/combobox.css";
+@import "./components/tree.css";
+@import "./components/calendar.css";
+@import "./components/popover.css";
+@import "./components/conversation.css";
+@import "./components/misc.css";
+@import "./components/chrome.css";
+@import "./components/marketing.css";
+@import "./components/a11y.css";
+@import "./components/table.css";
+@import "./components/progress.css";
+@import "./components/interaction.css";
+
+@import "./utilities.css";
+@import "./motion.css";

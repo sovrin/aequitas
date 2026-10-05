@@ -1,0 +1,101 @@
+/* Motion presets. Durations and easings come from the tokens; stagger with --i or sibling-index(). */
+@layer ae.utilities {
+  @keyframes ae-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes ae-slide-up {
+    from {
+      opacity: 0;
+      translate: 0 var(--ae-space-4);
+    }
+  }
+
+  @keyframes ae-slide-down {
+    from {
+      opacity: 0;
+      translate: 0 calc(var(--ae-space-4) * -1);
+    }
+  }
+
+  @keyframes ae-scale-in {
+    from {
+      opacity: 0;
+      scale: 0.96;
+    }
+  }
+
+  @keyframes ae-spin {
+    to {
+      rotate: 1turn;
+    }
+  }
+
+  @keyframes ae-blink {
+    50% {
+      opacity: 0.35;
+    }
+  }
+
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-slide-down,
+  .animate-scale-in {
+    animation-duration: var(--ae-duration-slow);
+    animation-timing-function: var(--ae-ease);
+    animation-fill-mode: both;
+    animation-delay: calc(var(--i, 0) * 60ms);
+  }
+
+  .animate-fade-in {
+    animation-name: ae-fade-in;
+  }
+  .animate-slide-up {
+    animation-name: ae-slide-up;
+  }
+  .animate-slide-down {
+    animation-name: ae-slide-down;
+  }
+  .animate-scale-in {
+    animation-name: ae-scale-in;
+  }
+
+  .animate-spin {
+    animation: ae-spin 1s linear infinite;
+  }
+
+  .animate-blink {
+    animation: ae-blink 1.2s ease-in-out infinite;
+  }
+
+  /* Stagger children: <ul data-stagger><li class="animate-slide-up">…</li></ul> */
+  @supports (--x: sibling-index()) {
+    [data-stagger] > * {
+      --i: sibling-index();
+    }
+  }
+
+  .delay-1 {
+    animation-delay: 60ms;
+  }
+  .delay-2 {
+    animation-delay: 120ms;
+  }
+  .delay-3 {
+    animation-delay: 180ms;
+  }
+  .delay-4 {
+    animation-delay: 240ms;
+  }
+  .delay-5 {
+    animation-delay: 300ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [class*="animate-"] {
+      animation: none;
+    }
+  }
+}

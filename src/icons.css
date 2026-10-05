@@ -1,0 +1,3 @@
+/*! aequitas icons — mask-based icon set, include alongside aequitas.css */
+@layer ae.components;
+@import "./_generated/icons.css";
