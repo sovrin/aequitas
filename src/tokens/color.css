@@ -1,0 +1,176 @@
+/* Registered so hues can be animated and type-checked by the browser. */
+@property --ae-hue {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 255;
+}
+
+@property --ae-neutral-hue {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 255;
+}
+
+/* The accent in each scheme, registered so a hue change crossfades the colour in a straight line
+   (the hue itself would interpolate as a number, sweeping the long way round the wheel). */
+@property --ae-accent-light {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.55 0.2 255);
+}
+
+@property --ae-accent-dark {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.72 0.15 255);
+}
+
+@layer ae.tokens {
+  :root {
+    color-scheme: light dark;
+
+    /* The two knobs. Change these per project, everything else follows. */
+    --ae-hue: 255;
+    --ae-neutral-hue: 255;
+
+    /* Surfaces */
+    --ae-bg: light-dark(
+      oklch(0.975 0.003 var(--ae-neutral-hue)),
+      oklch(0.14 0.008 var(--ae-neutral-hue))
+    );
+    --ae-bg-sunken: light-dark(
+      oklch(0.96 0.005 var(--ae-neutral-hue)),
+      oklch(0.115 0.006 var(--ae-neutral-hue))
+    );
+    --ae-surface: light-dark(oklch(1 0 0), oklch(0.26 0.01 var(--ae-neutral-hue)));
+    --ae-surface-hover: light-dark(
+      oklch(0.97 0.004 var(--ae-neutral-hue)),
+      oklch(0.31 0.012 var(--ae-neutral-hue))
+    );
+
+    /* Text */
+    --ae-text: light-dark(
+      oklch(0.21 0.02 var(--ae-neutral-hue)),
+      oklch(0.96 0.005 var(--ae-neutral-hue))
+    );
+    --ae-text-muted: light-dark(
+      oklch(0.48 0.02 var(--ae-neutral-hue)),
+      oklch(0.72 0.015 var(--ae-neutral-hue))
+    );
+
+    /* Lines */
+    --ae-border: light-dark(oklch(0.2 0.02 var(--ae-neutral-hue) / 0.08), oklch(1 0 0 / 0.08));
+    --ae-border-strong: light-dark(
+      oklch(0.2 0.02 var(--ae-neutral-hue) / 0.16),
+      oklch(1 0 0 / 0.16)
+    );
+    --ae-highlight: light-dark(oklch(1 0 0 / 0.9), oklch(1 0 0 / 0.08));
+
+    /* Tones */
+    --ae-accent-light: oklch(0.55 0.2 var(--ae-hue));
+    --ae-accent-dark: oklch(0.72 0.15 var(--ae-hue));
+    --ae-accent: light-dark(var(--ae-accent-light), var(--ae-accent-dark));
+    --ae-accent-contrast: light-dark(oklch(0.99 0 0), oklch(0.18 0.04 var(--ae-hue)));
+    --ae-success: light-dark(oklch(0.55 0.15 150), oklch(0.75 0.15 150));
+    --ae-success-contrast: light-dark(oklch(0.99 0 0), oklch(0.18 0.04 150));
+    --ae-warning: light-dark(oklch(0.62 0.15 70), oklch(0.82 0.15 80));
+    --ae-warning-contrast: light-dark(oklch(0.99 0 0), oklch(0.2 0.04 80));
+    --ae-danger: light-dark(oklch(0.56 0.21 25), oklch(0.72 0.17 25));
+    --ae-danger-contrast: light-dark(oklch(0.99 0 0), oklch(0.18 0.04 25));
+    --ae-info: light-dark(oklch(0.57 0.14 235), oklch(0.76 0.12 235));
+    --ae-info-contrast: light-dark(oklch(0.99 0 0), oklch(0.18 0.04 235));
+
+    /* The active tone. Components read these; `data-tone` swaps them. */
+    --ae-tone: var(--ae-accent);
+    --ae-tone-contrast: var(--ae-accent-contrast);
+
+    /* Aurora: colour fields behind the page. Frost needs something to blur. */
+    --ae-aurora:
+      radial-gradient(
+        46% 40% at 14% 6%,
+        light-dark(oklch(0.88 0.09 var(--ae-hue) / 0.7), oklch(0.42 0.09 var(--ae-hue) / 0.7)),
+        transparent
+      ),
+      radial-gradient(
+        40% 44% at 90% 12%,
+        light-dark(
+          oklch(0.9 0.07 calc(var(--ae-hue) + 55) / 0.55),
+          oklch(0.4 0.07 calc(var(--ae-hue) + 55) / 0.5)
+        ),
+        transparent
+      ),
+      radial-gradient(
+        50% 40% at 72% 96%,
+        light-dark(
+          oklch(0.9 0.07 calc(var(--ae-hue) - 60) / 0.5),
+          oklch(0.38 0.07 calc(var(--ae-hue) - 60) / 0.5)
+        ),
+        transparent
+      );
+  }
+
+  /* Where relative colours work, the aurora takes its hue from the accent, so it follows the
+     accent's transition instead of jumping to the new hue. */
+  @supports (color: oklch(from red l c h)) {
+    :root {
+      --ae-aurora:
+        radial-gradient(
+          46% 40% at 14% 6%,
+          light-dark(
+            oklch(from var(--ae-accent-light) 0.88 0.09 h / 0.7),
+            oklch(from var(--ae-accent-dark) 0.42 0.09 h / 0.7)
+          ),
+          transparent
+        ),
+        radial-gradient(
+          40% 44% at 90% 12%,
+          light-dark(
+            oklch(from var(--ae-accent-light) 0.9 0.07 calc(h + 55) / 0.55),
+            oklch(from var(--ae-accent-dark) 0.4 0.07 calc(h + 55) / 0.5)
+          ),
+          transparent
+        ),
+        radial-gradient(
+          50% 40% at 72% 96%,
+          light-dark(
+            oklch(from var(--ae-accent-light) 0.9 0.07 calc(h - 60) / 0.5),
+            oklch(from var(--ae-accent-dark) 0.38 0.07 calc(h - 60) / 0.5)
+          ),
+          transparent
+        );
+    }
+  }
+
+  :root[data-theme="light"] {
+    color-scheme: light;
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  [data-tone="accent"] {
+    --ae-tone: var(--ae-accent);
+    --ae-tone-contrast: var(--ae-accent-contrast);
+  }
+
+  [data-tone="success"] {
+    --ae-tone: var(--ae-success);
+    --ae-tone-contrast: var(--ae-success-contrast);
+  }
+
+  [data-tone="warning"] {
+    --ae-tone: var(--ae-warning);
+    --ae-tone-contrast: var(--ae-warning-contrast);
+  }
+
+  [data-tone="danger"] {
+    --ae-tone: var(--ae-danger);
+    --ae-tone-contrast: var(--ae-danger-contrast);
+  }
+
+  [data-tone="info"] {
+    --ae-tone: var(--ae-info);
+    --ae-tone-contrast: var(--ae-info-contrast);
+  }
+}

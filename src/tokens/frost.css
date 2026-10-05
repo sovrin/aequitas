@@ -1,0 +1,98 @@
+/*
+ * Frost is for layers that float: navigation, menus, dialogs, cards on the canvas.
+ * Controls (buttons, inputs) are flat tints. Degrades to solid surfaces without
+ * backdrop-filter, under reduced transparency, or forced colors.
+ */
+@layer ae.tokens {
+  :root {
+    /* Blur radii: 1, φ, φ² rem */
+    --ae-blur-s: 1rem;
+    --ae-blur-m: calc(1rem * var(--ae-phi));
+    --ae-blur-l: calc(1rem * pow(var(--ae-phi), 2));
+    --ae-frost-filter: blur(var(--ae-blur-m)) saturate(1.8);
+    /* Thicker material for modal and anchored layers (dialogs, popovers, the navbar): content
+       must stay legible over anything. */
+    --ae-frost-filter-l: blur(var(--ae-blur-l)) saturate(1.8);
+
+    --ae-frost-bg: var(--ae-surface);
+    --ae-frost-bg-thick: var(--ae-surface);
+    /* The only edge: a specular catch on the top, where light hits glass. */
+    --ae-frost-edge: inset 0 1px 0 var(--ae-highlight);
+
+    /* The tone ladder: rest, hover, press, each a power of φ deeper (7%, 7·φ, 7·φ²). Controls
+       answer the pointer by stepping down it, never by moving. Tinted and solid controls mix
+       their tone by the same steps. */
+    --ae-tint-rest: 7%;
+    --ae-tint-hover: 11.3%;
+    --ae-tint-press: 18.3%;
+
+    /* Flat control fills — the "tinted" look. */
+    --ae-fill: color-mix(in oklch, var(--ae-text) var(--ae-tint-rest), transparent);
+    --ae-fill-hover: color-mix(in oklch, var(--ae-text) var(--ae-tint-hover), transparent);
+    --ae-fill-active: color-mix(in oklch, var(--ae-text) var(--ae-tint-press), transparent);
+
+    /* "This one is on": a single accent edge, never colour alone. Vertical sets mark the
+       inline-start side (--ae-edge-x follows the writing direction), horizontal sets the
+       block-end side. */
+    --ae-edge: 2px;
+    --ae-edge-x: var(--ae-edge);
+    /* An inline-start hairline, flipped the same way; negate it for the inline-end side. */
+    --ae-hairline-x: 1px;
+  }
+
+  :dir(rtl) {
+    --ae-edge-x: calc(var(--ae-edge) * -1);
+    --ae-hairline-x: -1px;
+  }
+
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    :root {
+      --ae-frost-bg: light-dark(
+        color-mix(in oklch, var(--ae-surface) 66%, transparent),
+        color-mix(in oklch, var(--ae-surface) 72%, transparent)
+      );
+      --ae-frost-bg-thick: light-dark(
+        color-mix(in oklch, var(--ae-surface) 88%, transparent),
+        color-mix(in oklch, var(--ae-surface) 82%, transparent)
+      );
+    }
+  }
+
+  @media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+    :root {
+      --ae-frost-bg: var(--ae-surface);
+      --ae-frost-bg-thick: var(--ae-surface);
+      --ae-frost-filter: none;
+      --ae-frost-filter-l: none;
+    }
+  }
+}
+
+@layer ae.base {
+  /* Floating layers: fill + blur. Edges are implied by light, never drawn. */
+  :is(
+    .frost,
+    .card,
+    .alert,
+    .navbar,
+    .sidebar,
+    .menu,
+    .popover,
+    .list,
+    .settings,
+    .combobox-list,
+    .toast,
+    .action-bar,
+    .selection-bar,
+    .dock,
+    .tabbar,
+    dialog
+  ) {
+    background: var(--ae-frost-bg);
+    border: 0;
+
+    @supports (backdrop-filter: blur(1px)) {
+      backdrop-filter: var(--ae-frost-filter);
+    }
+  }
+}

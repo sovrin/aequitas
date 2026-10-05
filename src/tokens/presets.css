@@ -1,0 +1,140 @@
+/*
+ * System presets. Attributes on <html> or any subtree.
+ *   data-accent   named accent hues, in the spirit of macOS accent colours
+ *   data-density  scales the base unit; every φ-derived space follows
+ */
+@layer ae.tokens {
+  [data-accent="blue"] {
+    --ae-hue: 255;
+  }
+  [data-accent="indigo"] {
+    --ae-hue: 280;
+  }
+  [data-accent="purple"] {
+    --ae-hue: 305;
+  }
+  [data-accent="pink"] {
+    --ae-hue: 350;
+  }
+  [data-accent="red"] {
+    --ae-hue: 25;
+  }
+  [data-accent="orange"] {
+    --ae-hue: 55;
+  }
+  [data-accent="yellow"] {
+    --ae-hue: 90;
+  }
+  [data-accent="green"] {
+    --ae-hue: 150;
+  }
+  [data-accent="teal"] {
+    --ae-hue: 195;
+  }
+  [data-accent="graphite"] {
+    --ae-hue: 255;
+    --ae-accent-light: oklch(0.42 0.01 255);
+    --ae-accent-dark: oklch(0.78 0.01 255);
+    --ae-accent-contrast: light-dark(oklch(0.99 0 0), oklch(0.18 0 0));
+  }
+
+  /* Shape presets: the system is square by default. */
+  [data-radius="soft"] {
+    --ae-radius-m: 0.75rem;
+    --ae-radius-full: 999px;
+  }
+  [data-radius="round"] {
+    --ae-radius-m: 1.25rem;
+    --ae-radius-full: 999px;
+  }
+
+  /* Type presets */
+  [data-type="serif"] {
+    --ae-font-sans: ui-serif, "Iowan Old Style", "Palatino", Georgia, serif;
+  }
+  [data-type="humanist"] {
+    --ae-font-sans: "Geist Variable", "Segoe UI", Roboto, system-ui, sans-serif;
+  }
+  [data-type="mono"] {
+    --ae-font-sans: var(--ae-font-mono);
+  }
+
+  [data-density="compact"] {
+    --ae-unit: 0.8rem;
+    --ae-text-base: clamp(0.88rem, 0.86rem + 0.1vw, 0.95rem);
+  }
+  [data-density="spacious"] {
+    --ae-unit: 1.2rem;
+  }
+
+  /* Presets glide instead of jumping: spaces, type and corners interpolate to the new density or
+     shape, and the accent crossfades. Reduced motion shortens --ae-duration to nothing. */
+  :root {
+    transition:
+      --ae-unit var(--ae-duration-slow) var(--ae-ease),
+      --ae-text-base var(--ae-duration-slow) var(--ae-ease),
+      --ae-radius-m var(--ae-duration-slow) var(--ae-ease),
+      --ae-accent-light var(--ae-duration-slow) var(--ae-ease),
+      --ae-accent-dark var(--ae-duration-slow) var(--ae-ease);
+  }
+
+  /* Higher contrast: firmer lines and text, no translucency. */
+  @media (prefers-contrast: more) {
+    :root {
+      --ae-border: light-dark(oklch(0.2 0.02 var(--ae-neutral-hue) / 0.35), oklch(1 0 0 / 0.35));
+      --ae-border-strong: light-dark(
+        oklch(0.2 0.02 var(--ae-neutral-hue) / 0.6),
+        oklch(1 0 0 / 0.6)
+      );
+      --ae-text-muted: light-dark(
+        oklch(0.35 0.02 var(--ae-neutral-hue)),
+        oklch(0.85 0.01 var(--ae-neutral-hue))
+      );
+      --ae-tint-rest: 12%;
+      --ae-tint-hover: 20%;
+      --ae-tint-press: 30%;
+      --ae-edge: 3px;
+      --ae-frost-bg: var(--ae-surface);
+      --ae-frost-bg-thick: var(--ae-surface);
+      --ae-frost-filter: none;
+      --ae-frost-filter-l: none;
+    }
+  }
+}
+
+/* Windows High Contrast: let the system palette through, keep shapes visible. */
+@layer ae.base {
+  @media (forced-colors: active) {
+    .btn,
+    .input,
+    .segmented,
+    input:is([type="checkbox"], [type="radio"], [type="range"]),
+    .chip,
+    .badge,
+    .card,
+    .list,
+    .alert,
+    .menu,
+    .popover,
+    .toast,
+    dialog {
+      border: 1px solid;
+    }
+
+    .btn[data-variant="primary"],
+    [aria-pressed="true"],
+    [aria-selected="true"],
+    [aria-current]:not([aria-current="false"]),
+    input:is([type="checkbox"], [type="radio"]):checked,
+    .chip:has(> input:checked),
+    .segmented label:has(:checked) span {
+      forced-color-adjust: none;
+      color: HighlightText;
+      background: Highlight;
+    }
+
+    body::before {
+      display: none;
+    }
+  }
+}

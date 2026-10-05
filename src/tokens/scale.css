@@ -1,0 +1,155 @@
+/*
+ * Everything derives from one number: φ, the golden ratio.
+ * Change nothing here but the base values; the proportions stay golden.
+ *
+ *   space   φ^n          (n = -3 … 4)   0.24 → 6.85 rem
+ *   type    φ^(n/2)      (√φ = 1.272, the Kepler triangle ratio)
+ *   radius  φ^n around --ae-radius-m
+ *   blur    φ^n
+ *   motion  φ^n around --ae-duration
+ *   layout  1 : φ splits, φ aspect ratios, φ^9 rem container, 40ch·φ measure
+ */
+@property --ae-phi {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1.618034;
+}
+
+/* Registered so presets glide: density and shape change these, and every space, size and radius
+   derived from them interpolates with them instead of jumping. Initial values must be absolute
+   (a rem one invalidates the registration); the real values are the rem ones on :root. */
+@property --ae-unit {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 16px;
+}
+
+@property --ae-text-base {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 16px;
+}
+
+@property --ae-radius-m {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+@layer ae.tokens {
+  :root {
+    --ae-phi: 1.618034;
+
+    /* Space — one base unit, powers of φ, snapped to whole pixels. A fractional step rounds
+       differently wherever it lands, so equal marks would render a pixel apart. */
+    --ae-unit: 1rem;
+    --ae-space-1: round(calc(var(--ae-unit) * pow(var(--ae-phi), -3)), 1px); /* 0.236 */
+    --ae-space-2: round(calc(var(--ae-unit) * pow(var(--ae-phi), -2)), 1px); /* 0.382 */
+    --ae-space-3: round(calc(var(--ae-unit) * pow(var(--ae-phi), -1)), 1px); /* 0.618 */
+    --ae-space-4: round(var(--ae-unit), 1px); /* 1     */
+    --ae-space-5: round(calc(var(--ae-unit) * var(--ae-phi)), 1px); /* 1.618 */
+    --ae-space-6: round(calc(var(--ae-unit) * pow(var(--ae-phi), 2)), 1px); /* 2.618 */
+    --ae-space-7: round(calc(var(--ae-unit) * pow(var(--ae-phi), 3)), 1px); /* 4.236 */
+    --ae-space-8: round(calc(var(--ae-unit) * pow(var(--ae-phi), 4)), 1px); /* 6.854 */
+
+    /* Type — fluid base, half-φ steps */
+    --ae-font-sans:
+      ui-sans-serif, -apple-system, "SF Pro Text", system-ui, "Geist Variable", "Segoe UI",
+      sans-serif;
+    --ae-font-mono: ui-monospace, "SF Mono", "Geist Mono Variable", Menlo, Consolas, monospace;
+    --ae-text-base: clamp(0.95rem, 0.92rem + 0.15vw, 1.0625rem);
+    --ae-text-xs: calc(var(--ae-text-base) * pow(var(--ae-phi), -1)); /* φ^-1   */
+    --ae-text-s: calc(var(--ae-text-base) * pow(var(--ae-phi), -0.5)); /* φ^-½   */
+    --ae-text-m: var(--ae-text-base);
+    --ae-text-l: calc(var(--ae-text-base) * pow(var(--ae-phi), 0.5)); /* φ^½    */
+    --ae-text-xl: calc(var(--ae-text-base) * var(--ae-phi)); /* φ      */
+    --ae-text-2xl: calc(var(--ae-text-base) * pow(var(--ae-phi), 1.5));
+    --ae-text-3xl: calc(var(--ae-text-base) * pow(var(--ae-phi), 2));
+    --ae-text-4xl: calc(var(--ae-text-base) * pow(var(--ae-phi), 3));
+
+    /* Rhythm: body leading is φ itself, headings tighten by φ^¼ */
+    --ae-leading-normal: var(--ae-phi);
+    --ae-leading-tight: calc(var(--ae-phi) / pow(var(--ae-phi), 0.75)); /* 1.128 */
+
+    /* Shape — square by default; every radius derives from radius-m */
+    --ae-radius-m: 0rem; /* squares. Set e.g. 1rem to bring the φ curve back */
+    --ae-radius-s: calc(var(--ae-radius-m) / var(--ae-phi));
+    --ae-radius-l: calc(var(--ae-radius-m) * var(--ae-phi));
+    --ae-radius-xl: calc(var(--ae-radius-m) * pow(var(--ae-phi), 2));
+    --ae-radius-full: 0; /* "pill" is square too; use 999px for pills */
+    --ae-corner: round;
+
+    /* Depth — ambient + key layers, large blur, low alpha. Never a stroke. */
+    --ae-shadow-ink: oklch(0.15 0.02 var(--ae-neutral-hue));
+    --ae-shadow-s:
+      0 1px 1px
+        light-dark(
+          color-mix(in oklch, var(--ae-shadow-ink) 4%, transparent),
+          color-mix(in oklch, var(--ae-shadow-ink) 20%, transparent)
+        ),
+      0 2px 6px -1px
+        light-dark(
+          color-mix(in oklch, var(--ae-shadow-ink) 6%, transparent),
+          color-mix(in oklch, var(--ae-shadow-ink) 30%, transparent)
+        );
+    --ae-shadow-m:
+      0 1px 2px
+        light-dark(
+          color-mix(in oklch, var(--ae-shadow-ink) 4%, transparent),
+          color-mix(in oklch, var(--ae-shadow-ink) 25%, transparent)
+        ),
+      0 calc(0.25rem * var(--ae-phi)) calc(0.75rem * var(--ae-phi)) -2px
+        light-dark(
+          color-mix(in oklch, var(--ae-shadow-ink) 6%, transparent),
+          color-mix(in oklch, var(--ae-shadow-ink) 35%, transparent)
+        ),
+      0 1rem calc(1rem * pow(var(--ae-phi), 2)) -8px
+        light-dark(
+          color-mix(in oklch, var(--ae-shadow-ink) 8%, transparent),
+          color-mix(in oklch, var(--ae-shadow-ink) 45%, transparent)
+        );
+    --ae-shadow-l:
+      0 2px 4px
+        light-dark(
+          color-mix(in oklch, var(--ae-shadow-ink) 4%, transparent),
+          color-mix(in oklch, var(--ae-shadow-ink) 30%, transparent)
+        ),
+      0 calc(0.5rem * var(--ae-phi)) calc(1.25rem * var(--ae-phi)) -4px
+        light-dark(
+          color-mix(in oklch, var(--ae-shadow-ink) 8%, transparent),
+          color-mix(in oklch, var(--ae-shadow-ink) 45%, transparent)
+        ),
+      0 calc(1rem * pow(var(--ae-phi), 2)) calc(1rem * pow(var(--ae-phi), 4)) -12px
+        light-dark(
+          color-mix(in oklch, var(--ae-shadow-ink) 14%, transparent),
+          color-mix(in oklch, var(--ae-shadow-ink) 60%, transparent)
+        );
+
+    /* Motion — durations step by φ */
+    --ae-duration: 220ms;
+    --ae-duration-fast: calc(var(--ae-duration) / var(--ae-phi));
+    --ae-duration-slow: calc(var(--ae-duration) * var(--ae-phi));
+    --ae-ease: cubic-bezier(0.2, 0, 0, 1);
+    /* "Spring" settles without overshoot: a long, decelerating arrival, never a bounce. */
+    --ae-ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+
+    /* Layout */
+    --ae-container: calc(1rem * pow(var(--ae-phi), 9)); /* ≈ 76 rem */
+    --ae-measure: calc(40ch * var(--ae-phi)); /* ≈ 65 ch, ideal line length */
+    --ae-ratio: 1.618034; /* use as aspect-ratio */
+    --ae-gutter: var(--ae-space-5);
+
+    /* Focus */
+    --ae-ring: 0 0 0 2px var(--ae-bg), 0 0 0 4px var(--ae-accent);
+    /* Text fields focus inside out: an accent stroke and a soft halo. */
+    --ae-ring-field:
+      inset 0 0 0 1.5px var(--ae-accent),
+      0 0 0 4px color-mix(in oklch, var(--ae-accent) 28%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --ae-duration: 1ms;
+    }
+  }
+}
