@@ -2,8 +2,8 @@
    library component here, or its demos stop showing what the library does. */
 .bar {
   block-size: var(--ae-space-3);
-  inline-size: calc(1rem * pow(var(--ae-phi), var(--n)) * 3);
-  max-inline-size: 100%;
+  /* Relative to the largest step (φ⁴), so the chart keeps its exact ratios at any width. */
+  inline-size: calc(100% * pow(var(--ae-phi), var(--n) - 4));
   border-radius: var(--ae-radius-full);
   background: linear-gradient(
     90deg,
@@ -13,7 +13,7 @@
 }
 .scale-row {
   display: grid;
-  grid-template-columns: 4.5rem 1fr;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
   align-items: center;
   gap: var(--ae-space-4);
   font-family: var(--ae-font-mono);
