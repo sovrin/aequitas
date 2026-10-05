@@ -70,6 +70,12 @@ watch(
             </ul>
           </div>
         </div>
+        <div class="container">
+          <p class="docs-credit">
+            Made with <i class="icon" data-icon="heart" aria-hidden="true"></i
+            ><span class="sr-only">love</span> by <a href="https://sovrin.de">sovrin.de</a>
+          </p>
+        </div>
       </footer>
     </main>
 

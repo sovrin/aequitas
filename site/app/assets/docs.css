@@ -914,6 +914,20 @@
   margin-inline-start: auto;
 }
 
+.docs-credit {
+  display: flex;
+  align-items: center;
+  gap: var(--ae-space-1);
+  margin-block-start: var(--ae-space-6);
+  padding-block-start: var(--ae-space-4);
+  font-size: var(--ae-text-xs);
+  box-shadow: inset 0 1px 0 var(--ae-border);
+
+  & .icon {
+    color: var(--ae-accent);
+  }
+}
+
 .docs-nav {
   display: grid;
   gap: var(--ae-space-3);
