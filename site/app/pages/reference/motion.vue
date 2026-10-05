@@ -30,8 +30,8 @@ const bar = () => {
         <p class="text-muted text-s">
           Presets: <code>.animate-fade-in</code> <code>.animate-slide-up</code>
           <code>.animate-slide-down</code> <code>.animate-scale-in</code> <code>.animate-spin</code>
-          <code>.animate-blink</code>. Delays: <code>.delay-1 … .delay-5</code>, 60 ms apart (60–300
-          ms).
+          <code>.animate-blink</code>. Delays: <code>.delay-1 … .delay-5</code>, one
+          <code>--ae-stagger</code> apart (φ⁻³ of <code>--ae-duration</code>, ≈ 52 ms).
         </p>
       </div>
       <div class="grid" data-stagger>

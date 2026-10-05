@@ -1,6 +1,6 @@
 import type { Entry } from "./types";
 
-const side = `<nav class="sidebar" aria-label="Workspace"><h6>Workspace</h6><a href="#" aria-current="page"><i class="icon" data-icon="home"></i><span>Overview</span></a><a href="#"><i class="icon" data-icon="file"></i><span>Pages</span></a><a href="#"><i class="icon" data-icon="image"></i><span>Media</span></a><a href="#"><i class="icon" data-icon="settings-gear"></i><span>Settings</span></a><footer><a href="#"><span class="avatar" data-size="s">AL</span><span>Ada</span></a></footer></nav>`;
+const side = `<nav class="sidebar" aria-label="Workspace"><h6>Workspace</h6><a href="#" aria-current="page"><i class="icon" data-icon="home"></i><span>Overview</span></a><a href="#"><i class="icon" data-icon="file"></i><span>Pages</span></a><a href="#"><i class="icon" data-icon="image"></i><span>Media</span></a><a href="#"><i class="icon" data-icon="settings-gear"></i><span>Settings</span></a><footer><a href="#"><span class="avatar" data-size="s" aria-hidden="true">AL</span><span>Ada</span></a></footer></nav>`;
 const main = (label = "main") => `<main class="p-5"><div class="ph">${label}</div></main>`;
 const shell = (attrs: string, inner: string) =>
   `<div class="preview"><div class="shell"${attrs}>${inner}</div></div>`;
@@ -168,7 +168,7 @@ export const layouts: Entry[] = [
     attrs: [
       [
         ".container[data-size]",
-        "Narrower or wider page. Default φ⁹ ≈ 76rem; `s` is φ⁸ ≈ 47rem, `l` 96rem, `full` the whole width less the gutters.",
+        "Narrower or wider page. Default φ⁹ ≈ 76rem; `s` is φ⁸ ≈ 47rem, `l` φ^9.5 ≈ 97rem, `full` the whole width less the gutters.",
       ],
       [".container[--ae-container=<length>]", "Any other cap width. This is what `s` and `l` set."],
       [".measure[--ae-measure=<length>]", "Any other line length. Default 40ch·φ."],
@@ -191,7 +191,7 @@ export const layouts: Entry[] = [
       ["> :first-child", "The narrow side, growing 1 (φ with `data-flip`)."],
       [
         "> :last-child",
-        "The wide side, growing φ (1 with `data-flip`). Both sides keep at least `--basis` and wrap onto two rows below that.",
+        "The wide side, growing φ (1 with `data-flip`). The narrow side keeps at least `--basis`, the wide side `--basis · φ`; below that they wrap onto two rows, so side by side the ratio is always exact.",
       ],
     ],
     demos: [
@@ -306,7 +306,7 @@ export const layouts: Entry[] = [
     attrs: [
       [
         ".switcher[--threshold=<length>]",
-        "Container width below which the children stack. Default `40rem`.",
+        "Container width below which the children stack. Default φ^7.5 ≈ 37rem.",
       ],
     ],
     a11y: [

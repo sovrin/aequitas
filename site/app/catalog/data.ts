@@ -31,9 +31,9 @@ export const data: Entry[] = [
     <thead>
       <tr>
         <th><input type="checkbox" aria-label="Select all" /></th>
-        <th aria-sort="ascending">Project</th>
-        <th aria-sort="none">Owner</th>
-        <th aria-sort="none" data-num>Pages</th>
+        <th aria-sort="ascending"><button class="link">Project</button></th>
+        <th aria-sort="none"><button class="link">Owner</button></th>
+        <th aria-sort="none" data-num><button class="link">Pages</button></th>
         <th>Status</th>
       </tr>
     </thead>
@@ -141,14 +141,14 @@ export const data: Entry[] = [
       ["data-clear", "On a button in the bar: unchecks every row of the table."],
       ["role=region", "With an `aria-label`, makes the bar a landmark people can jump to."],
     ],
-    js: "A checkbox in the table's `thead` checks or unchecks every `tbody` checkbox. Any change sets `aria-selected=\"true\"` on checked rows, makes the header box indeterminate for a partial selection, writes the count into `[data-selected]` and toggles the bar's `hidden`. Without it, the checkboxes are plain inputs and the bar stays as you leave it.",
+    js: "A checkbox in the table's `thead` checks or unchecks every `tbody` checkbox. Any change sets `aria-selected=\"true\"` on checked rows, makes the header box indeterminate for a partial selection, writes the count into `[data-selected]` and toggles the bar's `hidden`. When the bar was hidden, the count is written a frame after it appears, so a live region around it hears the first number. Without it, the checkboxes are plain inputs and the bar stays as you leave it.",
     keys: [
       ["Space", "On a row or header checkbox: toggles it, and the bar updates."],
       ["Tab", "Moves from the table into the bar's actions, which follow it in source order."],
     ],
     a11y: [
       'Give every checkbox a label naming its row (`aria-label="Select Atlas"`); the header one selects all.',
-      'The count changes silently. If people need to hear it, add `aria-live="polite"` to the count\'s parent.',
+      'The count changes silently. If people need to hear it, add `aria-live="polite"` to the count\'s parent; aequitas.js writes the first count after the bar is shown, so it is announced too.',
       "Keep the bar right after the table in the markup so Tab reaches it next, whatever its sticky position on screen.",
     ],
     related: ["table", "toolbar", "form-layouts"],
@@ -309,14 +309,14 @@ export const data: Entry[] = [
         "On the remove button: aequitas.js removes the closest match. Without a value it removes the closest `.alert`, `.toast` or `.chip`.",
       ],
     ],
-    js: "Clicking a `[data-dismiss]` button removes the closest chip (or whatever selector it names). Without aequitas.js the button renders but does nothing; filter chips are plain checkboxes and need no script.",
+    js: "Clicking a `[data-dismiss]` button removes the closest chip (or whatever selector it names) and moves focus to the next focusable element, the previous one when nothing follows. Without aequitas.js the button renders but does nothing; filter chips are plain checkboxes and need no script.",
     keys: [
       ["Space", "Toggles a filter chip's checkbox."],
       ["Enter / Space", "Activates the remove button."],
     ],
     a11y: [
       'The remove button shows only `×`; give it an `aria-label` that names the chip ("Remove Design").',
-      "Removing a chip moves nothing on its own; when focus was on the button, move it to the next chip or the input that made it.",
+      "When focus was on the remove button, aequitas.js moves it to the next focusable element (the next chip's button, or the input in a tag input), so it never drops to the page.",
       "Filter chips are real checkboxes inside a `<label>`, so they announce their checked state. The state is shown by tint and edge, not colour alone.",
     ],
     related: ["badge", "tag-input", "checkbox"],
@@ -343,9 +343,9 @@ export const data: Entry[] = [
   <div class="avatar-group">
     <span class="avatar">AL</span><span class="avatar" data-tone="success">MK</span><span class="avatar" data-tone="danger">JR</span><span class="avatar" data-tone="info">+4</span>
   </div>
-  <span class="avatar" data-status="online">AL</span>
-  <span class="avatar" data-status="away" data-tone="success">MK</span>
-  <span class="avatar" data-status="busy" data-tone="danger">JR</span>
+  <span class="avatar" data-status="online" role="img" aria-label="Ada Lovelace, online">AL</span>
+  <span class="avatar" data-status="away" data-tone="success" role="img" aria-label="Mika K., away">MK</span>
+  <span class="avatar" data-status="busy" data-tone="danger" role="img" aria-label="Jun R., busy">JR</span>
 </div>`,
       },
     ],
@@ -420,7 +420,7 @@ export const data: Entry[] = [
         title: "Properties",
         html: `<dl class="properties" style="max-inline-size: 26rem">
   <dt>Status</dt><dd><span class="badge" data-tone="success">Live</span></dd>
-  <dt>Owner</dt><dd><span class="avatar" data-size="s">AL</span> Ada Lovelace</dd>
+  <dt>Owner</dt><dd><span class="avatar" data-size="s" aria-hidden="true">AL</span> Ada Lovelace</dd>
   <dt>Pages</dt><dd class="tabular">128</dd>
   <dt>Domain</dt><dd><a href="#">northlight.app</a></dd>
   <dt>Updated</dt><dd><time datetime="2026-10-04">4 October 2026</time></dd>

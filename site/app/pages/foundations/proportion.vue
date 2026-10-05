@@ -1,9 +1,9 @@
 <script setup lang="ts">
 const scale = `:root {
   --ae-phi: 1.618034;
-  --ae-space-1: calc(var(--ae-unit) * pow(var(--ae-phi), -3)); /* 0.236 */
-  --ae-space-4: var(--ae-unit);                                  /* 1     */
-  --ae-space-5: calc(var(--ae-unit) * var(--ae-phi));            /* 1.618 */
+  --ae-space-1: round(calc(var(--ae-unit) * pow(var(--ae-phi), -3)), 1px); /* 0.236 */
+  --ae-space-4: round(var(--ae-unit), 1px);                                /* 1     */
+  --ae-space-5: round(calc(var(--ae-unit) * var(--ae-phi)), 1px);          /* 1.618 */
   --ae-text-l:  calc(var(--ae-text-base) * pow(var(--ae-phi), 0.5));
   --ae-leading-normal: var(--ae-phi);
   --ae-container: calc(1rem * pow(var(--ae-phi), 9));            /* ≈ 76rem */
@@ -28,7 +28,11 @@ const scale = `:root {
       </div>
       <div class="split" data-reveal>
         <div class="card stack">
-          <h6>Space · 1rem × φⁿ</h6>
+          <h6>Space · unit × φⁿ, snapped to whole pixels</h6>
+          <div class="scale-row">
+            <span>−4 · 0.15</span>
+            <div class="bar" style="--n: -4"></div>
+          </div>
           <div class="scale-row">
             <span>−3 · 0.24</span>
             <div class="bar" style="--n: -3"></div>
@@ -56,6 +60,10 @@ const scale = `:root {
           <div class="scale-row">
             <span>3 · 4.24</span>
             <div class="bar" style="--n: 3"></div>
+          </div>
+          <div class="scale-row">
+            <span>4 · 6.85</span>
+            <div class="bar" style="--n: 4"></div>
           </div>
         </div>
         <div class="card stack">

@@ -52,8 +52,9 @@
     <section class="section stack gap-5" id="depth">
       <h2>Depth.</h2>
       <p class="text-muted measure">
-        Shadows are layered: an ambient and a key layer, large blur, low alpha, offsets stepping by
-        φ. Never a stroke.
+        Shadows are layered: a contact, a key and an ambient layer, large blur, low alpha. Key and
+        ambient offsets sit on the space scale, each blur two steps above its offset; contact layers
+        are whole pixels. Never a stroke.
       </p>
       <div class="grid">
         <div class="card" style="box-shadow: var(--ae-shadow-s)"><code>--ae-shadow-s</code></div>

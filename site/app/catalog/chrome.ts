@@ -59,8 +59,8 @@ export const chrome: Entry[] = [
       {
         title: "Menubar",
         html: `<nav class="menubar">
-  <button popovertarget="mb-file-demo" aria-haspopup="menu">File</button>
-  <button popovertarget="mb-edit-demo" aria-haspopup="menu">Edit</button>
+  <button popovertarget="mb-file-demo">File</button>
+  <button popovertarget="mb-edit-demo">Edit</button>
   <button>View</button>
   <button>Help</button>
 </nav>
@@ -77,7 +77,6 @@ export const chrome: Entry[] = [
         "aria-expanded=true",
         "Holds the item's hover fill while its menu is open. aequitas.js keeps it in sync with the popover; without it, set it yourself.",
       ],
-      ["aria-haspopup=menu", "Tells assistive tech the item opens a menu."],
     ],
     js: "When a menu opens or closes, aequitas.js sets `aria-expanded` on every item that targets it (by `popovertarget` or `data-open`), so the item holds its fill while its menu is open. Without it the menus still open and close natively; only the open style is lost.",
     keys: [
@@ -183,7 +182,7 @@ export const chrome: Entry[] = [
     anatomy: [
       [
         ".resizable",
-        "Any block. Gets the browser's resize grip in its end corner and scrolls what overflows. At least 8rem wide, never wider than its container.",
+        "Any block. Gets the browser's resize grip in its end corner and scrolls what overflows. At least φ^4.5 ≈ 8.7rem wide, never wider than its container.",
       ],
     ],
     demos: [
@@ -199,7 +198,7 @@ export const chrome: Entry[] = [
     attrs: [
       [
         "data-axis",
-        "Which way the panel resizes. Without it, inline only. `block` also sets a 4rem minimum height.",
+        "Which way the panel resizes. Without it, inline only. `block` also sets a φ³ ≈ 4.2rem minimum height; `both` resizes either way.",
       ],
     ],
     a11y: [

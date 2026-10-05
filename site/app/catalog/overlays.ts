@@ -239,8 +239,8 @@ export const overlays: Entry[] = [
         html: `<button class="btn" popovertarget="menu-demo">Actions</button>
 <div class="menu" popover id="menu-demo">
   <h6>View</h6>
-  <button role="menuitemcheckbox" aria-checked="true">Show hidden <kbd>⌘.</kbd></button>
-  <button role="menuitemcheckbox" aria-checked="false">Compact rows</button>
+  <button aria-pressed="true">Show hidden <kbd>⌘.</kbd></button>
+  <button aria-pressed="false">Compact rows</button>
   <hr />
   <button>Rename <kbd>↵</kbd></button>
   <button>Duplicate <kbd>⌘D</kbd></button>
@@ -255,7 +255,10 @@ export const overlays: Entry[] = [
         "Required. Auto popovers close on Esc, on an outside click, and when another menu opens.",
       ],
       ["popovertarget=<id>", "On the invoker: toggles and anchors the menu."],
-      ["aria-checked=true|false", "On an item: reserves a check column; `true` shows a ✓."],
+      [
+        "aria-pressed=true|false",
+        "On an item: reserves a check column; `true` shows a ✓ and announces the item as pressed.",
+      ],
       ["data-tone=danger", "On an item: colours its text, for destructive actions."],
       ["data-close", "On an item: aequitas.js hides the menu when it is clicked."],
     ],
@@ -267,7 +270,7 @@ export const overlays: Entry[] = [
     ],
     a11y: [
       'The items are plain buttons in tab order. Only add `role="menu"` and `role="menuitem"` if you also script arrow-key focus, since those roles promise it.',
-      "`aria-checked` draws the check but is only announced on an element with a checkable role such as `menuitemcheckbox`.",
+      'A toggle item is a `<button aria-pressed>`, which every screen reader announces as pressed or not. `role="menuitemcheckbox"` with `aria-checked` also draws the check, but it is only valid inside a `role="menu"`.',
       "Clicking an item does not close the menu by itself: add `data-close`, or call `hidePopover()` in your handler.",
     ],
     related: ["popover", "menubar", "palette"],
@@ -290,7 +293,10 @@ export const overlays: Entry[] = [
       ],
       ["> input.input", "Direct child. Large, borderless, with a hairline below."],
       ["[role=listbox]", "The results, scrolling past half the viewport height."],
-      ["> h6", "Optional group label inside the listbox. Hidden when none of its options match."],
+      [
+        "[role=group] > h6",
+        'Optional group label: wrap each set of options in `role="group"` with the same `aria-label`, and hide the `<h6>` from assistive tech. The group is hidden when none of its options match.',
+      ],
       [
         "> [role=option]",
         "One result. Text matching the search is drawn in the accent; a trailing `<kbd>` is pushed to the end.",
@@ -307,14 +313,18 @@ export const overlays: Entry[] = [
   <i class="icon" data-icon="search"></i>
   <input class="input" placeholder="Search projects, people, commands…" aria-label="Search" autofocus />
   <div role="listbox" aria-label="Projects and commands">
-    <h6>Recent</h6>
-    <div role="option" data-close><i class="icon" data-icon="folder"></i> Northlight <small>Project</small></div>
-    <div role="option" data-close><i class="icon" data-icon="user"></i> Ada Lovelace <small>Design</small></div>
-    <div role="option" data-close><i class="icon" data-icon="folder"></i> Atlas <small>Project</small></div>
-    <h6>Commands</h6>
-    <div role="option" data-close><i class="icon" data-icon="plus"></i> New project <kbd>⌘N</kbd></div>
-    <div role="option" data-close data-keywords="dark light appearance"><i class="icon" data-icon="circle-half"></i> Toggle theme <kbd>⌘T</kbd></div>
-    <div role="option" data-close data-keywords="people member"><i class="icon" data-icon="user-plus"></i> Invite to project</div>
+    <div role="group" aria-label="Recent">
+      <h6 aria-hidden="true">Recent</h6>
+      <div role="option" data-close><i class="icon" data-icon="folder"></i> Northlight <small>Project</small></div>
+      <div role="option" data-close><i class="icon" data-icon="user"></i> Ada Lovelace <small>Design</small></div>
+      <div role="option" data-close><i class="icon" data-icon="folder"></i> Atlas <small>Project</small></div>
+    </div>
+    <div role="group" aria-label="Commands">
+      <h6 aria-hidden="true">Commands</h6>
+      <div role="option" data-close><i class="icon" data-icon="plus"></i> New project <kbd>⌘N</kbd></div>
+      <div role="option" data-close data-keywords="dark light appearance"><i class="icon" data-icon="circle-half"></i> Toggle theme <kbd>⌘T</kbd></div>
+      <div role="option" data-close data-keywords="people member"><i class="icon" data-icon="user-plus"></i> Invite to project</div>
+    </div>
   </div>
   <div class="empty" hidden>
     <h4>Nothing for “<span data-term></span>”</h4>
@@ -350,7 +360,7 @@ export const overlays: Entry[] = [
     ],
     a11y: [
       'aequitas.js gives the input `role="combobox"`, `aria-controls` and `aria-activedescendant`, so the highlighted result is announced while focus stays in the input.',
-      'Label the listbox for what it holds; without a label aequitas.js names it "Results". The `<h6>` group labels are not exposed as groups unless you wrap each set in `role="group"` with a label.',
+      'Label the listbox for what it holds; without a label aequitas.js names it "Results". Only `group` and `option` may sit inside a listbox, so wrap each set in `role="group"` with an `aria-label` and mark the visible `<h6>` `aria-hidden="true"` so the label is not read twice.',
       "Keep `autofocus` on the input so typing starts at once.",
     ],
     related: ["combobox", "dialog", "menu"],
@@ -408,7 +418,7 @@ export const overlays: Entry[] = [
     anatomy: [
       [
         "[data-tip]",
-        "Any element. The text is drawn by its `::after`, above it by default, on one line.",
+        "Any element. The text is drawn by its `::after`, above it by default, wrapping at 20rem.",
       ],
     ],
     demos: [
@@ -424,15 +434,22 @@ export const overlays: Entry[] = [
     attrs: [
       [
         "data-tip=<text>",
-        "The tooltip text. Shown after 400 ms of hover or keyboard focus, hidden at once.",
+        "The tooltip text. Shown after `--ae-duration-slow` of hover or keyboard focus, faded out at once. Wraps past 20rem or the viewport width.",
       ],
       ["data-tip-side=bottom|end", "Where it sits. Default above."],
+      [
+        "data-tip-dismissed",
+        "Hides the tip while the element stays hovered or focused. aequitas.js sets it on Esc and clears it once pointer and focus have left.",
+      ],
     ],
+    js: "Esc hides the tip under the pointer or focus until both have left the element. On enhance, each `[data-tip]` gets its text as `aria-description`, unless it has one of its own. Without aequitas.js the tip still shows on hover and focus, but Esc does nothing and screen readers don't hear it.",
+    keys: [["Esc", "Hides the tip of the hovered or focused element."]],
     a11y: [
       "It shows on `:focus-visible`, so it only reaches keyboard users on focusable elements.",
-      "Generated text is not a reliable description: browsers may fold it into a button's accessible name or skip it. Keep the essential label in the element (or `aria-label`) and treat the tip as a hint.",
+      "The drawn text is left out of the accessible name; aequitas.js exposes it as the element's description instead, read after the name. Keep the label itself in the element (or `aria-label`): the tip is a hint, not the name.",
+      "Hover it and the pointer can travel onto the tip without it closing; Esc closes it without moving pointer or focus.",
       "Nothing shows on touch. Don't hide information only there.",
-      "It is a single nowrap line positioned against the element, so an `overflow: hidden` ancestor can clip it.",
+      "It is positioned against the element, so an `overflow: hidden` ancestor can clip it. Hidden, it takes no space and never widens the page.",
     ],
     related: ["popover", "button"],
     keywords: "tip hint title hover",

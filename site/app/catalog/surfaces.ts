@@ -152,8 +152,8 @@ export const surfaces: Entry[] = [
       {
         title: "Inset list",
         html: `<div class="list" style="max-inline-size: 24rem">
-  <a href="#"><span class="avatar" data-size="s">NL</span> Northlight <span class="end text-muted">Owner</span></a>
-  <a href="#"><span class="avatar" data-size="s" data-tone="success">AT</span> Atlas <span class="end text-muted">Editor</span></a>
+  <a href="#"><span class="avatar" data-size="s" aria-hidden="true">NL</span> Northlight <span class="end text-muted">Owner</span></a>
+  <a href="#"><span class="avatar" data-size="s" data-tone="success" aria-hidden="true">AT</span> Atlas <span class="end text-muted">Editor</span></a>
   <div><span class="spinner" aria-hidden="true"><span></span></span> <span class="text-muted">Syncing…</span></div>
 </div>`,
       },

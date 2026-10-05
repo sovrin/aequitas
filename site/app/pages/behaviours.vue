@@ -125,7 +125,10 @@ markMatches(list, "term"); // highlight a term in the options of a dialog.palett
     <section class="section stack gap-6" id="api">
       <div class="stack measure">
         <h2>API.</h2>
-        <p class="text-muted">Six exports. Import the module directly when you need them.</p>
+        <p class="text-muted">
+          Six functions, also bundled as one <code>aequitas</code> object. Import the module
+          directly when you need them.
+        </p>
       </div>
       <DocsCode label="app.js" lang="js" :code="api" />
       <div class="cluster">

@@ -56,8 +56,10 @@ const helpers: { cls: string; desc: string; to?: string }[] = [
           {{ utilities.rules.length }} single-purpose classes on the φ scale, generated at build
           time. Classes marked <span class="badge" data-tone="info">responsive</span> also exist as
           <code>s:</code> (&lt;48rem), <code>m:</code> (≥48rem), <code>l:</code> (≥64rem) and
-          <code>xl:</code> (≥80rem) variants, e.g. <code>m:flex</code>. Not needed? Use
-          <code>aequitas.core.css</code>.
+          <code>xl:</code> (≥80rem) variants, e.g. <code>m:flex</code>, and as container variants
+          <code>cq-s:</code> (&lt;32rem), <code>cq-m:</code> (≥32rem) and
+          <code>cq-l:</code> (≥48rem), measured against the nearest <code>.cq</code> ancestor. Not
+          needed? Use <code>aequitas.core.css</code>.
         </p>
         <div class="input-group" style="max-inline-size: 24rem">
           <span><i class="icon" data-icon="search"></i></span>

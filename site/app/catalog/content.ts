@@ -5,7 +5,7 @@ export const content: Entry[] = [
     slug: "typography",
     title: "Typography",
     group: "Content",
-    lede: "Headings step by √φ; body leading is φ. Roles for eyebrow, lead, display and caption.",
+    lede: "Headings sit on the √φ type scale, h6 at φ^-½ up to h1 at φ³; body leading is φ. Roles for eyebrow, lead, display and caption.",
     owns: [
       "h1",
       "h2",
@@ -109,7 +109,7 @@ export const content: Entry[] = [
         html: `<figure class="code">
   <figcaption>tokens/scale.css <button class="btn" data-size="s" data-copy>Copy</button></figcaption>
   <pre><code>--ae-phi: 1.618034;
---ae-space-5: calc(1rem * var(--ae-phi));</code></pre>
+--ae-space-5: round(calc(var(--ae-unit) * var(--ae-phi)), 1px);</code></pre>
 </figure>`,
       },
     ],
@@ -262,11 +262,11 @@ export const content: Entry[] = [
     demos: [
       {
         title: "Carousel",
-        html: `<div class="carousel">
-  <figure class="media"><div style="background: linear-gradient(135deg, var(--ae-accent), var(--ae-info)); block-size: 100%"></div><figcaption>Aurora 01</figcaption></figure>
-  <figure class="media"><div style="background: linear-gradient(135deg, var(--ae-success), var(--ae-info)); block-size: 100%"></div><figcaption>Aurora 02</figcaption></figure>
-  <figure class="media"><div style="background: linear-gradient(135deg, var(--ae-warning), var(--ae-danger)); block-size: 100%"></div><figcaption>Aurora 03</figcaption></figure>
-  <figure class="media"><div style="background: linear-gradient(135deg, var(--ae-danger), var(--ae-accent)); block-size: 100%"></div><figcaption>Aurora 04</figcaption></figure>
+        html: `<div class="carousel" role="region" aria-label="Aurora gallery" tabindex="0">
+  <figure class="media" aria-label="Slide 1 of 4"><div style="background: linear-gradient(135deg, var(--ae-accent), var(--ae-info)); block-size: 100%"></div><figcaption>Aurora 01</figcaption></figure>
+  <figure class="media" aria-label="Slide 2 of 4"><div style="background: linear-gradient(135deg, var(--ae-success), var(--ae-info)); block-size: 100%"></div><figcaption>Aurora 02</figcaption></figure>
+  <figure class="media" aria-label="Slide 3 of 4"><div style="background: linear-gradient(135deg, var(--ae-warning), var(--ae-danger)); block-size: 100%"></div><figcaption>Aurora 03</figcaption></figure>
+  <figure class="media" aria-label="Slide 4 of 4"><div style="background: linear-gradient(135deg, var(--ae-danger), var(--ae-accent)); block-size: 100%"></div><figcaption>Aurora 04</figcaption></figure>
 </div>`,
       },
     ],
@@ -275,7 +275,7 @@ export const content: Entry[] = [
     ],
     keys: [["← / →", "Scrolls the focused carousel; it snaps to the nearest item."]],
     a11y: [
-      'Give the carousel a name: `role="region"` with an `aria-label`, or wrap it in a labelled `<section>`.',
+      'Give the carousel a name: `role="region"` with an `aria-label`, or wrap it in a labelled `<section>`. Give each item an `aria-label` too ("Slide 1 of 4"): the dots are links to the items and take their name from it.',
       "The scrollbar is hidden and dots only appear where `::scroll-marker` is supported. Make sure part of the next item shows, so it is clear there is more.",
       'Keyboard users scroll it once it has focus. Where scroll containers are not focusable by default, add `tabindex="0"`.',
     ],

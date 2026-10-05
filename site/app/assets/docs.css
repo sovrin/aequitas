@@ -3,6 +3,7 @@
 .bar {
   block-size: var(--ae-space-3);
   inline-size: calc(1rem * pow(var(--ae-phi), var(--n)) * 3);
+  max-inline-size: 100%;
   border-radius: var(--ae-radius-full);
   background: linear-gradient(
     90deg,

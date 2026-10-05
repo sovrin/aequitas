@@ -9,8 +9,8 @@ const days = (() => {
     const a = d === 2 ? ' aria-current="date"' : "";
     const r = d >= 12 && d <= 16 ? " data-range" : "";
     const end = d === 12 || d === 16;
-    const s = end ? ' aria-selected="true"' : "";
-    const l = ` aria-label="${d} October 2026${end ? ", selected" : ""}"`;
+    const s = end ? ' aria-pressed="true"' : "";
+    const l = ` aria-label="${d} October 2026${end ? ", selected" : ""}${r ? ", in range" : ""}"`;
     h += `<button${a}${r}${s}${l}>${d}</button>`;
   }
   return h + `<button data-outside aria-label="1 November 2026">1</button>`;
@@ -413,11 +413,14 @@ export const selection: Entry[] = [
       },
     ],
     attrs: [
-      ["aria-selected=true", "On a day: solid accent. The selected day, or both ends of a range."],
+      [
+        "aria-pressed=true",
+        "On a day: solid accent, and announced as pressed. The selected day, or both ends of a range. `aria-selected=true` draws the same, for a day inside a `role=gridcell`.",
+      ],
       ["aria-current=date", "On today: accent text and a 2px underline."],
       [
         "button[data-range]",
-        "Days inside a range: a light accent tint. Mark the ends too; `aria-selected` draws over it.",
+        "Days inside a range: a light accent tint. Mark the ends too; `aria-pressed` draws over it.",
       ],
       ["button[data-outside]", "Days from the adjacent months: muted at half opacity."],
       ["disabled", "An unavailable day: faded, ignores the pointer."],
@@ -431,7 +434,7 @@ export const selection: Entry[] = [
     ],
     a11y: [
       'A day button\'s text is only a number. Give each an `aria-label` with the full date ("12 October 2026").',
-      '`aria-selected` styles the cell but is not announced on a plain `<button>`; put the state in the label too ("12 October 2026, selected").',
+      'Use `aria-pressed="true"` on the selected day: `aria-selected` is not exposed on a plain `<button>`. Say a day is inside a range in its label too ("13 October 2026, in range").',
       '`aria-current="date"` is valid on any element and announces today.',
       "The previous/next buttons are icon-only and need an `aria-label`, as in the demo.",
     ],

@@ -77,7 +77,7 @@ export const navigation: Entry[] = [
       <a href="#"><i class="icon" data-icon="image"></i><span>Media</span></a>
     </details>
     <details><summary>You</summary><a href="#"><i class="icon" data-icon="settings-gear"></i><span>Settings</span></a></details>
-    <footer><a href="#"><span class="avatar" data-size="s">AL</span><span>Ada</span></a></footer>
+    <footer><a href="#"><span class="avatar" data-size="s" aria-hidden="true">AL</span><span>Ada</span></a></footer>
   </nav>
   <main class="p-5 text-muted text-s">Main content</main>
 </div></div>`,
@@ -135,14 +135,14 @@ export const navigation: Entry[] = [
       {
         title: "Tabs",
         html: `<div class="stack gap-3">
-  <div class="tabs" role="tablist">
-    <button role="tab" aria-selected="true" aria-controls="tp1">Overview</button>
-    <button role="tab" aria-selected="false" aria-controls="tp2">Activity</button>
-    <button role="tab" aria-selected="false" aria-controls="tp3">Settings</button>
+  <div class="tabs" role="tablist" aria-label="Project">
+    <button role="tab" id="tb1" aria-selected="true" aria-controls="tp1">Overview</button>
+    <button role="tab" id="tb2" aria-selected="false" aria-controls="tp2">Activity</button>
+    <button role="tab" id="tb3" aria-selected="false" aria-controls="tp3">Settings</button>
   </div>
-  <p id="tp1" role="tabpanel" class="text-muted">Everything at a glance.</p>
-  <p id="tp2" role="tabpanel" class="text-muted" hidden>Recent changes, newest first.</p>
-  <p id="tp3" role="tabpanel" class="text-muted" hidden>Preferences for this project.</p>
+  <p id="tp1" role="tabpanel" aria-labelledby="tb1" tabindex="0" class="text-muted">Everything at a glance.</p>
+  <p id="tp2" role="tabpanel" aria-labelledby="tb2" tabindex="0" class="text-muted" hidden>Recent changes, newest first.</p>
+  <p id="tp3" role="tabpanel" aria-labelledby="tb3" tabindex="0" class="text-muted" hidden>Preferences for this project.</p>
 </div>`,
       },
     ],
@@ -158,7 +158,7 @@ export const navigation: Entry[] = [
       ["Home / End", "Moves to and selects the first or last tab."],
     ],
     a11y: [
-      "Name the tablist with `aria-label` or `aria-labelledby`, and point each panel back at its tab with `aria-labelledby`.",
+      'Name the tablist with `aria-label` or `aria-labelledby`, point each panel back at its tab with `aria-labelledby`, and give a panel without focusable content `tabindex="0"` so the keyboard can reach it.',
       "aequitas.js sets a roving `tabindex` as soon as it enhances the list, so Tab lands on the selected tab and the arrows move between tabs.",
       "In right-to-left pages the arrows follow the reading direction: ← moves to the next tab.",
     ],
@@ -258,7 +258,7 @@ export const navigation: Entry[] = [
       {
         title: "Horizontal",
         html: `<ol class="steps" data-numbered>
-  <li data-done>Account</li>
+  <li data-done><span class="sr-only">Completed: </span>Account</li>
   <li aria-current="step">Workspace</li>
   <li>Members</li>
   <li>Billing</li>
@@ -267,7 +267,7 @@ export const navigation: Entry[] = [
       {
         title: "Vertical",
         html: `<ol class="steps" data-vertical data-numbered style="max-inline-size: 16rem">
-  <li data-done>Email sent</li>
+  <li data-done><span class="sr-only">Completed: </span>Email sent</li>
   <li aria-current="step">Enter code</li>
   <li>Done</li>
 </ol>`,
@@ -293,7 +293,7 @@ export const navigation: Entry[] = [
     ],
     a11y: [
       'Mark the current step with `aria-current="step"`; it is the only state announced.',
-      'Done is visual only. Add hidden text ("completed") inside the step if it matters to the reader.',
+      'Done is visual only, so put `<span class="sr-only">Completed: </span>` inside each `data-done` step.',
       "Counters are generated content, but the `<ol>` already announces each position.",
     ],
     related: ["timeline", "progress"],

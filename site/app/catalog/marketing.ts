@@ -20,7 +20,7 @@ export const marketing: Entry[] = [
         html: `<section class="hero" data-center style="padding-block: var(--ae-space-6)">
   <h6>Introducing</h6>
   <h1>Proportion, shipped.</h1>
-  <p>One ratio for every space, size and radius. Glass only where it floats.</p>
+  <p>One ratio for space, type and radius. Glass only where it floats.</p>
   <div class="cluster"><button class="btn" data-variant="primary" data-size="l">Get started</button><button class="btn" data-size="l">Read the docs</button></div>
 </section>`,
       },
@@ -159,7 +159,7 @@ export const marketing: Entry[] = [
         title: "Testimonial",
         html: `<figure class="testimonial" style="max-inline-size: 30rem">
   <blockquote>We replaced three component libraries with one stylesheet. The product finally looks like one product.</blockquote>
-  <figcaption><span class="avatar" data-tone="success">MK</span><span><b>Mika Kim</b> Design lead, Harbor</span></figcaption>
+  <figcaption><span class="avatar" data-tone="success" aria-hidden="true">MK</span><span><b>Mika Kim</b> Design lead, Harbor</span></figcaption>
 </figure>`,
       },
       {
@@ -174,11 +174,11 @@ export const marketing: Entry[] = [
         html: `<div class="grid" style="--min: 14rem">
   <figure class="card testimonial">
     <blockquote>Setup took an afternoon.</blockquote>
-    <figcaption><span class="avatar" data-size="s">AL</span><span><b>Ada</b> Northlight</span></figcaption>
+    <figcaption><span class="avatar" data-size="s" aria-hidden="true">AL</span><span><b>Ada</b> Northlight</span></figcaption>
   </figure>
   <figure class="card testimonial">
     <blockquote>Our docs read better than our app now.</blockquote>
-    <figcaption><span class="avatar" data-size="s" data-tone="info">JR</span><span><b>Jun</b> Atlas</span></figcaption>
+    <figcaption><span class="avatar" data-size="s" data-tone="info" aria-hidden="true">JR</span><span><b>Jun</b> Atlas</span></figcaption>
   </figure>
 </div>`,
       },

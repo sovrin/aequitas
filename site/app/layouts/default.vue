@@ -32,7 +32,9 @@ watch(
       <DocsNav />
       <footer class="docs-sidebar-foot">
         <span class="badge" data-variant="outline">v{{ pkg.version }}</span>
-        <a href="#" class="caption" data-quiet>MIT</a>
+        <a href="https://github.com/sovrin/aequitas/blob/main/LICENSE" class="caption" data-quiet
+          >MIT</a
+        >
       </footer>
     </aside>
 
@@ -63,6 +65,7 @@ watch(
             <ul>
               <li><code>aequitas.min.css</code></li>
               <li><code>aequitas.core.min.css</code></li>
+              <li><code>aequitas.icons.min.css</code></li>
               <li><code>aequitas.min.js</code></li>
             </ul>
           </div>

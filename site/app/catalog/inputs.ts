@@ -25,17 +25,17 @@ export const inputs: Entry[] = [
         title: "Field",
         html: `<div class="field">
   <label for="in1" data-required>Project name</label>
-  <input class="input" id="in1" placeholder="Northlight" required />
-  <small>Used in URLs and exports.</small>
-  <span data-error>Enter a name.</span>
+  <input class="input" id="in1" placeholder="Northlight" required aria-describedby="in1-hint in1-error" />
+  <small id="in1-hint">Used in URLs and exports.</small>
+  <span data-error id="in1-error">Enter a name.</span>
 </div>`,
       },
       {
         title: "Inline field",
         html: `<div class="field" data-inline>
   <label for="in2">Email</label>
-  <input class="input" id="in2" type="email" placeholder="ada@northlight.app" />
-  <small>We'll send the invite here.</small>
+  <input class="input" id="in2" type="email" placeholder="ada@northlight.app" aria-describedby="in2-hint" />
+  <small id="in2-hint">We'll send the invite here.</small>
 </div>`,
       },
     ],
@@ -74,7 +74,7 @@ export const inputs: Entry[] = [
     slug: "input",
     title: "Input",
     group: "Inputs",
-    lede: "Filled, no outline until focus. Validation appears only after you leave a field.",
+    lede: "Filled, with a hairline along the bottom so an empty field can be found; the ring comes on focus. Validation appears only after you leave a field.",
     owns: [".input"],
     anatomy: [
       [
@@ -253,11 +253,11 @@ export const inputs: Entry[] = [
         html: `<div class="field" style="max-inline-size: 20rem">
   <label for="pw2" data-required>New password</label>
   <div class="input-group">
-    <input class="input" id="pw2" type="password" minlength="12" required autocomplete="new-password" />
+    <input class="input" id="pw2" type="password" minlength="12" required autocomplete="new-password" aria-describedby="pw2-hint pw2-error" />
     <button class="btn" type="button" data-icon data-password aria-pressed="false" aria-label="Show password"><i class="icon" data-icon="eye"></i><i class="icon" data-icon="eye-off"></i></button>
   </div>
-  <small>At least 12 characters.</small>
-  <span data-error>Use 12 characters or more.</span>
+  <small id="pw2-hint">At least 12 characters.</small>
+  <span data-error id="pw2-error">Use 12 characters or more.</span>
 </div>`,
       },
     ],
@@ -360,9 +360,9 @@ export const inputs: Entry[] = [
   <div class="combobox">
     <input class="input" id="cb1" role="combobox" aria-expanded="false" aria-controls="cbl1" placeholder="Search people…" autocomplete="off" />
     <div class="combobox-list" role="listbox" id="cbl1" popover="manual">
-      <div role="option" aria-selected="true"><span class="avatar" data-size="s">AL</span> Ada Lovelace <small class="text-muted">Owner</small></div>
-      <div role="option"><span class="avatar" data-size="s" data-tone="success">MK</span> Mika Kim <small class="text-muted">Editor</small></div>
-      <div role="option"><span class="avatar" data-size="s" data-tone="warning">JR</span> Jun Rao <small class="text-muted">Viewer</small></div>
+      <div role="option" aria-selected="true"><span class="avatar" data-size="s" aria-hidden="true">AL</span> Ada Lovelace <small class="text-muted">Owner</small></div>
+      <div role="option"><span class="avatar" data-size="s" data-tone="success" aria-hidden="true">MK</span> Mika Kim <small class="text-muted">Editor</small></div>
+      <div role="option"><span class="avatar" data-size="s" data-tone="warning" aria-hidden="true">JR</span> Jun Rao <small class="text-muted">Viewer</small></div>
     </div>
   </div>
 </div>`,
@@ -586,7 +586,7 @@ export const inputs: Entry[] = [
         "On a chip's button: aequitas.js removes the closest `.chip` on click.",
       ],
     ],
-    js: "Enter in the input turns its text into a chip, with a labelled remove button, placed before the input; Backspace in the empty input removes the chip before it; a click on the container's empty space focuses the input. The chips are markup only, not form values: read them from the DOM or mirror them into a hidden input. Without aequitas.js the chips render but adding and removing is up to you.",
+    js: "Enter in the input turns its text into a chip, with a labelled remove button, placed before the input; Backspace in the empty input removes the chip before it; a chip's remove button removes it and moves focus to the next chip or the input; a click on the container's empty space focuses the input. The chips are markup only, not form values: read them from the DOM or mirror them into a hidden input. Without aequitas.js the chips render but adding and removing is up to you.",
     keys: [
       ["Enter", "Adds the typed text as a chip."],
       ["Backspace", "In the empty input: removes the last chip."],
@@ -594,7 +594,7 @@ export const inputs: Entry[] = [
     a11y: [
       "The input has no visible label inside the box: give it an `aria-label`, or label the whole field with a `<label for>` outside.",
       'Each remove button needs an `aria-label` that names its tag ("Remove design"); aequitas.js does this for the chips it creates.',
-      "Removing a chip with its button removes the focused element, so focus falls back to the page. Move it to the input yourself if that matters.",
+      "Removing a chip with its button removes the focused element; aequitas.js moves focus to the next chip's button, or to the input after the last chip.",
     ],
     related: ["chip", "combobox"],
     keywords: "tags chips token input multi-value labels",

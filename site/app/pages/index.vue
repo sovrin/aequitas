@@ -11,8 +11,8 @@ const install = `<link rel="stylesheet" href="aequitas.min.css">
         <p class="eyebrow">A CSS design language</p>
         <h1 class="display">Glass, in proportion.</h1>
         <p class="lead">
-          Every space, size and radius is a power of φ. Surfaces separate by tone and shadow, never
-          by outline. Glass only where it floats. Squares throughout.
+          Space, type, radius, blur and motion are all powers of φ. Surfaces separate by tone and
+          shadow, never by outline. Glass only where it floats. Squares throughout.
         </p>
         <div class="cluster">
           <NuxtLink class="btn" data-variant="primary" data-size="l" to="/components/button"
@@ -22,7 +22,7 @@ const install = `<link rel="stylesheet" href="aequitas.min.css">
         </div>
         <div class="stats">
           <div class="stat"><b>φ</b><span>one ratio</span></div>
-          <div class="stat"><b>17 kB</b><span>core, gzipped</span></div>
+          <div class="stat"><b>18 kB</b><span>core, gzipped</span></div>
           <div class="stat"><b>5 kB</b><span>optional JS, gzipped</span></div>
           <div class="stat"><b>0</b><span>outlines</span></div>
         </div>
