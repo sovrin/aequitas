@@ -1,0 +1,82 @@
+@layer ae.layout {
+  /* Page width is φ^9 rem; text measure is 40ch·φ. */
+  .container {
+    inline-size: min(100% - 2 * var(--ae-gutter), var(--ae-container));
+    margin-inline: auto;
+  }
+
+  .measure {
+    max-inline-size: var(--ae-measure);
+  }
+
+  /* Vertical rhythm. Gap = space-4, override with .gap-n. */
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ae-space-4);
+  }
+
+  .cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ae-space-3);
+  }
+
+  /* The golden split: two columns grow 1 : φ, wrap when narrower than 2 × basis. */
+  .split {
+    --basis: calc(1rem * pow(var(--ae-phi), 6)); /* ≈ 18 rem */
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ae-space-5);
+
+    /* basis 0 so the ratio is exact; min-inline-size drives wrapping */
+    & > * {
+      min-inline-size: min(var(--basis), 100%);
+    }
+
+    & > :first-child {
+      flex: 1 1 0;
+    }
+
+    & > :last-child {
+      flex: var(--ae-phi) 1 0;
+    }
+
+    &[data-flip] > :first-child {
+      flex-grow: var(--ae-phi);
+    }
+
+    &[data-flip] > :last-child {
+      flex-grow: 1;
+    }
+  }
+
+  /* Auto-fit grid. Min column width is φ^6 rem ≈ 18 rem; override with --min. */
+  .grid {
+    --min: calc(1rem * pow(var(--ae-phi), 6));
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--min), 100%), 1fr));
+    gap: var(--ae-space-5);
+  }
+
+  .golden {
+    aspect-ratio: var(--ae-ratio);
+  }
+
+  /* Centre a single thing — sign-in cards, empty pages. */
+  .center {
+    display: grid;
+    place-items: center;
+    min-block-size: 100dvh;
+    padding: var(--ae-gutter);
+
+    & > * {
+      inline-size: min(100%, calc(1rem * pow(var(--ae-phi), 7)));
+    }
+  }
+
+  .section {
+    padding-block: var(--ae-space-7);
+  }
+}

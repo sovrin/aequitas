@@ -1,0 +1,411 @@
+@layer ae.layout {
+  /* Container sizes: s ≈ 47 rem (φ⁸), m ≈ 76 rem (φ⁹, default), l = 96 rem, full = fluid */
+  .container[data-size="s"] {
+    --ae-container: calc(1rem * pow(var(--ae-phi), 8));
+  }
+
+  .container[data-size="l"] {
+    --ae-container: 96rem;
+  }
+
+  .container[data-size="full"] {
+    inline-size: calc(100% - 2 * var(--ae-gutter));
+  }
+
+  /* Content with a sticky aside. <div class="with-aside"><article>…</article><aside>…</aside></div> */
+  .with-aside {
+    --aside: calc(1rem * pow(var(--ae-phi), 6));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--ae-space-6);
+
+    & > aside {
+      align-self: start;
+      min-inline-size: 0;
+    }
+
+    @media (width >= 64rem) {
+      grid-template-columns: minmax(0, 1fr) var(--aside);
+
+      & > aside {
+        position: sticky;
+        inset-block-start: var(--ae-space-5);
+      }
+
+      &[data-side="start"] {
+        grid-template-columns: var(--aside) minmax(0, 1fr);
+
+        & > aside {
+          order: -1;
+        }
+      }
+    }
+  }
+
+  /* Full-height cover with optional header/footer; the [data-center] child sits in the middle. */
+  .cover {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 100dvh;
+    padding: var(--ae-gutter);
+
+    & > * {
+      margin-block: var(--ae-space-4);
+    }
+
+    & > :first-child:not([data-center]) {
+      margin-block-start: 0;
+    }
+
+    & > :last-child:not([data-center]) {
+      margin-block-end: 0;
+    }
+
+    & > [data-center] {
+      margin-block: auto;
+    }
+  }
+
+  /* Side by side until narrower than --threshold, then stacked. */
+  .switcher {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ae-space-4);
+
+    & > * {
+      flex-grow: 1;
+      flex-basis: calc((var(--threshold, 40rem) - 100%) * 999);
+    }
+  }
+
+  /* Masonry via CSS columns; items flow down each column in source order. */
+  .masonry {
+    --min: calc(1rem * pow(var(--ae-phi), 6));
+    columns: var(--min);
+    gap: var(--ae-space-4);
+
+    & > * {
+      break-inside: avoid;
+      margin-block-end: var(--ae-space-4);
+    }
+  }
+
+  /* Bento: dense grid with spans. <div class="bento"><div data-span="2" data-rows="2">…</div>…</div> */
+  .bento {
+    --min: calc(1rem * pow(var(--ae-phi), 5));
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--min), 100%), 1fr));
+    grid-auto-rows: minmax(var(--min), auto);
+    grid-auto-flow: dense;
+    gap: var(--ae-space-4);
+
+    & > [data-span="2"] {
+      grid-column: span 2;
+    }
+
+    & > [data-span="3"] {
+      grid-column: span 3;
+    }
+
+    & > [data-rows="2"] {
+      grid-row: span 2;
+    }
+
+    @media (width < 48rem) {
+      & > * {
+        grid-column: auto;
+        grid-row: auto;
+      }
+    }
+  }
+
+  /* Two full-height panes in 1 : φ. <div class="panes"><section>…</section><section>…</section></div> */
+  .panes {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    min-block-size: 100dvh;
+
+    & > * {
+      display: grid;
+      align-content: center;
+      padding: var(--ae-space-7) var(--ae-gutter);
+    }
+
+    @media (width >= 64rem) {
+      grid-template-columns: 1fr calc(var(--ae-phi) * 1fr);
+
+      &[data-flip] {
+        grid-template-columns: calc(var(--ae-phi) * 1fr) 1fr;
+      }
+    }
+  }
+
+  /* Long-form text. Rhythm by φ, headings one step down from the page scale. */
+  .prose {
+    max-inline-size: var(--ae-measure);
+
+    & > * + * {
+      margin-block-start: var(--ae-space-4);
+    }
+
+    & > :is(h2, h3, h4) {
+      margin-block-start: var(--ae-space-6);
+    }
+
+    & > :is(h2, h3, h4) + * {
+      margin-block-start: var(--ae-space-3);
+    }
+
+    & h2 {
+      font-size: var(--ae-text-2xl);
+    }
+
+    & h3 {
+      font-size: var(--ae-text-xl);
+    }
+
+    & h4 {
+      font-size: var(--ae-text-l);
+    }
+
+    & > :is(figure, pre, table, .code, .media, blockquote) {
+      margin-block: var(--ae-space-5);
+    }
+
+    & > hr {
+      margin-block: var(--ae-space-6);
+    }
+
+    & img {
+      inline-size: 100%;
+    }
+  }
+}
+
+@layer ae.layout {
+  /* Sticky-footer page: <body class="page"><header>…</header><main>…</main><footer>…</footer></body> */
+  .page {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 100dvh;
+
+    & > main {
+      flex: 1;
+    }
+  }
+
+  /* Break out of a container to the viewport edges. */
+  .bleed {
+    inline-size: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+
+  /* Equal columns in one row; stacks under 48rem. */
+  .row {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: var(--ae-space-4);
+
+    @media (width < 48rem) {
+      grid-auto-flow: row;
+    }
+  }
+
+  /* Media frame. data-ratio="golden|square|video|portrait" */
+  .frame {
+    aspect-ratio: var(--ae-ratio);
+    overflow: hidden;
+    background: var(--ae-fill);
+
+    & > * {
+      inline-size: 100%;
+      block-size: 100%;
+      object-fit: cover;
+    }
+
+    &[data-ratio="golden"] {
+      aspect-ratio: var(--ae-ratio);
+    }
+
+    &[data-ratio="square"] {
+      aspect-ratio: 1;
+    }
+
+    &[data-ratio="video"] {
+      aspect-ratio: 16 / 9;
+    }
+
+    &[data-ratio="portrait"] {
+      aspect-ratio: calc(1 / var(--ae-phi));
+    }
+  }
+
+  /* Overlay covering its positioned parent. */
+  :has(> .overlay) {
+    position: relative;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    background: color-mix(in oklch, var(--ae-bg) 60%, transparent);
+    backdrop-filter: blur(var(--ae-blur-s));
+  }
+
+  /* Form grid: fields flow into columns; data-span="full" takes the row. */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+    gap: var(--ae-space-4) var(--ae-space-5);
+
+    & > [data-span="full"] {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* Preferences rows, label + description start, control end. <div class="settings"><div class="setting"><div><b>…</b><small>…</small></div><input …></div></div> */
+  .settings {
+    display: grid;
+    box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
+
+    & > .setting {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: var(--ae-space-4);
+      padding: var(--ae-space-3) var(--ae-space-4);
+
+      & > div {
+        display: grid;
+        gap: 2px;
+        min-inline-size: 0;
+      }
+
+      & small {
+        color: var(--ae-text-muted);
+      }
+
+      @media (width < 40rem) {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    & > .setting + .setting,
+    & > h6 + .setting {
+      box-shadow: inset 0 1px 0 var(--ae-border);
+    }
+
+    & > h6 {
+      padding: var(--ae-space-3) var(--ae-space-4) var(--ae-space-1);
+    }
+  }
+
+  /* Master–detail: list beside detail; one at a time under 48rem via data-view="list|detail". */
+  .master-detail {
+    display: grid;
+    grid-template-columns: calc(1rem * pow(var(--ae-phi), 6)) minmax(0, 1fr);
+    min-block-size: 100dvh;
+
+    & > :first-child {
+      overflow-y: auto;
+      box-shadow: inset calc(var(--ae-hairline-x) * -1) 0 0 var(--ae-border);
+    }
+
+    @media (width < 48rem) {
+      grid-template-columns: minmax(0, 1fr);
+
+      &:not([data-view="detail"]) > :last-child,
+      &[data-view="detail"] > :first-child {
+        display: none;
+      }
+
+      & > :first-child {
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+@layer ae.layout {
+  /* Full-screen snapping sections. <div class="snap"><section>…</section>…</div> */
+  .snap {
+    block-size: 100dvh;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+
+    & > * {
+      min-block-size: 100dvh;
+      scroll-snap-align: start;
+      display: grid;
+      align-content: center;
+      padding: var(--ae-space-7) var(--ae-gutter);
+    }
+  }
+
+  /* Navbar that condenses as the page scrolls (scroll-driven). */
+  @supports (animation-timeline: scroll()) {
+    .navbar[data-shrink] {
+      animation: ae-navbar-shrink linear both;
+      animation-timeline: scroll();
+      animation-range: 0 calc(1rem * pow(var(--ae-phi), 5));
+    }
+  }
+
+  @keyframes ae-navbar-shrink {
+    to {
+      padding-block: var(--ae-space-2);
+      box-shadow:
+        0 1px 0 var(--ae-border),
+        var(--ae-shadow-m);
+    }
+  }
+
+  /* Gentle parallax: --depth from -1 (slower) to 1 (faster). */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .parallax {
+        animation: ae-parallax linear both;
+        animation-timeline: scroll();
+      }
+    }
+  }
+
+  @keyframes ae-parallax {
+    to {
+      translate: 0 calc(var(--depth, 0.5) * -20vh);
+    }
+  }
+}
+
+@layer ae.utilities {
+  /* Theme-only content, e.g. a dark logo vs a light one. */
+  :root[data-theme="dark"] .light-only,
+  :root[data-theme="light"] .dark-only {
+    display: none !important;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .light-only {
+      display: none !important;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme]) .dark-only {
+      display: none !important;
+    }
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+}
