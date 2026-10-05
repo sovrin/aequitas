@@ -11,9 +11,10 @@ import { ai } from "./ai.js";
 const entry = fileURLToPath(new URL("../src/aequitas.css", import.meta.url));
 const outDir = fileURLToPath(new URL("../dist/", import.meta.url));
 
-// Baseline 2024-ish: light-dark(), nesting, @layer, container queries, :has().
+// Baseline 2024-ish: light-dark(), nesting, @layer, container queries, :has(), and round(),
+// which every --ae-space-* token uses (Chrome 125).
 const targets = {
-  chrome: 123 << 16,
+  chrome: 125 << 16,
   safari: (18 << 16) | (0 << 8),
   firefox: 128 << 16,
 };
@@ -41,7 +42,7 @@ export async function build(): Promise<void> {
       outfile: outDir + (minify ? "aequitas.min.js" : "aequitas.js"),
       bundle: true,
       format: "esm",
-      target: ["chrome123", "safari18", "firefox128"],
+      target: ["chrome125", "safari18", "firefox128"],
       minify,
       sourcemap: minify,
       legalComments: "inline",
