@@ -1,8 +1,9 @@
-// The tab icon wears the reader's accent. public/favicon.svg is the template (and the fallback without
-// JS or relative colours): its two tile stops are re-derived from the live --ae-accent-light, and
-// redrawn every frame while a preset change crossfades it, so the icon glides with the page.
-const TOP = "#3c95f0";
-const BOTTOM = "#004fc8";
+// The tab icon wears the reader's accent and theme. public/favicon.svg is the template (and the
+// fallback without JS or relative colours, following the system scheme): its <style> is replaced by
+// tile stops re-derived from the live --ae-accent and glyph ink from --ae-accent-contrast, redrawn
+// every frame while a preset change crossfades the accent, so the icon glides with the page, and
+// again when the theme flips.
+const STYLE = /<style>[\s\S]*?<\/style>/;
 const ACCENT = "--ae-accent-light";
 
 export default defineNuxtPlugin(() => {
@@ -34,14 +35,17 @@ export default defineNuxtPlugin(() => {
   let template = "";
   let last = "";
   const draw = () => {
-    const base = getComputedStyle(root).getPropertyValue(ACCENT).trim();
-    if (!template || !base || base === last) return;
-    last = base;
+    if (!template) return;
+    // The probe inherits the page's color-scheme, so light-dark() resolves to the theme on show.
     // The same offsets as the static file: lighter and cooler at the top, deeper at the bottom.
-    const svg = template
-      .replace(TOP, hex(`oklch(from ${base} calc(l + 0.11) calc(c * 0.8) calc(h - 3))`))
-      .replace(BOTTOM, hex(`oklch(from ${base} calc(l - 0.08) c calc(h + 5))`));
-    link.href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+    const top = hex("oklch(from var(--ae-accent) calc(l + 0.11) calc(c * 0.8) calc(h - 3))");
+    const bottom = hex("oklch(from var(--ae-accent) calc(l - 0.08) c calc(h + 5))");
+    const ink = hex("var(--ae-accent-contrast)");
+    const key = top + bottom + ink;
+    if (key === last) return;
+    last = key;
+    const style = `<style>.top{stop-color:${top}}.bottom{stop-color:${bottom}}.ink{fill:${ink}}</style>`;
+    link.href = `data:image/svg+xml,${encodeURIComponent(template.replace(STYLE, style))}`;
   };
 
   let frame = 0;
@@ -61,16 +65,20 @@ export default defineNuxtPlugin(() => {
   };
   root.addEventListener("transitionend", settle);
   root.addEventListener("transitioncancel", settle);
-  // Changes that do not transition (reduced motion, a first preset) still land on the next frame.
+  // Changes that do not transition (reduced motion, a first preset, the theme) still land on the
+  // next frame; without a data-theme the system scheme decides.
   new MutationObserver(() => requestAnimationFrame(draw)).observe(root, {
     attributes: true,
-    attributeFilter: ["data-accent", "style"],
+    attributeFilter: ["data-accent", "data-theme", "style"],
   });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () =>
+    requestAnimationFrame(draw),
+  );
 
   fetch("/favicon.svg")
     .then((r) => r.text())
     .then((svg) => {
-      if (!svg.includes(TOP) || !svg.includes(BOTTOM)) return;
+      if (!STYLE.test(svg)) return;
       template = svg;
       document.body.append(probe);
       document.head.append(link);

@@ -1,12 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <!-- aequitas: φ as a balance, in frost. A stem φ times the disc's diameter (30 × φ = 48.5)
        splits it into equal halves and passes behind it: sharp outside, blurred through the glass.
-       The default accent (hue 255), lit from above. plugins/favicon.client.ts swaps the two tile
-       stops for the reader's accent, so keep them as written. -->
+       The default accent (hue 255), lit from above, in each scheme: the tile lightens in dark mode
+       and the glyph turns to the accent's contrast ink. plugins/favicon.client.ts swaps the style
+       block for the reader's accent and theme, so keep the three classes as written (and the tag's
+       name out of this comment: the plugin finds the block by it). -->
+  <style>
+    .top { stop-color: #3c95f0 }
+    .bottom { stop-color: #004fc8 }
+    .ink { fill: #fff }
+    @media (prefers-color-scheme: dark) {
+      .top { stop-color: #8cccff }
+      .bottom { stop-color: #538ae6 }
+      .ink { fill: #051223 }
+    }
+  </style>
   <defs>
     <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#3c95f0" />
-      <stop offset="1" stop-color="#004fc8" />
+      <stop offset="0" class="top" />
+      <stop offset="1" class="bottom" />
     </linearGradient>
     <linearGradient id="catch" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#fff" stop-opacity="0" />
@@ -22,9 +34,9 @@
   </defs>
   <rect width="64" height="64" rx="14" fill="url(#tile)" />
   <g clip-path="url(#glass)">
-    <rect x="30" y="7.75" width="4" height="48.5" fill="#fff" fill-opacity=".85" filter="url(#blur)" />
+    <rect class="ink" x="30" y="7.75" width="4" height="48.5" fill-opacity=".85" filter="url(#blur)" />
   </g>
-  <circle cx="32" cy="32" r="15" fill="#fff" fill-opacity=".24" />
+  <circle class="ink" cx="32" cy="32" r="15" fill-opacity=".24" />
   <path d="M19.44 24.75A14.5 14.5 0 0 1 44.56 24.75" fill="none" stroke="url(#catch)" stroke-width="1" />
-  <rect x="30" y="7.75" width="4" height="48.5" fill="#fff" mask="url(#clear)" />
+  <rect class="ink" x="30" y="7.75" width="4" height="48.5" mask="url(#clear)" />
 </svg>
