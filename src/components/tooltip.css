@@ -1,5 +1,6 @@
 @layer ae.components {
-  /* <button data-tip="Saves to disk">…</button> — shown on hover and keyboard focus. */
+  /* <button data-tip="Saves to disk">…</button> — shown on hover and keyboard focus; aequitas.js
+     dismisses it on Esc (data-tip-dismissed) and mirrors the text into aria-description. */
   [data-tip] {
     /* Physical translations, mirrored for right-to-left text so the tip stays on its anchor. */
     --_dir: 1;
@@ -10,52 +11,68 @@
     }
 
     &::after {
+      /* Where it rests, and where it enters from: nudged towards the anchor. */
+      --_at: calc(-50% * var(--_dir)) 0;
+      --_from: calc(-50% * var(--_dir)) var(--ae-space-1);
       content: attr(data-tip);
+      /* Drawn, not read: the text would otherwise join the element's accessible name. */
+      content: attr(data-tip) / "";
+      display: none;
       position: absolute;
-      inset-block-end: calc(100% + var(--ae-space-2));
+      inset-block-end: 100%;
       inset-inline-start: 50%;
-      translate: calc(-50% * var(--_dir)) var(--ae-space-1);
+      translate: var(--_from);
+      inline-size: max-content;
+      max-inline-size: min(20rem, 100vw - 2 * var(--ae-gutter));
       padding: var(--ae-space-2) var(--ae-space-3);
+      /* The gap to the anchor is a transparent border, so the pointer can cross onto the tip. */
+      border: 0 solid transparent;
+      border-block-end-width: var(--ae-space-2);
       font-size: var(--ae-text-xs);
       font-weight: 400;
       line-height: var(--ae-leading-tight);
-      white-space: nowrap;
+      text-align: start;
+      white-space: normal;
       color: var(--ae-text);
       background: var(--ae-surface);
+      background-clip: padding-box;
       box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
       opacity: 0;
       pointer-events: none;
       z-index: 20;
       transition:
         opacity var(--ae-duration-fast) var(--ae-ease),
-        translate var(--ae-duration-fast) var(--ae-ease);
+        translate var(--ae-duration-fast) var(--ae-ease),
+        display var(--ae-duration-fast) allow-discrete;
       transition-delay: 0s;
     }
 
-    &:hover::after,
-    &:focus-visible::after {
+    &:is(:hover, :focus-visible):not([data-tip-dismissed])::after {
+      display: block;
       opacity: 1;
-      translate: calc(-50% * var(--_dir)) 0;
-      transition-delay: 400ms;
+      translate: var(--_at);
+      pointer-events: auto;
+      transition-delay: var(--ae-duration-slow);
+
+      @starting-style {
+        opacity: 0;
+        translate: var(--_from);
+      }
     }
 
     &[data-tip-side="bottom"]::after {
-      inset-block: calc(100% + var(--ae-space-2)) auto;
-      translate: calc(-50% * var(--_dir)) calc(var(--ae-space-1) * -1);
-    }
-
-    &[data-tip-side="bottom"]:is(:hover, :focus-visible)::after {
-      translate: calc(-50% * var(--_dir)) 0;
+      --_from: calc(-50% * var(--_dir)) calc(var(--ae-space-1) * -1);
+      inset-block: 100% auto;
+      border-block-width: var(--ae-space-2) 0;
     }
 
     &[data-tip-side="end"]::after {
+      --_at: 0 -50%;
+      --_from: calc(var(--ae-space-1) * -1 * var(--_dir)) -50%;
       inset-block: 50% auto;
-      inset-inline-start: calc(100% + var(--ae-space-2));
-      translate: calc(var(--ae-space-1) * -1 * var(--_dir)) -50%;
-    }
-
-    &[data-tip-side="end"]:is(:hover, :focus-visible)::after {
-      translate: 0 -50%;
+      inset-inline-start: 100%;
+      border-block-end-width: 0;
+      border-inline-start-width: var(--ae-space-2);
     }
   }
 }

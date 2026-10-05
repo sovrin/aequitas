@@ -82,12 +82,34 @@ function actions(root: Root): void {
         tone: toaster.dataset.toastTone as Tone | undefined,
       });
     const dismiss = t.closest<HTMLElement>("[data-dismiss]");
-    if (dismiss)
-      dismiss.closest<HTMLElement>(dismiss.dataset.dismiss || ".alert, .toast, .chip")?.remove();
+    const gone = dismiss?.closest<HTMLElement>(dismiss.dataset.dismiss || ".alert, .toast, .chip");
+    if (gone) {
+      if (gone.contains(document.activeElement)) refocus(gone);
+      gone.remove();
+    }
   });
 }
 
-/** Toasts. aequitas.toast("Saved.", { tone: "success" }) */
+const focusables =
+  'a[href], area[href], button, input:not([type="hidden"]), select, textarea, summary, iframe, [tabindex], [contenteditable]:not([contenteditable="false"])';
+
+/** Before removing `gone` with focus inside it: focus the next focusable element after it, else the one
+ *  before, within an open dialog or popover if it sits in one. In a .tag-input that is the next chip's
+ *  button, or the input. */
+function refocus(gone: Element): void {
+  const scope = gone.parentElement?.closest("dialog[open], [popover]") ?? document;
+  const all = q<HTMLElement>(focusables, scope).filter(
+    (el) =>
+      el.tabIndex >= 0 && !gone.contains(el) && !el.matches(":disabled") && el.checkVisibility(),
+  );
+  const after = (el: Element) =>
+    gone.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING;
+  (all.find(after) ?? all.findLast((el) => !after(el)))?.focus();
+}
+
+/** Toasts. aequitas.toast("Saved.", { tone: "success" })
+ *  A danger toast is role="alert", any other role="status". It leaves after `duration` ms (default 4000;
+ *  Infinity stays until dismissed), counted again from the start once the pointer or focus leaves it. */
 export function toast(
   message: string,
   opts: { tone?: Tone; title?: string; duration?: number } = {},
@@ -99,7 +121,7 @@ export function toast(
   }
   const el = document.createElement("div");
   el.className = "toast";
-  el.setAttribute("role", "status");
+  el.setAttribute("role", opts.tone === "danger" ? "alert" : "status");
   if (opts.tone) el.dataset.tone = opts.tone;
   const body = document.createElement("div");
   if (opts.title) {
@@ -108,15 +130,35 @@ export function toast(
     body.append(b);
   }
   body.append(message);
-  el.append(body);
   region.append(el);
   const leave = () => {
+    if (!el.isConnected || el.dataset.leaving != null) return;
     el.dataset.leaving = "";
     el.addEventListener("transitionend", () => el.remove(), { once: true });
     // No transition (transition: none, a hidden tab) means no transitionend.
     setTimeout(() => el.remove(), 1000);
   };
-  setTimeout(leave, opts.duration ?? 4000);
+  const ms = opts.duration ?? 4000;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const hold = () => clearTimeout(timer);
+  // setTimeout fires at once for Infinity, so a toast that stays never starts one.
+  const run = () => {
+    hold();
+    if (Number.isFinite(ms)) timer = setTimeout(leave, ms);
+  };
+  // Paused while read: under the pointer or holding focus.
+  el.addEventListener("pointerenter", hold);
+  el.addEventListener("focusin", hold);
+  el.addEventListener("pointerleave", () => el.contains(document.activeElement) || run());
+  el.addEventListener("focusout", (e) => {
+    if (!el.contains(e.relatedTarget as Node | null) && !el.matches(":hover")) run();
+  });
+  // Live regions announce changes, not arrivals: insert it empty, fill it a frame later. The
+  // countdown starts with the message, so a toast raised in a hidden tab waits to be seen.
+  requestAnimationFrame(() => {
+    el.append(body);
+    run();
+  });
   return el;
 }
 
@@ -306,9 +348,17 @@ function syncSelection(table: Element): void {
   }
   const bar = selectionBar(table);
   if (!bar) return;
+  const shown = bar.hidden && n > 0;
   bar.hidden = n === 0;
   const count = bar.querySelector("[data-selected]");
-  if (count) count.textContent = String(n);
+  if (!count) return;
+  // A live region misses a change made in the tick it is un-hidden: write the count a frame later,
+  // as it is then (another change may have come in between).
+  if (shown)
+    requestAnimationFrame(
+      () => (count.textContent = String(rowBoxes(table).filter((b) => b.checked).length)),
+    );
+  else count.textContent = String(n);
 }
 /** Table selection: a header checkbox selects every row; rows get aria-selected; a sibling .selection-bar shows the count. */
 function selection(root: Root): void {
@@ -626,6 +676,36 @@ function invokers(root: Root): void {
   );
 }
 
+/** Tooltips: Esc hides the [data-tip] under the pointer or focus (data-tip-dismissed) until both leave it. */
+function tips(root: Root): void {
+  root.addEventListener("keydown", (e) => {
+    if ((e as KeyboardEvent).key !== "Escape") return;
+    const focused = document.activeElement?.closest("[data-tip]");
+    for (const el of [...q("[data-tip]:hover"), ...(focused ? [focused] : [])])
+      el.setAttribute("data-tip-dismissed", "");
+  });
+  const clear = (e: Event) => {
+    const el = e.target as Element;
+    if (!el.matches?.("[data-tip-dismissed]")) return;
+    // Still hovered or focused: it stays dismissed until the other one goes too.
+    if (el.matches(e.type === "focusout" ? ":hover" : ":focus-visible")) return;
+    el.removeAttribute("data-tip-dismissed");
+  };
+  root.addEventListener("focusout", clear);
+  // mouseleave doesn't bubble; listen in the capture phase.
+  root.addEventListener("mouseleave", clear, true);
+}
+
+/** The tip as a description, read after the name. Never replaces an aria-description of your own. */
+const described = new WeakSet<Element>();
+function describeTips(root: Root): void {
+  for (const el of q<HTMLElement>("[data-tip]", root)) {
+    if (el.hasAttribute("aria-description") && !described.has(el)) continue;
+    el.setAttribute("aria-description", el.dataset.tip!);
+    described.add(el);
+  }
+}
+
 const bound = new WeakSet<Root>();
 
 /** Delegated listeners. Once per root; safe to call again. */
@@ -640,6 +720,7 @@ export function bind(root: Root = document): void {
   dropzone(root);
   invokers(root);
   copy(root);
+  tips(root);
 }
 
 /** Per-element enhancements. Call after rendering new content (e.g. on SPA navigation). */
@@ -648,6 +729,7 @@ export function enhance(root: Root = document): void {
   combobox(root);
   palette(root);
   toc(root);
+  describeTips(root);
   themeSync(root);
   for (const r of q<HTMLInputElement>('input[type="range"]', root)) fill(r);
   for (const t of q(".table", root))
