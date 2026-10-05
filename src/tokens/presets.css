@@ -2,6 +2,8 @@
  * System presets. Attributes on <html> or any subtree.
  *   data-accent   named accent hues, in the spirit of macOS accent colours
  *   data-density  scales the base unit; every φ-derived space follows
+ *   data-radius   soft | round corners
+ *   data-type     serif | humanist | mono type
  */
 @layer ae.tokens {
   [data-accent="blue"] {
@@ -25,11 +27,15 @@
   [data-accent="yellow"] {
     --ae-hue: 90;
   }
+  /* Green and teal are light hues: their solid fill is darkened so white text on it stays 4.5:1.
+     A custom --ae-hue between about 150 and 220 needs the same. */
   [data-accent="green"] {
     --ae-hue: 150;
+    --ae-accent-light: oklch(0.5 0.17 150);
   }
   [data-accent="teal"] {
     --ae-hue: 195;
+    --ae-accent-light: oklch(0.5 0.13 195);
   }
   [data-accent="graphite"] {
     --ae-hue: 255;
@@ -90,9 +96,9 @@
         oklch(0.35 0.02 var(--ae-neutral-hue)),
         oklch(0.85 0.01 var(--ae-neutral-hue))
       );
+      /* Only the rest step: hover and press follow it up the φ ladder (12, 19.4, 31.4%). */
       --ae-tint-rest: 12%;
-      --ae-tint-hover: 20%;
-      --ae-tint-press: 30%;
+      --ae-control-edge: color-mix(in oklch, var(--ae-text) 75%, transparent);
       --ae-edge: 3px;
       --ae-frost-bg: var(--ae-surface);
       --ae-frost-bg-thick: var(--ae-surface);
@@ -102,35 +108,145 @@
   }
 }
 
-/* Windows High Contrast: let the system palette through, keep shapes visible. */
+/* Windows High Contrast: let the system palette through, keep shapes visible. These rules are
+   !important on purpose: in forced colours they must beat the component layer, which strips
+   borders and paints states and glyphs with backgrounds the browser would turn into Canvas. */
 @layer ae.base {
   @media (forced-colors: active) {
-    .btn,
-    .input,
-    .segmented,
-    input:is([type="checkbox"], [type="radio"], [type="range"]),
-    .chip,
-    .badge,
-    .card,
-    .list,
-    .alert,
-    .menu,
-    .popover,
-    .toast,
-    dialog {
-      border: 1px solid;
+    :is(
+      .btn,
+      .input:not(.input-group > .input),
+      .select > select,
+      .segmented,
+      .chip,
+      .badge,
+      .card,
+      .list,
+      .alert,
+      .menu,
+      .popover,
+      .toast,
+      dialog,
+      .number,
+      .input-group,
+      .tag-input,
+      .choice,
+      .otp > input,
+      .rating label,
+      .swatch-group label,
+      progress,
+      meter,
+      input:is([type="checkbox"], [type="radio"], [type="range"]):not(
+          .segmented input,
+          .chip input,
+          .rating input,
+          .swatch-group input
+        )
+    ) {
+      border: 1px solid !important;
     }
 
-    .btn[data-variant="primary"],
-    [aria-pressed="true"],
-    [aria-selected="true"],
-    [aria-current]:not([aria-current="false"]),
-    input:is([type="checkbox"], [type="radio"]):checked,
-    .chip:has(> input:checked),
-    .segmented label:has(:checked) span {
+    /* "On" is the system highlight. */
+    :is(
+      .btn[data-variant="primary"],
+      [aria-pressed="true"],
+      [aria-selected="true"],
+      [aria-current]:not([aria-current="false"]),
+      input:is([type="checkbox"], [type="radio"]):is(:checked, :indeterminate),
+      .chip:has(> input:checked),
+      .segmented label:has(:checked) span,
+      .rating label:is(:has(:checked), :has(~ label :checked))
+    ) {
+      background: Highlight !important;
+
+      &,
+      & * {
+        color: HighlightText !important;
+      }
+    }
+
+    /* Glyphs drawn as backgrounds (mask icons, spinners, chevrons, tracks) would be forced to
+       Canvas and vanish: paint them in the text colour. */
+    :is(
+      .icon,
+      .spinner > span,
+      .spinner::before,
+      .spinner::after,
+      .select::after,
+      th[aria-sort]::after,
+      .delta::before,
+      .tabs::after,
+      input[role="switch"]::after,
+      .steps > li:is([data-done], [aria-current="step"])::before
+    ) {
+      background-color: CanvasText !important;
+    }
+    .steps > li:not([data-done], [aria-current="step"])::before {
+      background-color: GrayText !important;
+    }
+    :is(
+        .btn[data-variant="primary"],
+        [aria-pressed="true"],
+        [aria-selected="true"],
+        [aria-current]:not([aria-current="false"])
+      )
+      .icon,
+    input:is([type="checkbox"], [type="radio"]):is(:checked, :indeterminate)::after,
+    input[role="switch"]:checked::after {
+      background-color: HighlightText !important;
+    }
+    a:any-link .icon {
+      background-color: LinkText !important;
+    }
+    :disabled .icon {
+      background-color: GrayText !important;
+    }
+    .rating label:not(:has(:checked), :has(~ label :checked)) {
+      background: Canvas !important;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      background: GrayText !important;
+    }
+    input[type="range"]::-moz-range-track {
+      background: GrayText !important;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      background: CanvasText !important;
+    }
+    input[type="range"]::-moz-range-thumb {
+      background: CanvasText !important;
+    }
+    progress::-webkit-progress-value {
+      background: Highlight !important;
+    }
+    progress::-moz-progress-bar {
+      background: Highlight !important;
+    }
+    meter::-webkit-meter-optimum-value,
+    meter::-webkit-meter-suboptimum-value,
+    meter::-webkit-meter-even-less-good-value {
+      background: Highlight !important;
+    }
+    meter::-moz-meter-bar {
+      background: Highlight !important;
+    }
+
+    /* Here the colour is the content. */
+    .swatch-group label,
+    .swatch::before,
+    .dot,
+    .avatar[data-status]::after {
       forced-color-adjust: none;
-      color: HighlightText;
-      background: Highlight;
+    }
+    .swatch-group label:has(:checked) {
+      outline: 2px solid Highlight;
+      outline-offset: 2px;
+    }
+
+    /* Controls built around a hidden input: their box-shadow ring is gone, so outline the label. */
+    :is(.chip, .swatch-group label, .dropzone):has(:focus-visible) {
+      outline: 2px solid Highlight !important;
+      outline-offset: 2px;
     }
 
     body::before {

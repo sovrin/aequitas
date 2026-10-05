@@ -2,7 +2,7 @@
  * Everything derives from one number: φ, the golden ratio.
  * Change nothing here but the base values; the proportions stay golden.
  *
- *   space   φ^n          (n = -3 … 4)   0.24 → 6.85 rem
+ *   space   φ^n          (n = -4 … 4)   0.15 → 6.85 rem
  *   type    φ^(n/2)      (√φ = 1.272, the Kepler triangle ratio)
  *   radius  φ^n around --ae-radius-m
  *   blur    φ^n
@@ -43,6 +43,7 @@
     /* Space — one base unit, powers of φ, snapped to whole pixels. A fractional step rounds
        differently wherever it lands, so equal marks would render a pixel apart. */
     --ae-unit: 1rem;
+    --ae-space-0: round(calc(var(--ae-unit) * pow(var(--ae-phi), -4)), 1px); /* 0.146 */
     --ae-space-1: round(calc(var(--ae-unit) * pow(var(--ae-phi), -3)), 1px); /* 0.236 */
     --ae-space-2: round(calc(var(--ae-unit) * pow(var(--ae-phi), -2)), 1px); /* 0.382 */
     --ae-space-3: round(calc(var(--ae-unit) * pow(var(--ae-phi), -1)), 1px); /* 0.618 */
@@ -70,6 +71,7 @@
     /* Rhythm: body leading is φ itself, headings tighten by φ^¼ */
     --ae-leading-normal: var(--ae-phi);
     --ae-leading-tight: calc(var(--ae-phi) / pow(var(--ae-phi), 0.75)); /* 1.128 */
+    --ae-leading-display: pow(var(--ae-phi), 0.125); /* 1.062, h1 and .display */
 
     /* Shape — square by default; every radius derives from radius-m */
     --ae-radius-m: 0rem; /* squares. Set e.g. 1rem to bring the φ curve back */
@@ -79,7 +81,9 @@
     --ae-radius-full: 0; /* "pill" is square too; use 999px for pills */
     --ae-corner: round;
 
-    /* Depth — ambient + key layers, large blur, low alpha. Never a stroke. */
+    /* Depth — contact, key and ambient layers, large blur, low alpha. Never a stroke. Key and
+       ambient offsets sit on the space scale, each blur two steps (φ²) above its offset; contact
+       layers and spreads are whole pixels. */
     --ae-shadow-ink: oklch(0.15 0.02 var(--ae-neutral-hue));
     --ae-shadow-s:
       0 1px 1px
@@ -87,7 +91,7 @@
           color-mix(in oklch, var(--ae-shadow-ink) 4%, transparent),
           color-mix(in oklch, var(--ae-shadow-ink) 20%, transparent)
         ),
-      0 2px 6px -1px
+      0 var(--ae-space-0) var(--ae-space-2) -1px
         light-dark(
           color-mix(in oklch, var(--ae-shadow-ink) 6%, transparent),
           color-mix(in oklch, var(--ae-shadow-ink) 30%, transparent)
@@ -98,12 +102,12 @@
           color-mix(in oklch, var(--ae-shadow-ink) 4%, transparent),
           color-mix(in oklch, var(--ae-shadow-ink) 25%, transparent)
         ),
-      0 calc(0.25rem * var(--ae-phi)) calc(0.75rem * var(--ae-phi)) -2px
+      0 var(--ae-space-2) var(--ae-space-4) -2px
         light-dark(
           color-mix(in oklch, var(--ae-shadow-ink) 6%, transparent),
           color-mix(in oklch, var(--ae-shadow-ink) 35%, transparent)
         ),
-      0 1rem calc(1rem * pow(var(--ae-phi), 2)) -8px
+      0 var(--ae-space-4) var(--ae-space-6) -8px
         light-dark(
           color-mix(in oklch, var(--ae-shadow-ink) 8%, transparent),
           color-mix(in oklch, var(--ae-shadow-ink) 45%, transparent)
@@ -114,12 +118,12 @@
           color-mix(in oklch, var(--ae-shadow-ink) 4%, transparent),
           color-mix(in oklch, var(--ae-shadow-ink) 30%, transparent)
         ),
-      0 calc(0.5rem * var(--ae-phi)) calc(1.25rem * var(--ae-phi)) -4px
+      0 var(--ae-space-3) var(--ae-space-5) -4px
         light-dark(
           color-mix(in oklch, var(--ae-shadow-ink) 8%, transparent),
           color-mix(in oklch, var(--ae-shadow-ink) 45%, transparent)
         ),
-      0 calc(1rem * pow(var(--ae-phi), 2)) calc(1rem * pow(var(--ae-phi), 4)) -12px
+      0 var(--ae-space-6) var(--ae-space-8) -12px
         light-dark(
           color-mix(in oklch, var(--ae-shadow-ink) 14%, transparent),
           color-mix(in oklch, var(--ae-shadow-ink) 60%, transparent)
@@ -129,6 +133,8 @@
     --ae-duration: 220ms;
     --ae-duration-fast: calc(var(--ae-duration) / var(--ae-phi));
     --ae-duration-slow: calc(var(--ae-duration) * var(--ae-phi));
+    /* Stagger between siblings: φ⁻³ of a duration, ≈ 52ms. */
+    --ae-stagger: calc(var(--ae-duration) * pow(var(--ae-phi), -3));
     --ae-ease: cubic-bezier(0.2, 0, 0, 1);
     /* "Spring" settles without overshoot: a long, decelerating arrival, never a bounce. */
     --ae-ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
@@ -136,14 +142,20 @@
     /* Layout */
     --ae-container: calc(1rem * pow(var(--ae-phi), 9)); /* ≈ 76 rem */
     --ae-measure: calc(40ch * var(--ae-phi)); /* ≈ 65 ch, ideal line length */
-    --ae-ratio: 1.618034; /* use as aspect-ratio */
+    --ae-ratio: var(--ae-phi); /* use as aspect-ratio */
     --ae-gutter: var(--ae-space-5);
+
+    /* The smallest pointer target (WCAG 2.5.8). Not φ: it is a fixed accessibility floor. */
+    --ae-target: 24px;
+
+    /* Strokes between a hairline and the 2px state edge: field rings and chevron arms. */
+    --ae-stroke: 1.5px;
 
     /* Focus */
     --ae-ring: 0 0 0 2px var(--ae-bg), 0 0 0 4px var(--ae-accent);
     /* Text fields focus inside out: an accent stroke and a soft halo. */
     --ae-ring-field:
-      inset 0 0 0 1.5px var(--ae-accent),
+      inset 0 0 0 var(--ae-stroke) var(--ae-accent),
       0 0 0 4px color-mix(in oklch, var(--ae-accent) 28%, transparent);
   }
 

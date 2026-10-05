@@ -71,18 +71,37 @@
     --ae-accent-dark: oklch(0.72 0.15 var(--ae-hue));
     --ae-accent: light-dark(var(--ae-accent-light), var(--ae-accent-dark));
     --ae-accent-contrast: light-dark(oklch(0.99 0 0), oklch(0.18 0.04 var(--ae-hue)));
-    --ae-success: light-dark(oklch(0.55 0.15 150), oklch(0.75 0.15 150));
+    --ae-success: light-dark(oklch(0.52 0.15 150), oklch(0.75 0.15 150));
     --ae-success-contrast: light-dark(oklch(0.99 0 0), oklch(0.18 0.04 150));
-    --ae-warning: light-dark(oklch(0.62 0.15 70), oklch(0.82 0.15 80));
+    --ae-warning: light-dark(oklch(0.55 0.14 65), oklch(0.82 0.15 80));
     --ae-warning-contrast: light-dark(oklch(0.99 0 0), oklch(0.2 0.04 80));
     --ae-danger: light-dark(oklch(0.56 0.21 25), oklch(0.72 0.17 25));
     --ae-danger-contrast: light-dark(oklch(0.99 0 0), oklch(0.18 0.04 25));
-    --ae-info: light-dark(oklch(0.57 0.14 235), oklch(0.76 0.12 235));
+    --ae-info: light-dark(oklch(0.54 0.14 235), oklch(0.76 0.12 235));
     --ae-info-contrast: light-dark(oklch(0.99 0 0), oklch(0.18 0.04 235));
+
+    /* Ink: each tone dark (or light) enough to read as text, 4.5:1 on every surface and on the
+       tone's own tints. The tone itself stays for fills, edges and rings. The accent's ink is
+       derived from the accent, so presets and hue changes carry over. */
+    --ae-accent-ink: light-dark(
+      oklch(from var(--ae-accent-light) min(l, 0.45) min(c, 0.15) h),
+      oklch(from var(--ae-accent-dark) max(l, 0.78) min(c, 0.13) h)
+    );
+    --ae-success-ink: light-dark(oklch(0.45 0.13 150), oklch(0.78 0.13 150));
+    --ae-warning-ink: light-dark(oklch(0.45 0.12 65), oklch(0.84 0.13 80));
+    --ae-danger-ink: light-dark(oklch(0.45 0.17 25), oklch(0.78 0.13 25));
+    --ae-info-ink: light-dark(oklch(0.45 0.12 235), oklch(0.8 0.11 235));
+
+    /* Over images and media, in either scheme: a darkening scrim, the text on it, and the
+       always-white knob of a switch. */
+    --ae-scrim: oklch(0 0 0 / 0.6);
+    --ae-scrim-text: oklch(0.98 0 0);
+    --ae-thumb: oklch(1 0 0);
 
     /* The active tone. Components read these; `data-tone` swaps them. */
     --ae-tone: var(--ae-accent);
     --ae-tone-contrast: var(--ae-accent-contrast);
+    --ae-tone-ink: var(--ae-accent-ink);
 
     /* Aurora: colour fields behind the page. Frost needs something to blur. */
     --ae-aurora:
@@ -152,25 +171,30 @@
   [data-tone="accent"] {
     --ae-tone: var(--ae-accent);
     --ae-tone-contrast: var(--ae-accent-contrast);
+    --ae-tone-ink: var(--ae-accent-ink);
   }
 
   [data-tone="success"] {
     --ae-tone: var(--ae-success);
     --ae-tone-contrast: var(--ae-success-contrast);
+    --ae-tone-ink: var(--ae-success-ink);
   }
 
   [data-tone="warning"] {
     --ae-tone: var(--ae-warning);
     --ae-tone-contrast: var(--ae-warning-contrast);
+    --ae-tone-ink: var(--ae-warning-ink);
   }
 
   [data-tone="danger"] {
     --ae-tone: var(--ae-danger);
     --ae-tone-contrast: var(--ae-danger-contrast);
+    --ae-tone-ink: var(--ae-danger-ink);
   }
 
   [data-tone="info"] {
     --ae-tone: var(--ae-info);
     --ae-tone-contrast: var(--ae-info-contrast);
+    --ae-tone-ink: var(--ae-info-ink);
   }
 }

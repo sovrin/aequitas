@@ -23,13 +23,17 @@
        answer the pointer by stepping down it, never by moving. Tinted and solid controls mix
        their tone by the same steps. */
     --ae-tint-rest: 7%;
-    --ae-tint-hover: 11.3%;
-    --ae-tint-press: 18.3%;
+    --ae-tint-hover: calc(var(--ae-tint-rest) * var(--ae-phi));
+    --ae-tint-press: calc(var(--ae-tint-rest) * pow(var(--ae-phi), 2));
 
     /* Flat control fills — the "tinted" look. */
     --ae-fill: color-mix(in oklch, var(--ae-text) var(--ae-tint-rest), transparent);
     --ae-fill-hover: color-mix(in oklch, var(--ae-text) var(--ae-tint-hover), transparent);
     --ae-fill-active: color-mix(in oklch, var(--ae-text) var(--ae-tint-press), transparent);
+
+    /* The boundary of a control whose shape you need to find it (an empty box, a track, an off
+       switch): 3:1 against every surface, as non-text contrast asks. Surfaces still never get one. */
+    --ae-control-edge: color-mix(in oklch, var(--ae-text) 52%, transparent);
 
     /* "This one is on": a single accent edge, never colour alone. Vertical sets mark the
        inline-start side (--ae-edge-x follows the writing direction), horizontal sets the
@@ -53,7 +57,7 @@
       );
       --ae-frost-bg-thick: light-dark(
         color-mix(in oklch, var(--ae-surface) 88%, transparent),
-        color-mix(in oklch, var(--ae-surface) 82%, transparent)
+        color-mix(in oklch, var(--ae-surface) 90%, transparent)
       );
     }
   }
@@ -94,5 +98,10 @@
     @supports (backdrop-filter: blur(1px)) {
       backdrop-filter: var(--ae-frost-filter);
     }
+  }
+  /* Bars and menus float over scrolling content of any colour, so they take the thicker
+     material: text on them must stay legible over anything. */
+  :is(.navbar, .menu, .toast, .action-bar, .selection-bar, .dock, .tabbar) {
+    --ae-frost-bg: var(--ae-frost-bg-thick);
   }
 }
