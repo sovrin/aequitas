@@ -203,6 +203,12 @@
       gap: 0;
       padding: 0;
 
+      /* The side panels keep align-self: start for sticking, which in a column means shrink to fit:
+         the sidebar, an inline-size container, would collapse to its padding. Span the page. */
+      & > :is(.sidebar, .inspector) {
+        align-self: stretch;
+      }
+
       &[data-fill] {
         block-size: auto;
 
