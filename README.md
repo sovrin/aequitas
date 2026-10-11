@@ -78,7 +78,7 @@ Controls answer the pointer with tone, never movement, and persistent states add
 
 ## Behaviours
 
-`aequitas.js` is optional: about 6 kB gzipped, ESM, typed. It initialises itself; add `data-ae-manual` to `<html>` and call `init()` (or `bind()` once and `enhance()` after each render) to drive it yourself.
+`aequitas.js` is optional: about 7 kB gzipped, ESM, typed. It initialises itself; markup added later (an SPA render, a fetched fragment) is enhanced as it lands. Add `data-ae-manual` to `<html>` and call `init()` yourself to start it later, e.g. after hydration.
 
 | Markup                                 | Does                                                                        |
 | -------------------------------------- | --------------------------------------------------------------------------- |

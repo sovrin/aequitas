@@ -51,7 +51,7 @@ export const feedback: Entry[] = [
     anatomy: [
       [
         ".toasts",
-        "The fixed stack, bottom end by default. `toast()` creates it at the end of `<body>` when the page has none.",
+        "The fixed stack, bottom end by default. `toast()` uses the first one that is fixed, and creates one at the end of `<body>` when there is none; a region shown in place, like the demo here, is left alone.",
       ],
       [
         "> .toast",
@@ -75,8 +75,8 @@ export const feedback: Entry[] = [
       },
       {
         title: "Region",
-        note: "The .toasts region stacks toasts in a fixed corner. Shown in place here; on a page it is fixed to the viewport.",
-        html: `<div class="toasts" data-position="top-end" style="position: static">
+        note: "The .toasts region stacks toasts in a fixed corner, the newest in front; hover or focus it to fan them out. Shown in place here; on a page it is fixed to the viewport.",
+        html: `<div class="toasts" data-position="top-end" style="position: relative; overflow-x: clip; overflow-clip-margin: var(--ae-space-6)">
   <div class="toast" role="status" data-tone="success"><div><strong>Published.</strong> Northlight is live.</div></div>
   <div class="toast" role="status"><div>Three files uploaded.</div><button class="btn" data-size="s" data-variant="ghost" data-icon data-dismiss aria-label="Dismiss"><i class="icon" data-icon="x"></i></button></div>
 </div>`,
@@ -95,15 +95,19 @@ export const feedback: Entry[] = [
       ],
       [".toasts[data-position]", "Which corner or edge the stack sits in. Default bottom end."],
       [
+        ".toasts[data-stacked]",
+        "Set by aequitas.js: the toasts stack, the newest in front, and hover or focus fans them out. Without it the region is a plain list.",
+      ],
+      [
         ".toast[data-leaving]",
-        "Exit state: fades and slides sideways. `toast()` sets it, then removes the element when the transition ends.",
+        'Exit state: fades and sinks back towards the edge it came from; `data-leaving="swipe"` carries it on sideways instead. aequitas.js sets it, then removes the element once its transitions end.',
       ],
     ],
-    js: '`aequitas.toast(message, { title, tone, duration })` appends an empty `.toast` to `.toasts` (`role="alert"` for `tone: "danger"`, `role="status"` otherwise) and writes the message into it a frame later. After `duration` (default 4000 ms; `Infinity` keeps it) it sets `data-leaving` and removes it; the countdown pauses while the pointer is over the toast or focus is in it, and starts again from the top when both leave. A click on `[data-toast]` calls it with the element\'s `data-toast`, `data-toast-title` and `data-toast-tone`; a `[data-dismiss]` button inside a toast removes it at once and moves focus to the next focusable element. Without aequitas.js, toasts are markup you add and remove yourself.',
+    js: '`aequitas.toast(message, { title, tone, duration })` appends an empty `.toast` to `.toasts` (`role="alert"` for `tone: "danger"`, `role="status"` otherwise) and writes the message into it a frame later. After `duration` (default 4000 ms; `Infinity` keeps it) it sets `data-leaving` and removes it; toasts stack, the newest in front with two older ones peeking out behind it; hovering the stack or moving focus into it fans it out into a list, and every countdown waits until both leave, then starts again from the top. A click on `[data-toast]` calls it with the element\'s `data-toast`, `data-toast-title` and `data-toast-tone`; every toast it makes carries a Dismiss button, a stacked toast can be swiped away sideways towards its edge of the screen (a flick is enough; the other way it resists, and one already leaving can be caught), and a `[data-dismiss]` button inside any toast sends it out the same way a timed one leaves, moving focus to the next toast\'s button, or back to where it was before the stack took it, without scrolling the page. Without aequitas.js, toasts are markup you add and remove yourself.',
     a11y: [
       '`role="status"` makes a toast a polite live region, `role="alert"` an assertive one that interrupts; `toast()` picks `alert` for danger. Hand-written toasts need the role too.',
       "`toast()` inserts the live region empty and fills it on the next frame, since screen readers announce changes to a region, not a region that arrives already filled. Do the same when you add toasts yourself.",
-      "A toast leaves after four seconds unless the pointer or focus is on it; pass `duration: Infinity` for one that stays until dismissed. Never put the only copy of an error, or an action the user must take, in a timed one: show it inline as well.",
+      "A toast leaves after four seconds unless the pointer or focus is on the stack; pass `duration: Infinity` for one that stays until dismissed. Never put the only copy of an error, or an action the user must take, in a timed one: show it inline as well.",
     ],
     related: ["alert", "banner"],
     keywords: "snackbar notification",

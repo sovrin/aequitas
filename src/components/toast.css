@@ -5,7 +5,8 @@
     inset-block-end: var(--ae-gutter);
     inset-inline-end: var(--ae-gutter);
     z-index: 30;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: var(--ae-space-3);
     inline-size: min(100% - 2 * var(--ae-gutter), calc(1rem * pow(var(--ae-phi), 7)));
   }
@@ -29,42 +30,178 @@
   }
 
   .toast {
+    /* Where it sits: --_at along the stack, away from the edge it is pinned to (--_dir), set by
+       the stack below. Every state moves these, never translate itself, so none overrides another. */
+    --_dir: -1;
     display: flex;
     align-items: start;
     gap: var(--ae-space-3);
     padding: var(--ae-space-4) var(--ae-space-5);
     font-size: var(--ae-text-s);
     box-shadow: var(--ae-shadow-l), var(--ae-frost-edge);
+    /* --_dx and --_dxo: the sideways swipe (aequitas.js), and how far it has faded with it. */
+    opacity: calc(var(--_o, 1) * var(--_dxo, 1));
+    translate: var(--_dx, 0px) calc(var(--_dir) * var(--_at, 0px));
+    scale: var(--_s, 1);
     transition:
       opacity var(--ae-duration) var(--ae-ease),
-      translate var(--ae-duration-slow) var(--ae-ease-spring);
+      translate var(--ae-duration-slow) var(--ae-ease-spring),
+      scale var(--ae-duration-slow) var(--ae-ease-spring),
+      block-size var(--ae-duration-slow) var(--ae-ease-spring),
+      background-color var(--ae-duration) var(--ae-ease);
 
+    /* Enters from the edge it is pinned to, and arrives as a material: it grows into place as
+       it clears, rather than only fading in. */
     @starting-style {
       opacity: 0;
-      translate: 0 var(--ae-space-4);
+      translate: 0 calc(var(--_dir) * -1 * var(--ae-space-4));
+      scale: 0.96;
+    }
+
+    .toasts[data-position^="top"] > & {
+      --_dir: 1;
     }
 
     & strong {
       color: var(--ae-tone-ink);
     }
 
+    /* Dismiss: at the inline end, centred on the first line of text (half the difference between
+       that line and its own height, which is a small icon button's), and pulled into the padding
+       below so it never makes the toast taller. Its em is the toast's text size. */
+    & > [data-dismiss] {
+      flex: none;
+      margin-inline: auto calc(var(--ae-space-2) * -1);
+      margin-block: calc(
+          (1em * var(--ae-leading-normal) - max(var(--ae-target), 2 * var(--ae-space-2) + 1em)) / 2
+        )
+        calc(var(--ae-space-2) * -1);
+    }
+
+    /* The tone square, centred on the first line of text (within a hair of its x-height middle),
+       at any size or density. */
     &[data-tone]::before {
       content: "";
       flex: none;
       inline-size: var(--ae-space-2);
       block-size: var(--ae-space-2);
-      margin-block-start: 0.45em;
+      margin-block-start: calc((1lh - var(--ae-space-2)) / 2);
       background: var(--ae-tone);
     }
 
-    /* Leaves towards the inline end, whichever side that is. */
-    &[data-leaving] {
-      opacity: 0;
-      translate: var(--ae-space-4) 0;
+    /* Under the finger: it follows 1:1, nothing eases it. */
+    &[data-swiping] {
+      transition: none;
+      user-select: none;
     }
 
-    &[data-leaving]:dir(rtl) {
-      translate: calc(var(--ae-space-4) * -1) 0;
+    /* Leaves the way it came, back towards its edge, from wherever it sits, quicker than it came. */
+    &[data-leaving] {
+      opacity: 0;
+      translate: var(--_dx, 0px) calc(var(--_dir) * (var(--_at, 0px) - var(--ae-space-4)));
+      transition:
+        opacity var(--ae-duration-fast) var(--ae-ease),
+        translate var(--ae-duration-fast) var(--ae-ease);
+    }
+
+    /* Flicked away: it carries on sideways, off the screen. The curve opens at a slope of 2 and
+       aequitas.js times it (--_swipe) from the release speed, so it leaves at the finger's pace. */
+    &[data-leaving="swipe"] {
+      translate: var(--_dx, 0px) calc(var(--_dir) * var(--_at, 0px));
+      transition:
+        opacity var(--_swipe, var(--ae-duration-fast)) var(--ae-ease),
+        translate var(--_swipe, var(--ae-duration-fast)) cubic-bezier(0.25, 0.5, 0.5, 1);
+    }
+  }
+
+  /*
+   * The stack (aequitas.js sets data-stacked, each toast's --i from the front and --y in the list,
+   * and the heights). Collapsed, the newest toast is in front and two older ones peek out behind
+   * it, a step smaller each, their content hidden so the frost in front stays clean. Hovered or
+   * holding focus, the stack fans out into a list. Without the script the region stays a list.
+   */
+  .toasts[data-stacked] {
+    --_peek: var(--ae-space-3);
+    display: block;
+    block-size: calc(var(--_front) + clamp(0, var(--_n) - 1, 2) * var(--_peek));
+
+    & > .toast {
+      --_at: calc(var(--i, 0) * var(--_peek));
+      --_s: calc(1 - var(--i, 0) * 0.05);
+      /* The third one back fades out; the rest wait out of sight. */
+      --_o: clamp(0, 3 - var(--i, 0), 1);
+      position: absolute;
+      inset-inline: 0;
+      inset-block-end: 0;
+      z-index: calc(10 - var(--i, 0));
+      transform-origin: 50% 100%;
+      /* Sideways belongs to the swipe; vertical pans still reach the page. */
+      touch-action: pan-y;
+
+      & > *,
+      &::before {
+        transition: opacity var(--ae-duration) var(--ae-ease);
+      }
+
+      /* Depth: a shade that deepens with each card back. */
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: var(--ae-shadow-ink);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--ae-duration) var(--ae-ease);
+      }
+    }
+
+    &[data-position^="top"] > .toast {
+      inset-block: 0 auto;
+      transform-origin: 50% 0;
+    }
+
+    /* Behind the front one: its height, so only an edge shows, and no content. Solid, not frost:
+       glass behind glass only clouds the one in front. Each card back sits a shade deeper. */
+    &:not(:hover, :focus-within) > .toast[data-behind] {
+      --ae-frost-bg: var(--ae-surface);
+      block-size: var(--_front);
+      overflow: clip;
+      backdrop-filter: none;
+
+      & > *,
+      &::before {
+        opacity: 0;
+      }
+
+      &::after {
+        opacity: calc(var(--i, 0) * 0.07);
+      }
+    }
+
+    /* Fanned out: each at its place in the list, full size. The region grows to cover the gaps,
+       so the pointer never falls out of the stack between two toasts. */
+    &:is(:hover, :focus-within) {
+      block-size: var(--_list);
+
+      & > .toast {
+        --_at: var(--y, 0px);
+        --_s: 1;
+        --_o: 1;
+      }
+    }
+  }
+
+  /* Reduced motion: no travel, no growth; toasts still fade in, out and between layouts, as a
+     gentle cue rather than none (the 1ms token would make even the fades vanish). */
+  @media (prefers-reduced-motion: reduce) {
+    .toast,
+    .toast[data-leaving],
+    .toast[data-leaving="swipe"],
+    .toasts[data-stacked] > .toast > *,
+    .toasts[data-stacked] > .toast::before,
+    .toasts[data-stacked] > .toast::after {
+      transition: opacity 150ms var(--ae-ease);
     }
   }
 }

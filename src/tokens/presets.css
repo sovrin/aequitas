@@ -73,12 +73,11 @@
     --ae-unit: 1.2rem;
   }
 
-  /* Presets glide instead of jumping: spaces, type and corners interpolate to the new density or
-     shape, and the accent crossfades. Reduced motion shortens --ae-duration to nothing. */
+  /* Corners glide to the new shape and the accent crossfades: both only repaint. Density and type
+     size switch at once, since interpolating them would lay out the whole page every frame.
+     Reduced motion shortens --ae-duration to nothing. */
   :root {
     transition:
-      --ae-unit var(--ae-duration-slow) var(--ae-ease),
-      --ae-text-base var(--ae-duration-slow) var(--ae-ease),
       --ae-radius-m var(--ae-duration-slow) var(--ae-ease),
       --ae-accent-light var(--ae-duration-slow) var(--ae-ease),
       --ae-accent-dark var(--ae-duration-slow) var(--ae-ease);

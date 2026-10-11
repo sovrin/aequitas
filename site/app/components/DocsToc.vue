@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { enhance } from "@aequitas/aequitas.js";
-
 // On-page table of contents, rebuilt from the article's sections after each page renders.
 // Specimens inside a section become its nested items.
 type Item = { id: string; label: string; children: { id: string; label: string }[] };
@@ -23,20 +21,13 @@ const collect = () => {
     .filter((i) => i.label);
 };
 const route = useRoute();
-const nav = ref<HTMLElement | null>(null);
-// The TOC renders after the plugin's own enhance() on page:finish (and from nothing, when the last
-// page had none), so it wires up its own scroll tracking once its links are in the DOM.
-const update = async () => {
-  collect();
-  await nextTick();
-  if (nav.value?.parentElement) enhance(nav.value.parentElement);
-};
-onMounted(update);
-useNuxtApp().hook("page:finish", update);
+// aequitas.js picks the new links up and tracks scrolling on its own.
+onMounted(collect);
+useNuxtApp().hook("page:finish", collect);
 </script>
 
 <template>
-  <nav v-if="items.length > 1" ref="nav" :key="route.path" class="toc" aria-label="On this page">
+  <nav v-if="items.length > 1" :key="route.path" class="toc" aria-label="On this page">
     <ul>
       <li v-for="i in items" :key="i.id">
         <a :href="`#${i.id}`">{{ i.label }}</a>
