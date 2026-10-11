@@ -1,6 +1,7 @@
 @layer ae.components {
   /* <span class="chip">Design <button aria-label="Remove Design">×</button></span> */
   .chip {
+    border-radius: var(--ae-radius-full);
     display: inline-flex;
     align-items: center;
     gap: var(--ae-space-2);
@@ -11,6 +12,7 @@
     background: var(--ae-fill);
 
     & > button {
+      position: relative;
       display: grid;
       place-items: center;
       inline-size: calc(1em * pow(var(--ae-phi), 0.5));
@@ -23,6 +25,15 @@
       background: none;
       border: 0;
       cursor: pointer;
+
+      /* The glyph stays small; the target around it is the full --ae-target, without growing
+         the chip. */
+      &::after {
+        content: "";
+        position: absolute;
+        inline-size: var(--ae-target);
+        block-size: var(--ae-target);
+      }
 
       &:hover {
         color: var(--ae-text);

@@ -54,7 +54,7 @@ const check = `node dist/aequitas-check.mjs index.html src/**/*.html`;
             <tr>
               <td class="entry-key"><code>aequitas.min.js</code></td>
               <td class="text-muted">
-                The <NuxtLink to="/behaviours">behaviours</NuxtLink>, about 7 kB gzipped. ESM, typed
+                The <NuxtLink to="/behaviours">behaviours</NuxtLink>, about 8 kB gzipped. ESM, typed
                 by <code>aequitas.d.ts</code>.
               </td>
             </tr>

@@ -1,6 +1,7 @@
 @layer ae.components {
   /* Skeleton: give it the size of the content it stands in for. */
   .skeleton {
+    border-radius: var(--ae-radius-s);
     display: block;
     min-block-size: 1em;
     color: transparent;
@@ -68,6 +69,7 @@
 
   /* <div class="stat"><b>12,480</b><span>Active users</span></div> */
   .stat {
+    border-radius: var(--ae-radius-m);
     display: grid;
     gap: var(--ae-space-1);
 

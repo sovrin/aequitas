@@ -35,6 +35,12 @@
     letter-spacing: inherit;
   }
 
+  /* Browser defaults fall below 4.5:1 on a tinted field; every placeholder reads as muted text. */
+  ::placeholder {
+    color: var(--ae-text-muted);
+    opacity: 1;
+  }
+
   textarea {
     field-sizing: content;
     min-block-size: 3lh;

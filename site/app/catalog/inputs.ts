@@ -394,7 +394,7 @@ export const inputs: Entry[] = [
         "Opens the list and moves the highlight through the visible options, wrapping at the ends.",
       ],
       ["Enter", "Picks the highlighted option and closes the list."],
-      ["Esc", "Closes the list."],
+      ["Esc", "Closes the list. Inside a dialog only the list: a second Esc closes the dialog."],
     ],
     a11y: [
       'Label the input with `<label for>`, and give the list `role="listbox"` with `role="option"` rows. aequitas.js gives the input `role="combobox"`, `aria-expanded`, `aria-autocomplete` and `aria-controls` (and the list an `id` if it has none); write them yourself without it.',

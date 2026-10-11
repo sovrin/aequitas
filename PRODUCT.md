@@ -15,13 +15,13 @@ Coding agents get first-class reference material (`llms.txt`, the skill, `aequit
 
 ## Product Purpose
 
-aequitas is a CSS design language. Its parts are one stylesheet (`aequitas.css`, or `aequitas.core.css` without utilities), an optional icon sheet, and an optional ~7 kB ESM behaviour module (`aequitas.js`). You write semantic HTML, add a component class, and pick variants with `data-*` attributes. The docs site (`site/`, Nuxt, prerendered) is how people evaluate and learn it: a page per component and layout with live specimens, anatomy and API, plus foundations, reference pages and four showcases.
+aequitas is a CSS design language. Its parts are one stylesheet (`aequitas.css`, or `aequitas.core.css` without utilities), an optional icon sheet, and an optional ~8 kB ESM behaviour module (`aequitas.js`). You write semantic HTML, add a component class, and pick variants with `data-*` attributes. The docs site (`site/`, Nuxt, prerendered) is how people evaluate and learn it: a page per component and layout with live specimens, anatomy and API, plus foundations, reference pages and four showcases.
 
 Success means someone can build a coherent, accessible interface without tuning a single value by hand.
 
 ## Positioning
 
-**One ratio, everything derived.** Space, type, radius, blur, motion, shadow, tint and layout are all powers of φ (`--ae-phi: 1.618034`). Neighbouring frameworks pick their scales one by one, and that is the claim they cannot copy. Its honesty is part of the claim: the README names what is deliberately *off* the scale (hairlines, focus rings, the 24px pointer floor, breakpoints, colour, glyph geometry). Any new value, component or doc sentence has to either derive from φ or join that list on purpose.
+**One ratio, everything derived.** Space, type, radius, blur, motion, shadow, tint and layout are all powers of φ (`--ae-phi: 1.618034`). Neighbouring frameworks pick their scales one by one, and that is the claim they cannot copy. Its honesty is part of the claim: the README names what is deliberately _off_ the scale (hairlines, focus rings, the 24px pointer floor, breakpoints, colour, glyph geometry). Any new value, component or doc sentence has to either derive from φ or join that list on purpose.
 
 ## Operating Context
 
@@ -45,7 +45,7 @@ Success means someone can build a coherent, accessible interface without tuning 
 
 ## Evidence on Hand
 
-- Measured facts: core CSS ~20 kB gzipped, JS ~7 kB gzipped, 377 icons, the φ token table and its stated exceptions.
+- Measured facts: core CSS ~21 kB gzipped, JS ~8 kB gzipped, 377 icons, the φ token table and its stated exceptions.
 - The docs site itself, with its live specimens and four showcases (`site/app/pages/showcase/`).
 - **There are no adopters, testimonials, logos, benchmarks, download counts or case studies.** Future pages must not invent them. Any social proof on the showcase landing page is demo content and must read as demo content.
 
@@ -60,6 +60,7 @@ Success means someone can build a coherent, accessible interface without tuning 
 ## Accessibility & Inclusion
 
 These are commitments the framework already makes, and future work must keep them:
+
 - colour never carries meaning alone (persistent states add a 2px accent edge)
 - a 24px minimum pointer target
 - `prefers-contrast`, `forced-colors`, `prefers-reduced-motion` and `prefers-reduced-transparency` are handled throughout, and frost falls back to solid surfaces

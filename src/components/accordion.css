@@ -1,6 +1,7 @@
 @layer ae.components {
   /* <details class="accordion"><summary>…</summary>…</details>. Animates via interpolate-size. */
   .accordion {
+    border-radius: var(--ae-radius-m);
     & > summary {
       display: flex;
       align-items: center;
@@ -44,6 +45,8 @@
     &::details-content {
       block-size: 0;
       overflow: clip;
+      /* Room for the focus ring of content flush with the edge. */
+      overflow-clip-margin: 4px;
       color: var(--ae-text-muted);
       transition:
         block-size var(--ae-duration) var(--ae-ease),

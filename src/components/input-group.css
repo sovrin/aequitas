@@ -1,6 +1,7 @@
 @layer ae.components {
   /* <div class="input-group"><span>https://</span><input class="input"><span>.com</span></div> */
   .input-group {
+    border-radius: var(--ae-radius-m);
     display: flex;
     background: var(--ae-fill);
     /* The group carries the field's bottom rule; its input doesn't. */

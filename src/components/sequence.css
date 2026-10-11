@@ -42,7 +42,7 @@
       &[data-done],
       &[aria-current="step"] {
         &::before {
-          background: var(--ae-accent);
+          background: var(--ae-tone);
         }
       }
 
@@ -59,14 +59,14 @@
       }
 
       &[aria-current="step"]::after {
-        color: var(--ae-accent-contrast);
-        background: var(--ae-accent);
+        color: var(--ae-tone-contrast);
+        background: var(--ae-tone);
       }
 
       &[data-done]::after {
         content: "✓";
-        color: var(--ae-accent);
-        background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+        color: var(--ae-tone-ink);
+        background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
       }
     }
   }

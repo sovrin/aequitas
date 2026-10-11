@@ -14,7 +14,7 @@ markMatches(list, "term"); // highlight a term in the options of a dialog.palett
     <DocsPageHeader
       group="JavaScript"
       title="Behaviours"
-      lede="Seven kilobytes, gzipped, of TypeScript for what HTML cannot do alone."
+      lede="Eight kilobytes, gzipped, of TypeScript for what HTML cannot do alone."
     />
     <section class="section stack gap-6" id="behaviours">
       <div class="stack measure">

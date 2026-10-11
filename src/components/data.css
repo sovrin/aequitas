@@ -1,6 +1,7 @@
 @layer ae.components {
   /* <label class="dropzone"><input type="file"><strong>Drop files</strong> or click to browse</label> */
   .dropzone {
+    border-radius: var(--ae-radius-m);
     position: relative;
     display: grid;
     place-items: center;
@@ -10,7 +11,7 @@
     text-align: center;
     color: var(--ae-text-muted);
     background: var(--ae-fill);
-    outline: 1px dashed var(--ae-border-strong);
+    outline: 1px dashed var(--ae-control-edge);
     outline-offset: -1px;
     cursor: pointer;
     transition:
@@ -35,8 +36,8 @@
 
     &[data-active],
     &:has(:focus-visible) {
-      background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
-      outline-color: var(--ae-accent);
+      background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
+      outline-color: var(--ae-tone);
     }
 
     &:has(:focus-visible) {
@@ -55,9 +56,9 @@
       font-size: var(--ae-text-l);
       /* Over any page, through glass: full text colour, since muted can't hold 4.5:1 here. */
       color: var(--ae-text);
-      background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-rest), var(--ae-frost-bg));
+      background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-rest), var(--ae-frost-bg));
       backdrop-filter: var(--ae-frost-filter);
-      outline: var(--ae-edge) dashed var(--ae-accent);
+      outline: var(--ae-edge) dashed var(--ae-tone);
       outline-offset: calc(var(--ae-edge) * -1);
       box-shadow: var(--ae-shadow-l), var(--ae-frost-edge);
       pointer-events: none;
@@ -74,6 +75,8 @@
 
   /* <figure class="code"><figcaption>build.ts <button class="btn" data-size="s">Copy</button></figcaption><pre>…</pre></figure> */
   .code {
+    border-radius: var(--ae-radius-m);
+    overflow: clip;
     display: grid;
     background: var(--ae-fill);
 
@@ -98,8 +101,11 @@
 
   /* <div class="number"><button aria-label="Decrease">−</button><input type="number"><button aria-label="Increase">+</button></div> */
   .number {
+    border-radius: var(--ae-radius-m);
     display: inline-flex;
     background: var(--ae-fill);
+    /* A rule along the bottom, as on .input, so the field can be found; focus replaces it. */
+    box-shadow: inset 0 -1px 0 var(--ae-control-edge);
     transition: box-shadow var(--ae-duration) var(--ae-ease);
 
     & > input {
@@ -119,6 +125,17 @@
       &:focus-visible {
         box-shadow: none;
       }
+    }
+
+    /* The end buttons follow the field's corners (no clipping, which would cut their focus ring). */
+    & > :first-child {
+      border-start-start-radius: inherit;
+      border-end-start-radius: inherit;
+    }
+
+    & > :last-child {
+      border-start-end-radius: inherit;
+      border-end-end-radius: inherit;
     }
 
     & > button {
@@ -148,6 +165,10 @@
     &:focus-within {
       box-shadow: var(--ae-ring-field);
     }
+
+    &:has(> input:is(:user-invalid, [aria-invalid="true"])) {
+      box-shadow: inset 0 0 0 var(--ae-stroke) var(--ae-danger);
+    }
   }
 
   /* Horizontal scroll-snap carousel. Native scroll markers where supported. */
@@ -171,27 +192,34 @@
       &::scroll-marker-group {
         display: flex;
         justify-content: center;
-        gap: var(--ae-space-2);
-        padding-block-start: var(--ae-space-3);
+        padding-block-start: var(--ae-space-2);
       }
 
       & > *::scroll-marker {
         content: "";
         /* The marker is a link to its item: name it after the item's aria-label. */
         content: "" / attr(aria-label);
-        inline-size: var(--ae-space-2);
-        block-size: var(--ae-space-2);
-        background: var(--ae-border-strong);
+        /* A 24px target with the square drawn in its middle: a clear border is the hit area. Others
+           are hollow and the current one is filled, so shape tells them apart, not colour alone. */
+        box-sizing: border-box;
+        inline-size: var(--ae-target);
+        block-size: var(--ae-target);
+        border: calc((var(--ae-target) - var(--ae-space-2)) / 2) solid transparent;
+        background: transparent;
+        box-shadow: inset 0 0 0 1px var(--ae-control-edge);
       }
 
       & > *::scroll-marker:target-current {
-        background: var(--ae-accent);
+        background: var(--ae-tone) padding-box;
+        box-shadow: none;
       }
     }
   }
 
   /* <figure class="media"><img …><figcaption>…</figcaption></figure> — golden by default */
   .media {
+    border-radius: var(--ae-radius-l);
+    overflow: clip;
     position: relative;
     aspect-ratio: var(--ae-ratio);
     overflow: hidden;
@@ -261,17 +289,27 @@
       background: var(--ae-text-muted);
     }
 
+    /* Each status has its own shape as well as its colour: online solid, away half filled, busy
+       crossed by a bar, offline hollow. */
     &[data-status="online"]::after {
       background: var(--ae-success);
     }
     &[data-status="away"]::after {
-      background: var(--ae-warning);
+      background: linear-gradient(135deg, var(--ae-warning) 50%, var(--ae-bg) 0);
+      box-shadow:
+        0 0 0 2px var(--ae-bg),
+        inset 0 0 0 var(--ae-stroke) var(--ae-warning);
     }
     &[data-status="busy"]::after {
-      background: var(--ae-danger);
+      background:
+        linear-gradient(var(--ae-bg) 0 0) center / 60% 2px no-repeat,
+        var(--ae-danger);
     }
     &[data-status="offline"]::after {
-      background: var(--ae-text-muted);
+      background: var(--ae-bg);
+      box-shadow:
+        0 0 0 2px var(--ae-bg),
+        inset 0 0 0 var(--ae-stroke) var(--ae-text-muted);
     }
   }
 }

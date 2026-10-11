@@ -218,6 +218,7 @@
 
   /* Media frame. data-ratio="golden|square|video|portrait" */
   .frame {
+    border-radius: var(--ae-radius-l);
     aspect-ratio: var(--ae-ratio);
     overflow: hidden;
     background: var(--ae-fill);
@@ -282,7 +283,9 @@
     z-index: 2;
     display: grid;
     place-items: center;
-    background: color-mix(in oklch, var(--ae-bg) 60%, transparent);
+    border-radius: inherit;
+    /* The thick material: text on it stays 4.5:1 over any media behind it. */
+    background: var(--ae-frost-bg-thick);
     backdrop-filter: blur(var(--ae-blur-s));
 
     @media (prefers-reduced-transparency: reduce),
@@ -329,7 +332,7 @@
         color: var(--ae-text-muted);
       }
 
-      @media (width < 40rem) {
+      @media (width < 48rem) {
         grid-template-columns: minmax(0, 1fr);
       }
     }
@@ -396,9 +399,11 @@
     }
   }
 
+  /* It slides up by the padding it gives away rather than animating padding, which would lay the
+     page out again on every scroll frame. */
   @keyframes ae-navbar-shrink {
     to {
-      padding-block: var(--ae-space-2);
+      translate: 0 calc(var(--ae-space-2) - var(--ae-space-3));
       box-shadow:
         0 1px 0 var(--ae-border),
         var(--ae-shadow-m);

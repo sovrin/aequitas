@@ -36,6 +36,7 @@
       color: var(--ae-text);
       background: var(--ae-surface);
       background-clip: padding-box;
+      border-radius: var(--ae-radius-m);
       box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
       opacity: 0;
       pointer-events: none;

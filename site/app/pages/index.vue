@@ -22,8 +22,8 @@ const install = `<link rel="stylesheet" href="aequitas.min.css">
         </div>
         <div class="stats">
           <div class="stat"><b>φ</b><span>one ratio</span></div>
-          <div class="stat"><b>20 kB</b><span>core, gzipped</span></div>
-          <div class="stat"><b>7 kB</b><span>optional JS, gzipped</span></div>
+          <div class="stat"><b>21 kB</b><span>core, gzipped</span></div>
+          <div class="stat"><b>8 kB</b><span>optional JS, gzipped</span></div>
           <div class="stat"><b>0</b><span>outlines</span></div>
         </div>
       </div>
@@ -55,7 +55,7 @@ const install = `<link rel="stylesheet" href="aequitas.min.css">
         </NuxtLink>
         <NuxtLink class="card" data-interactive to="/behaviours">
           <h4>Behaviours</h4>
-          <p class="text-muted">A 7 kB module that wires up what HTML can't do alone.</p>
+          <p class="text-muted">An 8 kB module that wires up what HTML can't do alone.</p>
         </NuxtLink>
         <NuxtLink class="card" data-interactive to="/showcase/dashboard">
           <h4>Showcases</h4>

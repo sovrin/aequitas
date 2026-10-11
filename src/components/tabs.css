@@ -28,7 +28,7 @@
     @supports not (anchor-scope: all) {
       & > [role="tab"][aria-selected="true"] {
         box-shadow:
-          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-accent),
+          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone),
           var(--ae-focus, 0 0 #0000);
       }
     }
@@ -44,7 +44,7 @@
         position-anchor: --ae-tab;
         inset: auto anchor(right) anchor(bottom) anchor(left);
         block-size: var(--ae-edge);
-        background: var(--ae-accent);
+        background: var(--ae-tone);
         pointer-events: none;
         transition: inset var(--ae-duration) var(--ae-ease);
       }

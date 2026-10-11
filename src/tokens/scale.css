@@ -43,6 +43,63 @@
     /* Space — one base unit, powers of φ, snapped to whole pixels. A fractional step rounds
        differently wherever it lands, so equal marks would render a pixel apart. */
     --ae-unit: 1rem;
+
+    /* Type — fluid base, half-φ steps */
+    --ae-font-sans:
+      ui-sans-serif, -apple-system, "SF Pro Text", system-ui, "Geist Variable", "Segoe UI",
+      sans-serif;
+    --ae-font-mono: ui-monospace, "SF Mono", "Geist Mono Variable", Menlo, Consolas, monospace;
+    --ae-text-base: clamp(0.95rem, 0.92rem + 0.15vw, 1.0625rem);
+
+    /* Rhythm: body leading is φ itself, headings tighten by φ^¼ */
+    --ae-leading-normal: var(--ae-phi);
+    --ae-leading-tight: calc(var(--ae-phi) / pow(var(--ae-phi), 0.75)); /* 1.128 */
+    --ae-leading-display: pow(var(--ae-phi), 0.125); /* 1.062, h1 and .display */
+
+    /* Shape — square by default; every radius derives from radius-m */
+    --ae-radius-m: 0rem; /* squares. Set e.g. 1rem to bring the φ curve back */
+    --ae-radius-full: 0; /* "pill" is square too; use 999px for pills */
+    --ae-corner: round;
+
+    /* Depth — contact, key and ambient layers, large blur, low alpha. Never a stroke. Key and
+       ambient offsets sit on the space scale, each blur two steps (φ²) above its offset; contact
+       layers and spreads are whole pixels. */
+    --ae-shadow-ink: oklch(0.15 0.02 var(--ae-neutral-hue));
+
+    /* Motion — durations step by φ */
+    --ae-duration: 220ms;
+    --ae-duration-fast: calc(var(--ae-duration) / var(--ae-phi));
+    --ae-duration-slow: calc(var(--ae-duration) * var(--ae-phi));
+    /* Stagger between siblings: φ⁻³ of a duration, ≈ 52ms. */
+    --ae-stagger: calc(var(--ae-duration) * pow(var(--ae-phi), -3));
+    /* Layers enter from slightly smaller: a perceptual size, a named exception. */
+    --ae-enter-scale: 0.96;
+    --ae-ease: cubic-bezier(0.2, 0, 0, 1);
+    /* "Spring" settles without overshoot: a long, decelerating arrival, never a bounce. */
+    --ae-ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+    /* Busy squares for a single pseudo-element (.btn, .card, .list and .table with aria-busy): a
+       vector mask with .spinner's pulse inside it, so the squares scale smoothly instead of
+       stepping through repainted pixels. Squares are φ⁻² and gaps φ⁻³ of the width's φ; the beat
+       is .spinner's, φ³ × 220ms, baked in because a data URI can't read tokens. */
+    --ae-busy-squares: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 161.8 38.2'%3E%3Cstyle%3Erect{transform-box:fill-box;transform-origin:center;animation:p .932s ease-in-out infinite}rect:nth-child(1){animation-delay:-.311s}rect:nth-child(2){animation-delay:-.155s}@keyframes p{0%25,80%25,100%25{opacity:.25;transform:scale(.75)}40%25{opacity:1;transform:scale(1)}}%3C/style%3E%3Crect width='38.2' height='38.2'/%3E%3Crect x='61.8' width='38.2' height='38.2'/%3E%3Crect x='123.6' width='38.2' height='38.2'/%3E%3C/svg%3E");
+
+    /* Layout */
+    --ae-container: calc(1rem * pow(var(--ae-phi), 9)); /* ≈ 76 rem */
+    --ae-measure: calc(40ch * var(--ae-phi)); /* ≈ 65 ch, ideal line length */
+    --ae-ratio: var(--ae-phi); /* use as aspect-ratio */
+
+    /* The smallest pointer target (WCAG 2.5.8). Not φ: it is a fixed accessibility floor. */
+    --ae-target: 24px;
+
+    /* Strokes between a hairline and the 2px state edge: field rings and chevron arms. */
+    --ae-stroke: 1.5px;
+  }
+
+  /* Presets can sit on any subtree (presets.css), and a custom property resolves where it is
+     declared: everything derived from a preset's knob is declared wherever that knob can change,
+     so a compact or round subtree recomputes its own scale instead of inheriting the root's. */
+  :root,
+  [data-density] {
     --ae-space-0: round(calc(var(--ae-unit) * pow(var(--ae-phi), -4)), 1px); /* 0.146 */
     --ae-space-1: round(calc(var(--ae-unit) * pow(var(--ae-phi), -3)), 1px); /* 0.236 */
     --ae-space-2: round(calc(var(--ae-unit) * pow(var(--ae-phi), -2)), 1px); /* 0.382 */
@@ -53,13 +110,9 @@
     --ae-space-7: round(calc(var(--ae-unit) * pow(var(--ae-phi), 3)), 1px); /* 4.236 */
     --ae-space-8: round(calc(var(--ae-unit) * pow(var(--ae-phi), 4)), 1px); /* 6.854 */
 
-    /* Type — fluid base, half-φ steps */
-    --ae-font-sans:
-      ui-sans-serif, -apple-system, "SF Pro Text", system-ui, "Geist Variable", "Segoe UI",
-      sans-serif;
-    --ae-font-mono: ui-monospace, "SF Mono", "Geist Mono Variable", Menlo, Consolas, monospace;
-    --ae-text-base: clamp(0.95rem, 0.92rem + 0.15vw, 1.0625rem);
-    --ae-text-xs: calc(var(--ae-text-base) * pow(var(--ae-phi), -1)); /* φ^-1   */
+    /* φ^-1, but never under 11px: a legibility floor, named like --ae-target (on a small base
+       the step alone falls to about 9px). */
+    --ae-text-xs: max(calc(var(--ae-text-base) * pow(var(--ae-phi), -1)), 0.6875rem);
     --ae-text-s: calc(var(--ae-text-base) * pow(var(--ae-phi), -0.5)); /* φ^-½   */
     --ae-text-m: var(--ae-text-base);
     --ae-text-l: calc(var(--ae-text-base) * pow(var(--ae-phi), 0.5)); /* φ^½    */
@@ -67,24 +120,9 @@
     --ae-text-2xl: calc(var(--ae-text-base) * pow(var(--ae-phi), 1.5));
     --ae-text-3xl: calc(var(--ae-text-base) * pow(var(--ae-phi), 2));
     --ae-text-4xl: calc(var(--ae-text-base) * pow(var(--ae-phi), 3));
+    --ae-gutter: var(--ae-space-5);
 
-    /* Rhythm: body leading is φ itself, headings tighten by φ^¼ */
-    --ae-leading-normal: var(--ae-phi);
-    --ae-leading-tight: calc(var(--ae-phi) / pow(var(--ae-phi), 0.75)); /* 1.128 */
-    --ae-leading-display: pow(var(--ae-phi), 0.125); /* 1.062, h1 and .display */
-
-    /* Shape — square by default; every radius derives from radius-m */
-    --ae-radius-m: 0rem; /* squares. Set e.g. 1rem to bring the φ curve back */
-    --ae-radius-s: calc(var(--ae-radius-m) / var(--ae-phi));
-    --ae-radius-l: calc(var(--ae-radius-m) * var(--ae-phi));
-    --ae-radius-xl: calc(var(--ae-radius-m) * pow(var(--ae-phi), 2));
-    --ae-radius-full: 0; /* "pill" is square too; use 999px for pills */
-    --ae-corner: round;
-
-    /* Depth — contact, key and ambient layers, large blur, low alpha. Never a stroke. Key and
-       ambient offsets sit on the space scale, each blur two steps (φ²) above its offset; contact
-       layers and spreads are whole pixels. */
-    --ae-shadow-ink: oklch(0.15 0.02 var(--ae-neutral-hue));
+    /* Shadow offsets and blurs sit on the space scale, so they follow density too. */
     --ae-shadow-s:
       0 1px 1px
         light-dark(
@@ -128,37 +166,19 @@
           color-mix(in oklch, var(--ae-shadow-ink) 14%, transparent),
           color-mix(in oklch, var(--ae-shadow-ink) 60%, transparent)
         );
+  }
 
-    /* Motion — durations step by φ */
-    --ae-duration: 220ms;
-    --ae-duration-fast: calc(var(--ae-duration) / var(--ae-phi));
-    --ae-duration-slow: calc(var(--ae-duration) * var(--ae-phi));
-    /* Stagger between siblings: φ⁻³ of a duration, ≈ 52ms. */
-    --ae-stagger: calc(var(--ae-duration) * pow(var(--ae-phi), -3));
-    --ae-ease: cubic-bezier(0.2, 0, 0, 1);
-    /* "Spring" settles without overshoot: a long, decelerating arrival, never a bounce. */
-    --ae-ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
-    /* Busy squares for a single pseudo-element (.btn, .card, .list and .table with aria-busy): a
-       vector mask with .spinner's pulse inside it, so the squares scale smoothly instead of
-       stepping through repainted pixels. Squares are φ⁻² and gaps φ⁻³ of the width's φ; the beat
-       is .spinner's, φ³ × 220ms, baked in because a data URI can't read tokens. */
-    --ae-busy-squares: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 161.8 38.2'%3E%3Cstyle%3Erect{transform-box:fill-box;transform-origin:center;animation:p .932s ease-in-out infinite}rect:nth-child(1){animation-delay:-.311s}rect:nth-child(2){animation-delay:-.155s}@keyframes p{0%25,80%25,100%25{opacity:.25;transform:scale(.75)}40%25{opacity:1;transform:scale(1)}}%3C/style%3E%3Crect width='38.2' height='38.2'/%3E%3Crect x='61.8' width='38.2' height='38.2'/%3E%3Crect x='123.6' width='38.2' height='38.2'/%3E%3C/svg%3E");
+  :root,
+  [data-radius] {
+    --ae-radius-s: calc(var(--ae-radius-m) / var(--ae-phi));
+    --ae-radius-l: calc(var(--ae-radius-m) * var(--ae-phi));
+    --ae-radius-xl: calc(var(--ae-radius-m) * pow(var(--ae-phi), 2));
+  }
 
-    /* Layout */
-    --ae-container: calc(1rem * pow(var(--ae-phi), 9)); /* ≈ 76 rem */
-    --ae-measure: calc(40ch * var(--ae-phi)); /* ≈ 65 ch, ideal line length */
-    --ae-ratio: var(--ae-phi); /* use as aspect-ratio */
-    --ae-gutter: var(--ae-space-5);
-
-    /* The smallest pointer target (WCAG 2.5.8). Not φ: it is a fixed accessibility floor. */
-    --ae-target: 24px;
-
-    /* Strokes between a hairline and the 2px state edge: field rings and chevron arms. */
-    --ae-stroke: 1.5px;
-
-    /* Focus */
+  :root,
+  [data-accent] {
+    /* Focus. Text fields focus inside out: an accent stroke and a soft halo. */
     --ae-ring: 0 0 0 2px var(--ae-bg), 0 0 0 4px var(--ae-accent);
-    /* Text fields focus inside out: an accent stroke and a soft halo. */
     --ae-ring-field:
       inset 0 0 0 var(--ae-stroke) var(--ae-accent),
       0 0 0 4px color-mix(in oklch, var(--ae-accent) 28%, transparent);

@@ -43,16 +43,16 @@
       /* The row Enter will pick takes the accent tone, as in the palette and a menu. */
       &:hover,
       &[aria-selected="true"] {
-        background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+        background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
       }
 
       /* The keyboard's place in the list. */
       &[aria-selected="true"] {
-        box-shadow: inset var(--ae-edge-x) 0 0 var(--ae-accent);
+        box-shadow: inset var(--ae-edge-x) 0 0 var(--ae-tone);
       }
 
       &:active {
-        background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-press), transparent);
+        background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-press), transparent);
       }
 
       & small {
@@ -81,12 +81,14 @@
 
   /* <div class="tag-input"><span class="chip">…</span><input placeholder="Add…"></div> */
   .tag-input {
+    border-radius: var(--ae-radius-m);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--ae-space-1);
     padding: var(--ae-space-1);
     background: var(--ae-fill);
+    box-shadow: inset 0 -1px 0 var(--ae-control-edge);
     cursor: text;
     transition: box-shadow var(--ae-duration) var(--ae-ease);
 
@@ -105,10 +107,15 @@
     &:focus-within {
       box-shadow: var(--ae-ring-field);
     }
+
+    &:has(> input:is(:user-invalid, [aria-invalid="true"])) {
+      box-shadow: inset 0 0 0 var(--ae-stroke) var(--ae-danger);
+    }
   }
 
   /* <label class="choice"><input type="radio" name="plan"><span><b>Pro</b><small>€12 / month</small></span></label> */
   .choice {
+    border-radius: var(--ae-radius-m);
     display: flex;
     align-items: center;
     gap: var(--ae-space-3);
@@ -143,8 +150,8 @@
 
     /* Selection is the one state that earns a ring. */
     &:has(:checked) {
-      background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
-      box-shadow: inset 0 0 0 var(--ae-stroke) var(--ae-accent);
+      background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
+      box-shadow: inset 0 0 0 var(--ae-stroke) var(--ae-tone);
     }
 
     /* Focus adds the ring without dropping the checked stroke. */
@@ -154,7 +161,7 @@
 
     &:has(:checked):has(:focus-visible) {
       box-shadow:
-        inset 0 0 0 var(--ae-stroke) var(--ae-accent),
+        inset 0 0 0 var(--ae-stroke) var(--ae-tone),
         var(--ae-ring);
     }
   }

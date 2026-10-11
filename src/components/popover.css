@@ -24,7 +24,7 @@
     /* Closing is quicker than opening: the answer to a dismissal should not linger. */
     --_move-for: var(--ae-duration-fast);
     opacity: 0;
-    scale: 0.96;
+    scale: var(--ae-enter-scale);
     transition:
       opacity var(--ae-duration-fast) var(--ae-ease),
       scale var(--_move-for) var(--ae-ease-spring),
@@ -38,7 +38,7 @@
 
       @starting-style {
         opacity: 0;
-        scale: 0.96;
+        scale: var(--ae-enter-scale);
       }
     }
   }
