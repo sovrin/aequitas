@@ -95,7 +95,7 @@ const slug = computed(
       </h3>
       <span v-if="note" class="caption">{{ note }}</span>
       <button class="btn" data-size="s" data-variant="ghost" :aria-pressed="show" @click="toggle">
-        <i class="icon" data-icon="layout" data-size="s"></i>{{ show ? "Hide code" : "Code" }}
+        <i class="icon" data-icon="layout" data-size="s"></i>Code
       </button>
     </header>
     <div ref="preview" class="specimen-preview"><slot /></div>

@@ -46,7 +46,7 @@ export const componentGroups = [
   "Marketing",
   "Conversation",
 ];
-export const layoutGroups = ["Shells", "Pages", "Application"];
+export const layoutGroups = ["Pages", "Application"];
 
 export const byGroup = (entries: Entry[], groups: string[]) =>
   groups

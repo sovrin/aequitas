@@ -15,7 +15,7 @@ const install = `<link rel="stylesheet" href="aequitas.min.css">
           shadow, never by outline. Glass only where it floats. Squares throughout.
         </p>
         <div class="cluster">
-          <NuxtLink class="btn" data-variant="primary" data-size="l" to="/components/button"
+          <NuxtLink class="btn" data-variant="primary" data-size="l" to="/components"
             >Browse components</NuxtLink
           >
           <NuxtLink class="btn" data-size="l" to="/foundations/proportion">How it's built</NuxtLink>
@@ -32,57 +32,42 @@ const install = `<link rel="stylesheet" href="aequitas.min.css">
     <section class="section stack gap-5 overview" id="overview">
       <h2>Start here.</h2>
       <p class="text-muted measure">
+        Link one stylesheet; add the module only if you need its behaviours. aequitas is
+        pre-release, so <NuxtLink to="/start">build it from the repository</NuxtLink> for now.
+      </p>
+      <DocsCode label="Install" lang="html" :code="install" />
+      <p class="text-muted measure">
         One page per component and layout, each with its markup and attributes; four showcases
         compose them into real screens.
       </p>
       <div class="grid">
-        <NuxtLink
-          class="card"
-          data-interactive
-          to="/foundations/proportion"
-          style="text-decoration: none; color: inherit"
-        >
+        <NuxtLink class="card" data-interactive to="/foundations/proportion">
           <h4>Foundations</h4>
           <p class="text-muted">The φ scales, colour and material, accent and density presets.</p>
         </NuxtLink>
-        <NuxtLink
-          class="card"
-          data-interactive
-          to="/layouts/shell"
-          style="text-decoration: none; color: inherit"
-        >
+        <NuxtLink class="card" data-interactive to="/layouts">
           <h4>Layouts</h4>
-          <p class="text-muted">Shells, page shapes and application layouts, one page each.</p>
+          <p class="text-muted">The shell, page shapes and application layouts, one page each.</p>
         </NuxtLink>
-        <NuxtLink
-          class="card"
-          data-interactive
-          to="/components/button"
-          style="text-decoration: none; color: inherit"
-        >
+        <NuxtLink class="card" data-interactive to="/components">
           <h4>Components</h4>
           <p class="text-muted">Every component on its own page, with markup and attributes.</p>
         </NuxtLink>
-        <NuxtLink
-          class="card"
-          data-interactive
-          to="/showcase/dashboard"
-          style="text-decoration: none; color: inherit"
-        >
-          <h4>Showcases</h4>
-          <p class="text-muted">A dashboard, settings, a landing page and the kitchen sink.</p>
-        </NuxtLink>
-        <NuxtLink
-          class="card"
-          data-interactive
-          to="/behaviours"
-          style="text-decoration: none; color: inherit"
-        >
+        <NuxtLink class="card" data-interactive to="/behaviours">
           <h4>Behaviours</h4>
           <p class="text-muted">A 7 kB module that wires up what HTML can't do alone.</p>
         </NuxtLink>
+        <NuxtLink class="card" data-interactive to="/showcase/dashboard">
+          <h4>Showcases</h4>
+          <p class="text-muted">A dashboard, settings, a landing page and the kitchen sink.</p>
+        </NuxtLink>
+        <NuxtLink class="card" data-interactive to="/reference/utilities">
+          <h4>Reference</h4>
+          <p class="text-muted">
+            Utilities with breakpoint variants, 377 icons and the motion tokens.
+          </p>
+        </NuxtLink>
       </div>
-      <DocsCode label="Install" lang="html" :code="install" />
     </section>
   </div>
 </template>

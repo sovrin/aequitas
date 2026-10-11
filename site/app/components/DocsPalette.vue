@@ -71,14 +71,15 @@ onUnmounted(() => {
 
 <template>
   <!-- data-manual: the results are rendered here, so aequitas.js leaves filtering and keys to us. -->
-  <dialog ref="dlg" class="palette" data-manual @click.self="close">
+  <dialog ref="dlg" class="palette" data-manual aria-label="Search the docs" @click.self="close">
     <i class="icon" data-icon="search"></i>
     <input
       ref="input"
       v-model="q"
       class="input"
       role="combobox"
-      aria-expanded="true"
+      :aria-expanded="results.length > 0"
+      aria-label="Search"
       aria-autocomplete="list"
       aria-controls="docs-results"
       :aria-activedescendant="results.length ? `docs-result-${active}` : undefined"

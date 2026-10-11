@@ -21,11 +21,10 @@ const bar = () => {
     />
     <section class="section stack gap-6" id="motion">
       <div class="stack measure">
-        <h2>Motion.</h2>
+        <h2>Entrances.</h2>
         <p class="text-muted">
-          Entrance presets on the token durations, staggered with <code>data-stagger</code> (via
-          <code>sibling-index()</code>) or a manual <code>--i</code>. All of it is off under reduced
-          motion.
+          Stagger siblings with <code>data-stagger</code> (via <code>sibling-index()</code>) or a
+          manual <code>--i</code>.
         </p>
         <p class="text-muted text-s">
           Presets: <code>.animate-fade-in</code> <code>.animate-slide-up</code>

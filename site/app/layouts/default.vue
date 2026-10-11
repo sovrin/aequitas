@@ -9,7 +9,8 @@ watch(
 </script>
 
 <template>
-  <div class="shell docs-shell" data-header style="--header: 3.25rem">
+  <div class="shell docs-shell" data-header style="--header: calc(1rem * pow(var(--ae-phi), 2.5))">
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="navbar docs-topbar">
       <button class="btn" data-size="s" data-icon aria-label="Menu" data-open="#docs-menu">
         <i class="icon" data-icon="menu"></i>
@@ -32,6 +33,7 @@ watch(
       <DocsNav />
       <footer class="docs-sidebar-foot">
         <span class="badge" data-variant="outline">v{{ pkg.version }}</span>
+        <a href="https://github.com/sovrin/aequitas" class="caption" data-quiet>Source</a>
         <a href="https://github.com/sovrin/aequitas/blob/main/LICENSE" class="caption" data-quiet
           >MIT</a
         >
@@ -55,8 +57,9 @@ watch(
           <div>
             <h6>Framework</h6>
             <ul>
+              <li><NuxtLink to="/start">Install</NuxtLink></li>
               <li><NuxtLink to="/foundations/proportion">Foundations</NuxtLink></li>
-              <li><NuxtLink to="/components/button">Components</NuxtLink></li>
+              <li><NuxtLink to="/components">Components</NuxtLink></li>
               <li><NuxtLink to="/reference/utilities">Reference</NuxtLink></li>
             </ul>
           </div>
@@ -72,8 +75,7 @@ watch(
         </div>
         <div class="container">
           <p class="docs-credit">
-            Made with <i class="icon" data-icon="heart" aria-hidden="true"></i
-            ><span class="sr-only">love</span> by <a href="https://sovrin.de">sovrin.de</a>
+            Built in proportion by <a href="https://sovrin.de">sovrin.de</a>.
           </p>
         </div>
       </footer>

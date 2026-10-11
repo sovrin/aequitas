@@ -51,10 +51,10 @@ const helpers: { cls: string; desc: string; to?: string }[] = [
     />
     <section class="section stack gap-6" id="utilities">
       <div class="stack measure">
-        <h2>Utilities.</h2>
+        <h2>Every class.</h2>
         <p class="text-muted">
-          {{ utilities.rules.length }} single-purpose classes on the φ scale, generated at build
-          time. Classes marked <span class="badge" data-tone="info">responsive</span> also exist as
+          {{ utilities.rules.length }} of them. Classes marked
+          <span class="badge" data-tone="info">responsive</span> also exist as
           <code>s:</code> (&lt;48rem), <code>m:</code> (≥48rem), <code>l:</code> (≥64rem) and
           <code>xl:</code> (≥80rem) variants, e.g. <code>m:flex</code>, and as container variants
           <code>cq-s:</code> (&lt;32rem), <code>cq-m:</code> (≥32rem) and
