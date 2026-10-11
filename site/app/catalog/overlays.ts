@@ -442,7 +442,7 @@ export const overlays: Entry[] = [
         "Hides the tip while the element stays hovered or focused. aequitas.js sets it on Esc and clears it once pointer and focus have left.",
       ],
     ],
-    js: "Esc hides the tip under the pointer or focus until both have left the element. On enhance, each `[data-tip]` gets its text as `aria-description`, unless it has one of its own. Without aequitas.js the tip still shows on hover and focus, but Esc does nothing and screen readers don't hear it.",
+    js: "Esc hides the tip under the pointer or focus until both have left the element. Each `[data-tip]` gets its text as `aria-description`, kept in step when the text changes, unless it has one of its own. Without aequitas.js the tip still shows on hover and focus, but Esc does nothing and screen readers don't hear it.",
     keys: [["Esc", "Hides the tip of the hovered or focused element."]],
     a11y: [
       "It shows on `:focus-visible`, so it only reaches keyboard users on focusable elements.",

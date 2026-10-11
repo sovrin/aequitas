@@ -60,6 +60,19 @@
       }
     }
 
+    /* Right after another tip was showing (aequitas.js sets data-tip-instant): no wait, no
+       entrance, so moving along a toolbar only waits for the first tip. */
+    &[data-tip-instant]:is(:hover, :focus-visible):not([data-tip-dismissed])::after {
+      transition: none;
+    }
+
+    /* Touch has no hover, only the sticky one a tap leaves behind: there tips follow focus alone. */
+    @media not ((hover: hover) and (pointer: fine)) {
+      &:hover:not(:focus-visible)::after {
+        display: none;
+      }
+    }
+
     &[data-tip-side="bottom"]::after {
       --_from: calc(-50% * var(--_dir)) calc(var(--ae-space-1) * -1);
       inset-block: 100% auto;

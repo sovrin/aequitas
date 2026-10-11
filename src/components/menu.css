@@ -14,17 +14,26 @@
       position-area: block-end span-inline-end;
       position-try-fallbacks: flip-block, flip-inline;
       margin-block: var(--ae-space-2);
+      /* Grows out of the trigger: the corner it hangs from in the default placement. */
+      transform-origin: 0 0;
+
+      &:dir(rtl) {
+        transform-origin: 100% 0;
+      }
     }
 
+    /* Closing is quicker than opening: the answer to a dismissal should not linger. */
+    --_move-for: var(--ae-duration-fast);
     opacity: 0;
     scale: 0.96;
     transition:
       opacity var(--ae-duration-fast) var(--ae-ease),
-      scale var(--ae-duration) var(--ae-ease-spring),
-      overlay var(--ae-duration) allow-discrete,
-      display var(--ae-duration) allow-discrete;
+      scale var(--_move-for) var(--ae-ease-spring),
+      overlay var(--_move-for) allow-discrete,
+      display var(--_move-for) allow-discrete;
 
     &:popover-open {
+      --_move-for: var(--ae-duration);
       opacity: 1;
       scale: 1;
 

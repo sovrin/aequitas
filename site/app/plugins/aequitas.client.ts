@@ -1,14 +1,11 @@
-import { bind, enhance } from "@aequitas/aequitas.js";
+import { init } from "@aequitas/aequitas.js";
 
 const FALLBACK = { name: "page", mode: "out-in" } as const;
 
 export default defineNuxtPlugin((nuxtApp) => {
-  // Delegated listeners once; per-element enhancements after every page render.
-  // The tick lets components that render on page:finish (e.g. the TOC) land first.
-  bind();
-  const run = () => nextTick(() => enhance());
-  nuxtApp.hook("app:mounted", run);
-  nuxtApp.hook("page:finish", run);
+  // Started after hydration (html[data-ae-manual]), so the server-rendered DOM Vue hydrates is
+  // untouched; from then on aequitas.js enhances every page and component as it renders.
+  nuxtApp.hook("app:mounted", () => init());
 
   // Route changes animate with the View Transitions API when it is usable; otherwise the
   // Vue page transition takes over. A failed transition never blocks navigation.

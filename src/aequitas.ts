@@ -84,41 +84,211 @@ function actions(root: Root): void {
     const dismiss = t.closest<HTMLElement>("[data-dismiss]");
     const gone = dismiss?.closest<HTMLElement>(dismiss.dataset.dismiss || ".alert, .toast, .chip");
     if (gone) {
-      if (gone.contains(document.activeElement)) refocus(gone);
-      gone.remove();
+      const region = gone.matches(".toast") ? gone.parentElement : null;
+      if (gone.contains(document.activeElement)) {
+        // A toast hands focus on within its stack, else back to where it was before the stack took
+        // it, never to whatever happens to come next on the page (which would scroll it there).
+        if (!region) refocus(gone);
+        else if (!refocus(gone, region)) {
+          const back = cameFrom.get(region);
+          if (back?.isConnected) back.focus({ preventScroll: true });
+          else (document.activeElement as HTMLElement).blur();
+        }
+      }
+      if (region) dismissToast(gone);
+      else gone.remove();
     }
   });
+  // Where focus was before it moved into a toast stack, to return it there.
+  root.addEventListener("focusin", (e) => {
+    const region = (e.target as Element).closest?.(".toasts");
+    const from = (e as FocusEvent).relatedTarget as HTMLElement | null;
+    if (region && !region.contains(from))
+      from ? cameFrom.set(region, from) : cameFrom.delete(region);
+  });
 }
+
+const cameFrom = new WeakMap<Element, HTMLElement>();
 
 const focusables =
   'a[href], area[href], button, input:not([type="hidden"]), select, textarea, summary, iframe, [tabindex], [contenteditable]:not([contenteditable="false"])';
 
 /** Before removing `gone` with focus inside it: focus the next focusable element after it, else the one
- *  before, within an open dialog or popover if it sits in one. In a .tag-input that is the next chip's
- *  button, or the input. */
-function refocus(gone: Element): void {
-  const scope = gone.parentElement?.closest("dialog[open], [popover]") ?? document;
+ *  before, within `scope`: by default an open dialog or popover if it sits in one. In a .tag-input that
+ *  is the next chip's button, or the input. Says whether it found one. */
+function refocus(
+  gone: Element,
+  scope: ParentNode = gone.parentElement?.closest("dialog[open], [popover]") ?? document,
+): boolean {
   const all = q<HTMLElement>(focusables, scope).filter(
     (el) =>
-      el.tabIndex >= 0 && !gone.contains(el) && !el.matches(":disabled") && el.checkVisibility(),
+      el.tabIndex >= 0 &&
+      !gone.contains(el) &&
+      !el.closest("[data-leaving]") &&
+      !el.matches(":disabled") &&
+      el.checkVisibility(),
   );
   const after = (el: Element) =>
     gone.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING;
-  (all.find(after) ?? all.findLast((el) => !after(el)))?.focus();
+  const next = all.find(after) ?? all.findLast((el) => !after(el));
+  next?.focus();
+  return !!next;
+}
+
+/** Natural heights of stacked toasts, measured while each is laid out at full size. */
+const heights = new WeakMap<Element, number>();
+const stacks = new WeakMap<HTMLElement, HTMLElement[]>();
+
+/** Toast stack: the newest toast in front, older ones peeking out behind it (CSS, under
+ *  .toasts[data-stacked]). Sets each toast's place from the front (--i), its offset in the list a
+ *  hovered or focused stack fans out into (--y), and the heights both layouts need. Runs again
+ *  whenever the region's toasts change; `fresh` re-measures a toast whose content just arrived. */
+function stack(region: HTMLElement, fresh?: Element): void {
+  const items = q<HTMLElement>(":scope > .toast:not([data-leaving])", region).reverse();
+  const prev = stacks.get(region);
+  if (!fresh && prev?.length === items.length && prev.every((t, i) => t === items[i])) return;
+  stacks.set(region, items);
+  if (fresh) heights.delete(fresh);
+  const gap = parseFloat(getComputedStyle(region).rowGap) || 0;
+  let y = 0;
+  items.forEach((t, i) => {
+    if (!heights.has(t)) heights.set(t, t.offsetHeight);
+    t.style.setProperty("--i", String(i));
+    t.style.setProperty("--y", `${y}px`);
+    t.toggleAttribute("data-behind", i > 0);
+    y += heights.get(t)! + gap;
+  });
+  region.style.setProperty("--_n", String(items.length));
+  region.style.setProperty("--_front", `${items[0] ? heights.get(items[0]) : 0}px`);
+  region.style.setProperty("--_list", `${Math.max(0, y - gap)}px`);
+  region.toggleAttribute("data-stacked", true);
+}
+
+/** The leave each toast is on, so one taken back mid-way (rescueToast) is not removed after all. */
+const leaves = new WeakMap<Element, number>();
+let leaving = 0;
+
+/** Sends a toast out: it leaves from where it sits while the rest of the stack closes ranks, and
+ *  is removed once its own transitions end. `how` is "swipe" for one flicked away sideways; any
+ *  other leave goes back towards the edge it came in from. */
+function dismissToast(el: HTMLElement, how = ""): void {
+  if (!el.isConnected || el.dataset.leaving != null) return;
+  el.dataset.leaving = how;
+  const id = ++leaving;
+  leaves.set(el, id);
+  const region = el.parentElement;
+  if (region?.matches(".toasts")) stack(region);
+  const remove = () => leaves.get(el) === id && el.remove();
+  // Waits for the transitions themselves: transitionend names physical properties, so waiting
+  // for one by name is fragile. None running means at once.
+  Promise.allSettled(el.getAnimations().map((a) => a.finished)).then(remove);
+  // A safety net, should an animation never settle.
+  setTimeout(remove, 1000);
+}
+
+/** Takes back a toast on its way out: it rejoins the stack from wherever it was caught. */
+function rescueToast(el: HTMLElement): void {
+  leaves.delete(el);
+  delete el.dataset.leaving;
+  if (el.parentElement?.matches(".toasts")) stack(el.parentElement);
+}
+
+/** Rubber band: the further past a boundary, the less it follows; real things slow before they stop. */
+const rubber = (d: number, size: number) => (d * size * 0.55) / (size + 0.55 * Math.abs(d));
+
+/**
+ * Toast swipe. A stacked toast follows the pointer sideways 1:1 once it has moved ~10px more across
+ * than down. Released, the gesture is projected forward as a scroll would decelerate it; landing past
+ * half its width towards the stack's screen edge (either way for a centred stack) it leaves that way at
+ * the finger's speed, else it springs back. The other way it rubber-bands. A leaving toast can be
+ * caught again.
+ */
+function swipe(root: Root): void {
+  root.addEventListener("pointerdown", (e) => {
+    const down = e as PointerEvent;
+    const t = down.target as Element;
+    const el = t.closest?.<HTMLElement>(".toasts[data-stacked] > .toast");
+    if (!el || down.button !== 0 || t.closest("button, a, input, select, textarea")) return;
+    const width = el.offsetWidth;
+    // Which way is out: towards the nearer side of the screen; a centred stack goes either way.
+    const box = el.getBoundingClientRect();
+    const mid = (box.left + box.right) / 2 / innerWidth;
+    const out = mid > 0.6 ? 1 : mid < 0.4 ? -1 : 0;
+    // From where it is on screen, not where it was headed: a toast caught mid-leave stays put.
+    const from = parseFloat(getComputedStyle(el).translate) || 0;
+    let dx = from;
+    const place = (x: number) => {
+      dx = x;
+      el.style.setProperty("--_dx", `${x}px`);
+      el.style.setProperty("--_dxo", String(Math.max(0, 1 - Math.abs(x) / width)));
+    };
+    if (el.dataset.leaving != null) {
+      el.toggleAttribute("data-swiping", true);
+      place(from);
+      rescueToast(el);
+    }
+    let dragging = false;
+    const trail: { x: number; t: number }[] = [];
+    const move = (ev: PointerEvent) => {
+      if (ev.pointerId !== down.pointerId) return;
+      const x = ev.clientX - down.clientX;
+      if (!dragging) {
+        if (Math.abs(x) < 10 || Math.abs(x) < Math.abs(ev.clientY - down.clientY)) return;
+        dragging = true;
+        el.setPointerCapture(down.pointerId);
+        el.toggleAttribute("data-swiping", true);
+        getSelection()?.removeAllRanges();
+      }
+      trail.push({ x: ev.clientX, t: ev.timeStamp });
+      while (trail.length > 2 && ev.timeStamp - trail[0].t > 100) trail.shift();
+      const to = from + x;
+      // The wrong way, it resists.
+      place(out && Math.sign(to) !== out ? rubber(to, width) : to);
+    };
+    const up = (ev: PointerEvent) => {
+      if (ev.pointerId !== down.pointerId) return;
+      document.removeEventListener("pointermove", move);
+      document.removeEventListener("pointerup", up);
+      document.removeEventListener("pointercancel", up);
+      el.removeAttribute("data-swiping");
+      if (!dragging && !from) return;
+      const [a, b] = [trail[0], trail.at(-1)];
+      const v = a && b && b.t > a.t ? ((b.x - a.x) / (b.t - a.t)) * 1000 : 0;
+      // Where a scroll decelerating at 0.998 would come to rest.
+      const rest = dx + (v / 1000) * (0.998 / (1 - 0.998));
+      const way = Math.sign(rest);
+      if (ev.type === "pointerup" && way && (!out || way === out) && Math.abs(rest) > width / 2) {
+        // Off the screen on that side, at the finger's speed: the easing opens at a slope of 2,
+        // so it covers the distance in 2 × distance ÷ speed, held between a blink and a beat.
+        const now = el.getBoundingClientRect();
+        const to = dx + (way > 0 ? innerWidth - now.left : -now.right);
+        const ms = ((2 * Math.abs(to - dx)) / Math.max(Math.abs(v), 1)) * 1000;
+        el.style.setProperty("--_swipe", `${Math.min(400, Math.max(120, ms))}ms`);
+        place(to);
+        dismissToast(el, "swipe");
+      } else place(0);
+    };
+    document.addEventListener("pointermove", move);
+    document.addEventListener("pointerup", up);
+    document.addEventListener("pointercancel", up);
+  });
 }
 
 /** Toasts. aequitas.toast("Saved.", { tone: "success" })
  *  A danger toast is role="alert", any other role="status". It leaves after `duration` ms (default 4000;
- *  Infinity stays until dismissed), counted again from the start once the pointer or focus leaves it. */
+ *  Infinity stays until dismissed). Every timer in the stack waits while the stack is hovered or holds
+ *  focus, or the page is hidden, and counts again from the start after. */
 export function toast(
   message: string,
   opts: { tone?: Tone; title?: string; duration?: number } = {},
 ): HTMLElement {
-  let region = document.querySelector<HTMLElement>(".toasts");
+  // The page's fixed region: one shown in place (a demo, a preview) is not where toasts pop up.
+  let region = q<HTMLElement>(".toasts").find((r) => getComputedStyle(r).position === "fixed");
   if (!region) {
     region = Object.assign(document.createElement("div"), { className: "toasts" });
     document.body.append(region);
   }
+  const stage = region;
   const el = document.createElement("div");
   el.className = "toast";
   el.setAttribute("role", opts.tone === "danger" ? "alert" : "status");
@@ -130,33 +300,53 @@ export function toast(
     body.append(b);
   }
   body.append(message);
+  // In from the start, so the live region announces only the message, not "Dismiss" with it.
+  const close = Object.assign(document.createElement("button"), {
+    type: "button",
+    className: "btn",
+    textContent: "×",
+  });
+  Object.assign(close.dataset, { size: "s", variant: "ghost", icon: "", dismiss: "" });
+  close.setAttribute("aria-label", "Dismiss");
+  el.append(close);
   region.append(el);
+  const off = new AbortController();
   const leave = () => {
-    if (!el.isConnected || el.dataset.leaving != null) return;
-    el.dataset.leaving = "";
-    el.addEventListener("transitionend", () => el.remove(), { once: true });
-    // No transition (transition: none, a hidden tab) means no transitionend.
-    setTimeout(() => el.remove(), 1000);
+    hold();
+    dismissToast(el);
   };
   const ms = opts.duration ?? 4000;
   let timer: ReturnType<typeof setTimeout> | undefined;
   const hold = () => clearTimeout(timer);
+  const busy = () => stage.matches(":hover") || stage.contains(document.activeElement);
   // setTimeout fires at once for Infinity, so a toast that stays never starts one.
   const run = () => {
     hold();
-    if (Number.isFinite(ms)) timer = setTimeout(leave, ms);
+    // Gone: stop listening. Leaving: nothing to count, unless it is caught and kept.
+    if (!el.isConnected) return off.abort();
+    if (el.dataset.leaving != null) return;
+    if (Number.isFinite(ms) && body.isConnected && !document.hidden && !busy())
+      timer = setTimeout(leave, ms);
   };
-  // Paused while read: under the pointer or holding focus.
-  el.addEventListener("pointerenter", hold);
-  el.addEventListener("focusin", hold);
-  el.addEventListener("pointerleave", () => el.contains(document.activeElement) || run());
-  el.addEventListener("focusout", (e) => {
-    if (!el.contains(e.relatedTarget as Node | null) && !el.matches(":hover")) run();
+  // The whole stack waits while it is open to be read: under the pointer or holding focus, and
+  // while the page is hidden.
+  const { signal } = off;
+  stage.addEventListener("pointerenter", hold, { signal });
+  stage.addEventListener("focusin", hold, { signal });
+  stage.addEventListener("pointerleave", run, { signal });
+  stage.addEventListener(
+    "focusout",
+    (e) => stage.contains(e.relatedTarget as Node | null) || run(),
+    { signal },
+  );
+  document.addEventListener("visibilitychange", () => (document.hidden ? hold() : run()), {
+    signal,
   });
   // Live regions announce changes, not arrivals: insert it empty, fill it a frame later. The
   // countdown starts with the message, so a toast raised in a hidden tab waits to be seen.
   requestAnimationFrame(() => {
-    el.append(body);
+    el.prepend(body);
+    stack(stage, el);
     run();
   });
   return el;
@@ -229,7 +419,9 @@ export function setTheme(
 function themeSync(root: Root): void {
   try {
     const saved = localStorage.getItem("ae-theme");
-    if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+    const html = document.documentElement;
+    if ((saved === "light" || saved === "dark") && html.dataset.theme !== saved)
+      html.dataset.theme = saved;
     for (const r of q<HTMLInputElement>("input[data-theme-set]", root)) {
       r.checked = r.dataset.themeSet === (saved ?? "auto");
     }
@@ -380,7 +572,8 @@ function syncSelection(table: Element): void {
     requestAnimationFrame(
       () => (count.textContent = String(rowBoxes(table).filter((b) => b.checked).length)),
     );
-  else count.textContent = String(n);
+  // Only when it changed: enhance() runs on every DOM change, and a live region announces any write.
+  else if (count.textContent !== String(n)) count.textContent = String(n);
 }
 /** Table selection: a header checkbox selects every row; rows get aria-selected; a sibling .selection-bar shows the count. */
 function selection(root: Root): void {
@@ -673,8 +866,14 @@ function lightDismiss(root: Root): void {
 
 /** Table of contents: marks the link whose section is in view. Rebuilt whenever its links change,
  *  so a TOC a framework re-renders in place (new page, same <nav>) follows the new sections. */
-const tocs = new WeakMap<HTMLElement, { key: string; io?: IntersectionObserver }>();
+const tocs = new Map<HTMLElement, { key: string; io?: IntersectionObserver }>();
 function toc(root: Root): void {
+  // A removed TOC stops watching its sections.
+  for (const [nav, t] of tocs)
+    if (!nav.isConnected) {
+      t.io?.disconnect();
+      tocs.delete(nav);
+    }
   for (const nav of q<HTMLElement>(".toc", root)) {
     const links = q<HTMLAnchorElement>('a[href^="#"]', nav).filter((a) => a.hash.length > 1);
     const key = links.map((a) => a.hash).join(" ");
@@ -763,6 +962,28 @@ function tips(root: Root): void {
   root.addEventListener("focusout", clear);
   // mouseleave doesn't bubble; listen in the capture phase.
   root.addEventListener("mouseleave", clear, true);
+  // Left while its tip was showing: the next tip within a beat opens at once (data-tip-instant).
+  let shown = -Infinity;
+  root.addEventListener(
+    "pointerenter",
+    (e) => {
+      const el = e.target as Element;
+      if (el.matches?.("[data-tip]") && e.timeStamp - shown < 300)
+        el.setAttribute("data-tip-instant", "");
+    },
+    true,
+  );
+  root.addEventListener(
+    "pointerleave",
+    (e) => {
+      const el = e.target as Element;
+      if (!el.matches?.("[data-tip]")) return;
+      // Mid-fade the computed opacity is the live one: above 0, the tip was on screen.
+      if (Number(getComputedStyle(el, "::after").opacity) > 0) shown = e.timeStamp;
+      el.removeAttribute("data-tip-instant");
+    },
+    true,
+  );
 }
 
 /** The tip as a description, read after the name. Never replaces an aria-description of your own. */
@@ -791,9 +1012,11 @@ export function bind(root: Root = document): void {
   invokers(root);
   copy(root);
   tips(root);
+  swipe(root);
 }
 
-/** Per-element enhancements. Call after rendering new content (e.g. on SPA navigation). */
+/** Per-element enhancements. init() reruns them on its own whenever the DOM changes; call it
+ *  directly only to enhance a root init() does not watch. */
 export function enhance(root: Root = document): void {
   tabs(root);
   combobox(root);
@@ -806,11 +1029,31 @@ export function enhance(root: Root = document): void {
   for (const t of q(".table", root))
     if (t.querySelector('tbody input[type="checkbox"]')) syncSelection(t);
   lightDismiss(root);
+  // Toasts written into the markup, or rendered by a framework, stack like toast()'s own.
+  for (const r of q<HTMLElement>(".toasts", root)) stack(r);
 }
 
+const watched = new WeakSet<Root>();
+
+/** Delegated listeners, enhancements, and a watch on the DOM: markup added or changed later (an SPA
+ *  render, a fetched fragment) is enhanced as it lands, with nothing to call. Once per root. */
 export function init(root: Root = document): void {
   bind(root);
   enhance(root);
+  if (watched.has(root)) return;
+  watched.add(root);
+  // Every enhancer skips what it has already done, so one pass over the root per batch is enough.
+  const mo = new MutationObserver(() => {
+    enhance(root);
+    // Drop the changes enhance() just made itself, or they would call it again.
+    mo.takeRecords();
+  });
+  mo.observe(root, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["data-tip"],
+  });
 }
 
 export const aequitas = { init, bind, enhance, toast, setTheme, markMatches };

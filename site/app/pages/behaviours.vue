@@ -5,7 +5,7 @@ const api = `import { init, bind, enhance, toast, setTheme, markMatches } from "
 
 toast("Northlight is live.", { title: "Published.", tone: "success", duration: 4000 });
 setTheme("dark", button); // "light" | "dark" | "auto", revealed from the button
-init(); // bind() + enhance(); call enhance() again after rendering new content
+init(); // listeners, enhancements, and a watch that enhances markup added later
 markMatches(list, "term"); // highlight a term in the options of a dialog.palette[data-manual]`;
 </script>
 
@@ -14,16 +14,16 @@ markMatches(list, "term"); // highlight a term in the options of a dialog.palett
     <DocsPageHeader
       group="Behaviours"
       title="Behaviours"
-      lede="Six kilobytes, gzipped, of TypeScript for what HTML cannot do alone."
+      lede="Seven kilobytes, gzipped, of TypeScript for what HTML cannot do alone."
     />
     <section class="section stack gap-6" id="behaviours">
       <div class="stack measure">
         <h2>Behaviours.</h2>
         <p class="text-muted">
           <code>aequitas.js</code> is optional and self-initialising. Everything is driven by
-          attributes; set <code>data-ae-manual</code> on <code>&lt;html&gt;</code> to call
-          <code>init()</code> yourself — or <code>bind()</code> once and
-          <code>enhance()</code> after each render in an SPA, as this site does.
+          attributes, and markup that arrives later (an SPA render, a fetched fragment) is enhanced
+          as it lands. Set <code>data-ae-manual</code> on <code>&lt;html&gt;</code> to call
+          <code>init()</code> yourself, for example after hydration, as this site does.
         </p>
       </div>
       <table class="table" data-size="s">

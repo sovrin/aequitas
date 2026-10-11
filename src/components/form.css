@@ -202,8 +202,12 @@
       block-size: round(calc(var(--_s) / var(--ae-phi)), 2px);
       background: var(--ae-accent-contrast);
       clip-path: polygon(14% 52%, 0 66%, 38% 100%, 100% 22%, 86% 8%, 38% 72%);
-      scale: 0;
-      transition: scale var(--ae-duration) var(--ae-ease-spring);
+      /* Half-size and clear, not scale(0): a mark that grows from nothing looks like it popped. */
+      opacity: 0;
+      scale: 0.5;
+      transition:
+        opacity var(--ae-duration-fast) var(--ae-ease),
+        scale var(--ae-duration) var(--ae-ease-spring);
     }
 
     &:checked {
@@ -211,6 +215,7 @@
       box-shadow: var(--ae-focus, 0 0 #0000);
 
       &::after {
+        opacity: 1;
         scale: 1;
       }
     }
@@ -223,6 +228,7 @@
       &::after {
         block-size: var(--ae-edge);
         clip-path: none;
+        opacity: 1;
         scale: 1;
       }
     }

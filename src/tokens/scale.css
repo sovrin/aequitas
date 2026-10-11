@@ -15,8 +15,8 @@
   initial-value: 1.618034;
 }
 
-/* Registered so presets glide: density and shape change these, and every space, size and radius
-   derived from them interpolates with them instead of jumping. Initial values must be absolute
+/* Registered as lengths, so they can interpolate: shape changes glide every radius derived from
+   --ae-radius-m (presets.css). Density and type size switch at once. Initial values must be absolute
    (a rem one invalidates the registration); the real values are the rem ones on :root. */
 @property --ae-unit {
   syntax: "<length>";

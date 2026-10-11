@@ -98,8 +98,8 @@ const selectors = computed(() => owned(props.entry));
       <h2>Behaviour</h2>
       <p class="measure" v-html="inline(entry.js)"></p>
       <p class="caption measure">
-        From <NuxtLink to="/behaviours">aequitas.js</NuxtLink>. It initialises itself; in an SPA,
-        call <code>enhance()</code> after rendering new markup.
+        From <NuxtLink to="/behaviours">aequitas.js</NuxtLink>. It initialises itself and enhances
+        markup added later on its own, so it works the same in an SPA.
       </p>
     </section>
 

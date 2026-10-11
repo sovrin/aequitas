@@ -56,8 +56,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   );
 
   watch(theme, (v) => synced && setTheme(v, origin()));
-  // Presets apply directly: accent is only colour, and density and shape glide by themselves, as the
-  // framework interpolates its unit and radius tokens.
+  // Presets apply directly: the framework crossfades the accent and glides the radius by itself, and
+  // density switches at once.
   watch(accent, (v) => synced && apply("accent", v));
   watch(density, (v) => synced && apply("density", v));
   watch(radius, (v) => synced && apply("radius", v));

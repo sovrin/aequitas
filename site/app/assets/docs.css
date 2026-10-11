@@ -350,14 +350,17 @@
   transition: color var(--ae-duration-fast) var(--ae-ease);
 }
 
-/* Hover tints in colour, never moves: a faint accent ring, the full ring is reserved for the choice. */
-.ap-options label:hover {
-  & .ap-preview {
-    outline-color: color-mix(in oklch, var(--ae-accent) 40%, transparent);
-  }
+/* Hover tints in colour, never moves: a faint accent ring, the full ring is reserved for the choice.
+   Pointers only: a tap would leave the faint ring stuck beside the chosen one. */
+@media (hover: hover) and (pointer: fine) {
+  .ap-options label:hover {
+    & .ap-preview {
+      outline-color: color-mix(in oklch, var(--ae-accent) 40%, transparent);
+    }
 
-  & .ap-name {
-    color: var(--ae-text);
+    & .ap-name {
+      color: var(--ae-text);
+    }
   }
 }
 
@@ -551,8 +554,10 @@
     transition: outline-color var(--ae-duration-fast) var(--ae-ease);
   }
 
-  & label:hover {
-    outline-color: color-mix(in oklch, var(--swatch) 45%, transparent);
+  @media (hover: hover) and (pointer: fine) {
+    & label:hover {
+      outline-color: color-mix(in oklch, var(--swatch) 45%, transparent);
+    }
   }
 
   & label:has(:checked) {

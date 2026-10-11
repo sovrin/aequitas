@@ -18,6 +18,11 @@
       --_out: -100%;
     }
 
+    /* A whole panel travels: it closes quicker than it opens, but not in a dialog's blink. */
+    &:not([open]) {
+      --_move-for: var(--ae-duration);
+    }
+
     &[open] {
       translate: 0;
 
@@ -68,19 +73,19 @@
     padding: 0;
     overflow: hidden;
 
-    /* Summoned dozens of times a day, so quicker than a dialog: it grows from its top edge
-       instead of rising into place. */
-    transform-origin: 50% 0;
+    /* Summoned from the keyboard dozens of times a day: it never moves, only a quick fade. */
     translate: 0;
-    scale: 0.98;
-    transition-duration: var(--ae-duration-fast);
+    scale: 1;
+
+    &,
+    &[open] {
+      --_fade-for: var(--ae-duration-fast);
+    }
 
     &[open] {
-      scale: 1;
-
       @starting-style {
         translate: 0;
-        scale: 0.98;
+        scale: 1;
       }
     }
 
