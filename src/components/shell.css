@@ -310,10 +310,10 @@
       }
 
       &[aria-current="page"] {
-        color: var(--ae-accent-ink);
-        background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+        color: var(--ae-tone-ink);
+        background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
         box-shadow:
-          inset var(--ae-edge-x) 0 0 var(--ae-accent),
+          inset var(--ae-edge-x) 0 0 var(--ae-tone),
           var(--ae-focus, 0 0 #0000);
       }
 
@@ -451,6 +451,7 @@
 
   /* <div class="toolbar"><button class="btn" data-icon>…</button><hr>…</div> */
   .toolbar {
+    border-radius: var(--ae-radius-m);
     display: inline-flex;
     align-items: center;
     gap: var(--ae-space-1);

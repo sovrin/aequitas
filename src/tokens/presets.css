@@ -46,11 +46,11 @@
 
   /* Shape presets: the system is square by default. */
   [data-radius="soft"] {
-    --ae-radius-m: 0.75rem;
+    --ae-radius-m: calc(1rem / pow(var(--ae-phi), 0.5)); /* ≈ 0.786rem */
     --ae-radius-full: 999px;
   }
   [data-radius="round"] {
-    --ae-radius-m: 1.25rem;
+    --ae-radius-m: calc(1rem * pow(var(--ae-phi), 0.5)); /* ≈ 1.272rem */
     --ae-radius-full: 999px;
   }
 
@@ -64,13 +64,23 @@
   [data-type="mono"] {
     --ae-font-sans: var(--ae-font-mono);
   }
+  /* The family is set on body; a type preset on a subtree sets it again where it sits. */
+  [data-type]:not(:root) {
+    font-family: var(--ae-font-sans);
+  }
+  /* Likewise the size: body text in a density subtree follows its own base. */
+  [data-density]:not(:root) {
+    font-size: var(--ae-text-base);
+  }
 
   [data-density="compact"] {
-    --ae-unit: 0.8rem;
+    --ae-unit: calc(1rem / pow(var(--ae-phi), 0.5)); /* ≈ 0.786rem */
     --ae-text-base: clamp(0.88rem, 0.86rem + 0.1vw, 0.95rem);
   }
   [data-density="spacious"] {
-    --ae-unit: 1.2rem;
+    --ae-unit: calc(1rem * pow(var(--ae-phi), 0.5)); /* ≈ 1.272rem */
+    /* The default base again, so spacious inside compact does not keep compact's text. */
+    --ae-text-base: clamp(0.95rem, 0.92rem + 0.15vw, 1.0625rem);
   }
 
   /* Corners glide to the new shape and the accent crossfades: both only repaint. Density and type
@@ -86,7 +96,7 @@
   /* Higher contrast: firmer lines and text, no translucency. */
   @media (prefers-contrast: more) {
     :root {
-      --ae-border: light-dark(oklch(0.2 0.02 var(--ae-neutral-hue) / 0.35), oklch(1 0 0 / 0.35));
+      --ae-border: light-dark(oklch(0.2 0.02 var(--ae-neutral-hue) / 0.5), oklch(1 0 0 / 0.5));
       --ae-border-strong: light-dark(
         oklch(0.2 0.02 var(--ae-neutral-hue) / 0.6),
         oklch(1 0 0 / 0.6)
@@ -136,6 +146,10 @@
       progress,
       meter,
       .range-pair,
+      .fab,
+      .dock > :is(a, button),
+      .combobox-list,
+      .dropzone,
       input:is([type="checkbox"], [type="radio"], [type="range"]):not(
           .segmented input,
           .chip input,
@@ -152,18 +166,43 @@
       .btn[data-variant="primary"],
       [aria-pressed="true"],
       [aria-selected="true"],
-      [aria-current]:not([aria-current="false"]),
+      [aria-current]:not([aria-current="false"], [aria-current="date"]),
       input:is([type="checkbox"], [type="radio"]):is(:checked, :indeterminate),
+      .menubar > [aria-expanded="true"],
       .chip:has(> input:checked),
       .segmented label:has(:checked) span,
       .rating label:is(:has(:checked), :has(~ label :checked))
     ) {
+      /* The pair is set here, so the browser must not adjust it: left on auto, it backs the
+         HighlightText label with a Canvas plate and the label vanishes. */
+      forced-color-adjust: none;
       background: Highlight !important;
 
       &,
       & * {
         color: HighlightText !important;
       }
+
+      /* Glyphs drawn as backgrounds take the highlight's text colour too. */
+      & .icon {
+        background-color: HighlightText !important;
+      }
+    }
+
+    /* The calendar keeps its three states apart: today outlined, the range between hairlines,
+       the chosen ends highlighted (above). */
+    .calendar-grid > button[aria-current="date"] {
+      outline: 2px solid CanvasText !important;
+      outline-offset: -2px;
+    }
+    .calendar-grid > button[data-range] {
+      border-block: 1px solid Highlight !important;
+    }
+
+    /* Inside a highlighted state the colours are set, not adjusted, so the focus outline must be
+       named too or it stays transparent. */
+    :focus-visible {
+      outline-color: CanvasText !important;
     }
 
     /* Glyphs drawn as backgrounds (mask icons, spinners, chevrons, tracks) would be forced to
@@ -179,6 +218,10 @@
       .tabs::after,
       input[role="switch"]::after,
       .steps > li:is([data-done], [aria-current="step"])::before,
+      .toast[data-tone]::before,
+      .timeline > li::before,
+      .badge[data-dot]::before,
+      .loading-bar,
       :is(.btn, .card, .list, .table)[aria-busy="true"]::after
     ) {
       background-color: CanvasText !important;
@@ -219,6 +262,19 @@
     }
     input[type="range"]::-moz-range-thumb {
       background: CanvasText !important;
+    }
+    /* Markers keep their shapes: hollow, and the current one filled. */
+    .carousel > *::scroll-marker {
+      forced-color-adjust: none;
+      box-shadow: inset 0 0 0 1px CanvasText;
+    }
+    .carousel > *::scroll-marker:target-current {
+      background: Highlight padding-box;
+      box-shadow: none;
+    }
+    /* The tip's gap to its anchor is a transparent border, so it takes an outline instead. */
+    [data-tip]::after {
+      outline: 1px solid CanvasText;
     }
     progress::-webkit-progress-value {
       background: Highlight !important;

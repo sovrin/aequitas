@@ -291,12 +291,12 @@ export const content: Entry[] = [
     slug: "carousel",
     title: "Carousel",
     group: "Content",
-    lede: "Scroll-snap with native ::scroll-marker dots where the browser supports them.",
+    lede: "Scroll-snap with native ::scroll-marker squares where the browser supports them: hollow, and filled for the item in view.",
     owns: [".carousel"],
     anatomy: [
       [
         ".carousel",
-        "Horizontal scroll container that snaps; the scrollbar is hidden. Dots follow it where `::scroll-marker` is supported.",
+        "Horizontal scroll container that snaps; the scrollbar is hidden. Square markers follow it where `::scroll-marker` is supported, each a 24px target.",
       ],
       ["> *", "The items, usually `figure.media`. Each snaps to the start edge."],
     ],

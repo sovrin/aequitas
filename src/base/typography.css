@@ -82,8 +82,12 @@
     z-index: -1;
     background: var(--ae-aurora);
     pointer-events: none;
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
+  /* Drift is opt-in, <html data-aurora="drift">: every frosted layer re-blurs the moving aurora
+     each frame, so a still page would otherwise never let the GPU idle. */
+  @media (prefers-reduced-motion: no-preference) {
+    :root[data-aurora="drift"] body::before {
       animation: ae-drift calc(var(--ae-duration) * pow(var(--ae-phi), 11)) ease-in-out infinite
         alternate;
     }
@@ -116,8 +120,16 @@
     --ae-scroll-start: var(--ae-space-7);
   }
 
-  :root:has(.tabbar, .dock, .action-bar) {
-    --ae-scroll-end: var(--ae-space-7);
+  :root:has(.tabbar, .action-bar) {
+    --ae-scroll-end: calc(var(--ae-space-7) + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* The dock floats a gutter up: its item, its padding and a step of air above it. */
+  :root:has(.dock) {
+    --ae-scroll-end: calc(
+      var(--ae-gutter) + round(calc(var(--ae-unit) * pow(var(--ae-phi), 2.5)), 2px) + 3 *
+        var(--ae-space-2)
+    );
   }
 
   /* Large type gets lighter and tighter, not heavier: size carries the weight. */

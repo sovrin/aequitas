@@ -70,13 +70,14 @@
             display: inline-block;
             inline-size: calc(1em * pow(var(--ae-phi), 0.75));
             text-indent: 0;
-            color: var(--ae-accent);
+            color: var(--ae-tone);
           }
         }
       }
 
       &[data-featured] {
-        --ae-text-muted: color-mix(in oklch, var(--ae-tone-contrast) 92%, transparent);
+        /* Full strength: at any alpha the small print drops under 4.5:1 on some tones. */
+        --ae-text-muted: var(--ae-tone-contrast);
         color: var(--ae-tone-contrast);
         background: var(--ae-tone);
         backdrop-filter: none;

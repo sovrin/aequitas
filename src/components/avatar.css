@@ -1,6 +1,7 @@
 @layer ae.components {
   /* <span class="avatar">AL</span> or <span class="avatar"><img …></span> */
   .avatar {
+    border-radius: var(--ae-radius-full);
     --_size: round(calc(var(--ae-unit) * pow(var(--ae-phi), 2)), 2px);
     display: inline-grid;
     place-items: center;

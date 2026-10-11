@@ -6,6 +6,7 @@
   }
 
   .bubble {
+    border-radius: var(--ae-radius-l);
     justify-self: start;
     max-inline-size: min(100%, var(--ae-measure));
     padding: var(--ae-space-3) var(--ae-space-4);
@@ -43,6 +44,7 @@
 
   /* <article class="comment"><span class="avatar">AL</span><div><header><b>Ada</b><time>2h</time></header><p>…</p><footer>…</footer></div></article> */
   .comment {
+    border-radius: var(--ae-radius-m);
     display: grid;
     grid-template-columns: auto 1fr;
     gap: var(--ae-space-3);

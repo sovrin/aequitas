@@ -12,6 +12,11 @@
     box-shadow: 0 1px 0 var(--ae-border);
     backdrop-filter: var(--ae-frost-filter-l);
 
+    /* Inside another frosted layer it keeps its tint and leaves the blurring to that layer. */
+    :is(.frost, .card, .alert, .list, .settings, .sidebar, dialog) & {
+      backdrop-filter: none;
+    }
+
     & a {
       color: var(--ae-text-muted);
       text-decoration: none;
@@ -31,7 +36,7 @@
       }
 
       &[aria-current="page"] {
-        text-decoration-color: var(--ae-accent);
+        text-decoration-color: var(--ae-tone);
       }
     }
   }

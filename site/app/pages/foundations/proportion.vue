@@ -38,9 +38,25 @@ const exceptions: [string, string][] = [
   ["The 2px state edge", "“This one is on” must read at any density, so it never scales."],
   ["Focus rings", "2px gap, 2px ring: sized for visibility, not proportion."],
   ["24px pointer target", "An accessibility floor (WCAG 2.5.8), not a design choice."],
-  ["Breakpoints", "48, 64 and 80rem. Media queries can't read custom properties."],
+  [
+    "11px small-text floor",
+    "--ae-text-xs is φ⁻¹ of the base, but never smaller than 11px to stay legible.",
+  ],
+  [
+    "Breakpoints",
+    "48, 64 and 80rem, plus 32 and 48rem for containers. Queries can't read custom properties.",
+  ],
   ["Viewport caps", "Values such as 85dvh keep sheets and dialogs inside the screen."],
+  [
+    "The 999px pill",
+    "A radius larger than any box, so the soft and round presets turn ends fully round.",
+  ],
   ["Colour and alpha", "OKLCH lightness and chroma are tuned for contrast, not ratio."],
+  ["Tracking and weights", "Letter-spacing and font weights are optical, set per size by eye."],
+  [
+    "Entrance scale and glass saturation",
+    "Layers grow in from 0.96 and frost lifts colour by 1.8: perceptual amounts.",
+  ],
   ["Glyphs and markers", "Icons, chevrons and the mark keep the geometry they were drawn with."],
 ];
 </script>

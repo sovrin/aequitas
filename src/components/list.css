@@ -19,6 +19,17 @@
       border: 0;
     }
 
+    /* The first and last rows follow the list's corners, so their tint never pokes past them. */
+    & > :first-child {
+      border-start-start-radius: inherit;
+      border-start-end-radius: inherit;
+    }
+
+    & > :last-child {
+      border-end-start-radius: inherit;
+      border-end-end-radius: inherit;
+    }
+
     & > * + * {
       box-shadow:
         inset 0 1px 0 var(--ae-border),
@@ -28,16 +39,16 @@
     /* Current row (master-detail): accent ink and tint, and the accent edge on its inline start,
        as in the sidebar and tree. */
     & > [aria-current]:not([aria-current="false"]) {
-      color: var(--ae-accent-ink);
-      background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+      color: var(--ae-tone-ink);
+      background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
       box-shadow:
-        inset var(--ae-edge-x) 0 0 var(--ae-accent),
+        inset var(--ae-edge-x) 0 0 var(--ae-tone),
         var(--ae-focus, 0 0 #0000);
     }
 
     & > * + [aria-current]:not([aria-current="false"]) {
       box-shadow:
-        inset var(--ae-edge-x) 0 0 var(--ae-accent),
+        inset var(--ae-edge-x) 0 0 var(--ae-tone),
         inset 0 1px 0 var(--ae-border),
         var(--ae-focus, 0 0 #0000);
     }

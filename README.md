@@ -30,7 +30,7 @@ Every proportion is a power of it.
 | tint   | `7% · φⁿ` for rest, hover, press                                                               |
 | layout | `.split` and `.panes` at `1 : φ`, `.golden` at `φ : 1`, container `φ⁹ rem`, measure `40ch · φ` |
 
-Not on the scale, by design: hairlines, the 1.5px stroke, the 2px state edge and focus rings (device pixels), the 24px minimum pointer target (an accessibility floor), breakpoints (media queries can't read tokens), viewport caps such as `85dvh`, colour and alpha, and the geometry of glyphs and markers.
+Not on the scale, by design: hairlines, the 1.5px stroke, the 2px state edge and focus rings (device pixels), the 24px minimum pointer target and the 11px floor under `--ae-text-xs` (accessibility floors), breakpoints and container thresholds (media and container queries can't read tokens), viewport caps such as `85dvh`, the 999px pill, colour and alpha, letter-spacing and font weights (optical, tuned per size), the 0.96 entrance scale and 1.8 frost saturation (perceptual), and the geometry of glyphs and markers.
 
 ## Use
 
@@ -70,6 +70,7 @@ Set these on `<html>`. Light and dark follow the OS unless `data-theme` says oth
 | `data-accent`  | `blue` `indigo` `purple` `pink` `red` `orange` `yellow` `green` `teal` `graphite` |
 | `data-density` | `compact` `spacious`                                                              |
 | `data-radius`  | `soft` `round`                                                                    |
+| `data-aurora`  | `drift`: the aurora moves slowly (off by default; it keeps the GPU busy)          |
 | `data-type`    | `serif` `humanist` `mono`                                                         |
 
 For any other colour, set `--ae-hue` and `--ae-neutral-hue`. Components take `data-tone="accent|success|warning|danger|info"`.
@@ -78,7 +79,7 @@ Controls answer the pointer with tone, never movement, and persistent states add
 
 ## Behaviours
 
-`aequitas.js` is optional: about 7 kB gzipped, ESM, typed. It initialises itself; markup added later (an SPA render, a fetched fragment) is enhanced as it lands. Add `data-ae-manual` to `<html>` and call `init()` yourself to start it later, e.g. after hydration.
+`aequitas.js` is optional: about 8 kB minified and gzipped, ESM, typed. It initialises itself; markup added later (an SPA render, a fetched fragment) is enhanced as it lands. Add `data-ae-manual` to `<html>` and call `init()` yourself to start it later, e.g. after hydration.
 
 | Markup                                 | Does                                                                        |
 | -------------------------------------- | --------------------------------------------------------------------------- |

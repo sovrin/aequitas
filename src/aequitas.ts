@@ -7,6 +7,11 @@ type Root = Document | HTMLElement;
 const q = <T extends Element>(sel: string, root: ParentNode = document) =>
   Array.from(root.querySelectorAll<T>(sel));
 
+/** Like q(), with the root itself when it matches: enhancers find their element even when the
+ *  observer hands them that element (rows added to a .table enhance the table). */
+const own = <T extends Element>(sel: string, root: ParentNode = document): T[] =>
+  root instanceof Element && root.matches(sel) ? [root as T, ...q<T>(sel, root)] : q<T>(sel, root);
+
 /** Adjacent <input> in a group, skipping decorative siblings such as <hr>. */
 const sibInput = (el: Element, dir: "next" | "previous"): HTMLInputElement | null => {
   let n = dir === "next" ? el.nextElementSibling : el.previousElementSibling;
@@ -17,7 +22,7 @@ const sibInput = (el: Element, dir: "next" | "previous"): HTMLInputElement | nul
 
 /** Tabs: <div class="tabs" role="tablist"> with [role=tab][aria-controls]. */
 function tabs(root: Root): void {
-  for (const list of q<HTMLElement>('[role="tablist"]', root)) {
+  for (const list of own<HTMLElement>('[role="tablist"]', root)) {
     if (list.dataset.ae != null) continue;
     list.dataset.ae = "";
     const items = q<HTMLElement>('[role="tab"]', list);
@@ -61,6 +66,18 @@ function tabs(root: Root): void {
  *  nearest dialog/popover; [data-toast] shows a toast; [data-dismiss] removes the nearest .alert, .toast or
  *  .chip (or the nearest ancestor matching its value). */
 function actions(root: Root): void {
+  // A busy control ignores the pointer in CSS; this stops Enter and Space too, before any handler
+  // of the page's own can run the action a second time.
+  root.addEventListener(
+    "click",
+    (e) => {
+      if ((e.target as Element).closest?.('[aria-busy="true"]:is(button, a, .btn)')) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    },
+    { capture: true },
+  );
   root.addEventListener("click", (e) => {
     const t = e.target as Element;
     const opener = t.closest<HTMLElement>("[data-open]");
@@ -150,9 +167,10 @@ function stack(region: HTMLElement, fresh?: Element): void {
   stacks.set(region, items);
   if (fresh) heights.delete(fresh);
   const gap = parseFloat(getComputedStyle(region).rowGap) || 0;
+  // Measure every toast before writing to any, so layout is read once, not once per toast.
+  for (const t of items) if (!heights.has(t)) heights.set(t, t.offsetHeight);
   let y = 0;
   items.forEach((t, i) => {
-    if (!heights.has(t)) heights.set(t, t.offsetHeight);
     t.style.setProperty("--i", String(i));
     t.style.setProperty("--y", `${y}px`);
     t.toggleAttribute("data-behind", i > 0);
@@ -167,6 +185,23 @@ function stack(region: HTMLElement, fresh?: Element): void {
 /** The leave each toast is on, so one taken back mid-way (rescueToast) is not removed after all. */
 const leaves = new WeakMap<Element, number>();
 let leaving = 0;
+/** Each toast()'s listeners, released as soon as it is removed. */
+const offs = new WeakMap<Element, AbortController>();
+
+/** Re-measures a toast whose size changes after it arrived (zoom, text spacing, a narrower
+ *  viewport), so the stack's offsets never go stale. Created on first use: not at import, where
+ *  there may be no DOM. */
+let resized: ResizeObserver | undefined;
+const watchSize = (el: Element) =>
+  (resized ??= new ResizeObserver((entries) => {
+    for (const { target } of entries) {
+      // The content is watched, not the toast: a toast behind the front one is collapsed to the
+      // front's height, and that size must never be taken for its own.
+      const t = target.parentElement;
+      const region = t?.parentElement;
+      if (t?.isConnected && region?.matches(".toasts")) stack(region, t);
+    }
+  })).observe(el);
 
 /** Sends a toast out: it leaves from where it sits while the rest of the stack closes ranks, and
  *  is removed once its own transitions end. `how` is "swipe" for one flicked away sideways; any
@@ -178,7 +213,12 @@ function dismissToast(el: HTMLElement, how = ""): void {
   leaves.set(el, id);
   const region = el.parentElement;
   if (region?.matches(".toasts")) stack(region);
-  const remove = () => leaves.get(el) === id && el.remove();
+  const remove = () => {
+    if (leaves.get(el) !== id) return;
+    el.remove();
+    if (el.firstElementChild) resized?.unobserve(el.firstElementChild);
+    offs.get(el)?.abort();
+  };
   // Waits for the transitions themselves: transitionend names physical properties, so waiting
   // for one by name is fragile. None running means at once.
   Promise.allSettled(el.getAnimations().map((a) => a.finished)).then(remove);
@@ -191,6 +231,39 @@ function rescueToast(el: HTMLElement): void {
   leaves.delete(el);
   delete el.dataset.leaving;
   if (el.parentElement?.matches(".toasts")) stack(el.parentElement);
+}
+
+/** The page's fixed toast region, created once and early (init) so it is already a live region
+ *  when the first toast lands in it: one created together with its content is often not read. */
+function toastRegion(): HTMLElement {
+  const fixed = q<HTMLElement>(".toasts").find((r) => getComputedStyle(r).position === "fixed");
+  const region = fixed ?? Object.assign(document.createElement("div"), { className: "toasts" });
+  if (!region.hasAttribute("aria-live")) region.setAttribute("aria-live", "polite");
+  if (!fixed) document.body.append(region);
+  return region;
+}
+
+let live: HTMLElement | undefined;
+/** The polite, visually hidden region announce() speaks through. Made by init() before anything is
+ *  said, and again if a page swapped its body out from under it. */
+function liveRegion(): HTMLElement {
+  if (!live?.isConnected) {
+    live = document.createElement("div");
+    live.setAttribute("aria-live", "polite");
+    // Inline, not .sr-only: the utilities are not in aequitas.core.css.
+    live.style.cssText =
+      "position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap";
+    document.body.append(live);
+  }
+  return live;
+}
+
+/** Says a change that has no visible announcement of its own (a copy, a stepped value, a tag
+ *  added or removed). */
+function announce(message: string): void {
+  const region = liveRegion();
+  region.textContent = "";
+  requestAnimationFrame(() => (region.textContent = message));
 }
 
 /** Rubber band: the further past a boundary, the less it follows; real things slow before they stop. */
@@ -284,14 +357,12 @@ export function toast(
 ): HTMLElement {
   // The page's fixed region: one shown in place (a demo, a preview) is not where toasts pop up.
   let region = q<HTMLElement>(".toasts").find((r) => getComputedStyle(r).position === "fixed");
-  if (!region) {
-    region = Object.assign(document.createElement("div"), { className: "toasts" });
-    document.body.append(region);
-  }
+  region ??= toastRegion();
   const stage = region;
   const el = document.createElement("div");
   el.className = "toast";
-  el.setAttribute("role", opts.tone === "danger" ? "alert" : "status");
+  // The region is the polite live region; an error interrupts as an alert of its own.
+  if (opts.tone === "danger") el.setAttribute("role", "alert");
   if (opts.tone) el.dataset.tone = opts.tone;
   const body = document.createElement("div");
   if (opts.title) {
@@ -311,11 +382,13 @@ export function toast(
   el.append(close);
   region.append(el);
   const off = new AbortController();
+  offs.set(el, off);
   const leave = () => {
     hold();
     dismissToast(el);
   };
-  const ms = opts.duration ?? 4000;
+  // An error stays until it is dismissed: it may be read slowly, or with a magnifier far away.
+  const ms = opts.duration ?? (opts.tone === "danger" ? Infinity : 4000);
   let timer: ReturnType<typeof setTimeout> | undefined;
   const hold = () => clearTimeout(timer);
   const busy = () => stage.matches(":hover") || stage.contains(document.activeElement);
@@ -347,6 +420,7 @@ export function toast(
   requestAnimationFrame(() => {
     el.prepend(body);
     stack(stage, el);
+    watchSize(body);
     run();
   });
   return el;
@@ -422,7 +496,7 @@ function themeSync(root: Root): void {
     const html = document.documentElement;
     if ((saved === "light" || saved === "dark") && html.dataset.theme !== saved)
       html.dataset.theme = saved;
-    for (const r of q<HTMLInputElement>("input[data-theme-set]", root)) {
+    for (const r of own<HTMLInputElement>("input[data-theme-set]", root)) {
       r.checked = r.dataset.themeSet === (saved ?? "auto");
     }
   } catch {}
@@ -487,6 +561,8 @@ function forms(root: Root): void {
       const input = step.parentElement!.querySelector("input")!;
       Number(step.dataset.step) < 0 ? input.stepDown() : input.stepUp();
       input.dispatchEvent(new Event("input", { bubbles: true }));
+      // Focus stays on the button, so the new value is said for it.
+      announce(input.value);
     }
     const toggle = t.closest<HTMLElement>("[aria-pressed][data-toggle]");
     if (toggle)
@@ -510,9 +586,14 @@ function forms(root: Root): void {
         x.textContent = "×";
         chip.append(x);
         t.before(chip);
+        announce(`Added ${t.value.trim()}`);
         t.value = "";
       } else if (key === "Backspace" && !t.value) {
-        if (t.previousElementSibling?.matches(".chip")) t.previousElementSibling.remove();
+        const last = t.previousElementSibling;
+        if (last?.matches(".chip")) {
+          announce(`Removed ${last.firstChild?.textContent?.trim() ?? ""}`);
+          last.remove();
+        }
       }
     }
     if (t.matches(".otp > input") && key === "Backspace" && !t.value)
@@ -652,7 +733,7 @@ let comboboxes = 0;
 
 /** Combobox: opens its list on focus/typing, filters options by text, selects on click/Enter. */
 function combobox(root: Root): void {
-  for (const box of q<HTMLElement>(".combobox", root)) {
+  for (const box of own<HTMLElement>(".combobox", root)) {
     if (box.dataset.ae != null) continue;
     box.dataset.ae = "";
     const input = box.querySelector<HTMLInputElement>("input");
@@ -718,7 +799,12 @@ function combobox(root: Root): void {
       } else if (e.key === "Enter" && i >= 0 && !e.isComposing) {
         e.preventDefault();
         pick(opts[i]);
-      } else if (e.key === "Escape") close();
+      } else if (e.key === "Escape" && input.getAttribute("aria-expanded") === "true") {
+        // One Escape closes the suggestions only; a dialog around the field waits for the next.
+        e.preventDefault();
+        e.stopPropagation();
+        close();
+      }
     });
     list.addEventListener("mousedown", (e) => {
       const o = (e.target as Element).closest<HTMLElement>('[role="option"]');
@@ -768,7 +854,7 @@ let palettes = 0;
  * Enter. dialog.palette[data-manual] is left alone, for palettes that render their own results.
  */
 function palette(root: Root): void {
-  for (const dlg of q<HTMLDialogElement>("dialog.palette:not([data-manual])", root)) {
+  for (const dlg of own<HTMLDialogElement>("dialog.palette:not([data-manual])", root)) {
     const input = dlg.querySelector<HTMLInputElement>(":scope > input");
     const list = dlg.querySelector<HTMLElement>('[role="listbox"]');
     if (!input || !list || list.dataset.ae != null) continue;
@@ -851,7 +937,7 @@ function palette(root: Root): void {
 
 /** Light dismiss: dialog[data-light-dismiss] closes on a click outside its box. */
 function lightDismiss(root: Root): void {
-  for (const dlg of q<HTMLDialogElement>("dialog[data-light-dismiss]", root)) {
+  for (const dlg of own<HTMLDialogElement>("dialog[data-light-dismiss]", root)) {
     if (dlg.dataset.ae != null) continue;
     dlg.dataset.ae = "";
     // The backdrop and the dialog's own padding both target the dialog; only outside its box closes.
@@ -874,7 +960,7 @@ function toc(root: Root): void {
       t.io?.disconnect();
       tocs.delete(nav);
     }
-  for (const nav of q<HTMLElement>(".toc", root)) {
+  for (const nav of own<HTMLElement>(".toc", root)) {
     const links = q<HTMLAnchorElement>('a[href^="#"]', nav).filter((a) => a.hash.length > 1);
     const key = links.map((a) => a.hash).join(" ");
     const prev = tocs.get(nav);
@@ -920,6 +1006,7 @@ function copy(root: Root): void {
     const label = b.innerHTML;
     b.dataset.copied = "";
     b.textContent = "Copied";
+    announce("Copied");
     setTimeout(() => {
       b.innerHTML = label;
       delete b.dataset.copied;
@@ -989,7 +1076,7 @@ function tips(root: Root): void {
 /** The tip as a description, read after the name. Never replaces an aria-description of your own. */
 const described = new WeakSet<Element>();
 function describeTips(root: Root): void {
-  for (const el of q<HTMLElement>("[data-tip]", root)) {
+  for (const el of own<HTMLElement>("[data-tip]", root)) {
     if (el.hasAttribute("aria-description") && !described.has(el)) continue;
     el.setAttribute("aria-description", el.dataset.tip!);
     described.add(el);
@@ -1024,16 +1111,19 @@ export function enhance(root: Root = document): void {
   toc(root);
   describeTips(root);
   themeSync(root);
-  for (const p of q(".range-pair", root)) pair(p);
-  for (const r of q<HTMLInputElement>('input[type="range"]', root)) fill(r);
-  for (const t of q(".table", root))
+  for (const p of own(".range-pair", root)) pair(p);
+  for (const r of own<HTMLInputElement>('input[type="range"]', root)) fill(r);
+  for (const t of own(".table", root))
     if (t.querySelector('tbody input[type="checkbox"]')) syncSelection(t);
   lightDismiss(root);
   // Toasts written into the markup, or rendered by a framework, stack like toast()'s own.
-  for (const r of q<HTMLElement>(".toasts", root)) stack(r);
+  for (const r of own<HTMLElement>(".toasts", root)) stack(r);
 }
 
 const watched = new WeakSet<Root>();
+/** The components enhance() keeps in sync with their content. */
+const ENHANCED =
+  '.table, .toc, .toasts, .range-pair, .combobox, [role="tablist"], dialog.palette, dialog[data-light-dismiss]';
 
 /** Delegated listeners, enhancements, and a watch on the DOM: markup added or changed later (an SPA
  *  render, a fetched fragment) is enhanced as it lands, with nothing to call. Once per root. */
@@ -1042,9 +1132,30 @@ export function init(root: Root = document): void {
   enhance(root);
   if (watched.has(root)) return;
   watched.add(root);
-  // Every enhancer skips what it has already done, so one pass over the root per batch is enough.
-  const mo = new MutationObserver(() => {
-    enhance(root);
+  // The live regions exist before anything is said into them.
+  if (root === document) {
+    toastRegion();
+    liveRegion();
+  }
+  // Only where something changed: each record's parent, since the enhancers look below the root
+  // they are given (a toast leaving its region restacks the region). Every enhancer skips what it
+  // has already done.
+  const mo = new MutationObserver((records) => {
+    const changed = new Set<HTMLElement>();
+    for (const { target } of records) {
+      const parent = target.parentElement ?? (target instanceof HTMLElement ? target : null);
+      // A change deep inside an enhanced component (a row in a table, a link in a nested list
+      // of a .toc) re-enhances the component, not just the spot that changed.
+      const el = parent?.closest<HTMLElement>(ENHANCED) ?? parent;
+      if (!el) {
+        changed.clear();
+        enhance(root);
+        break;
+      }
+      changed.add(el);
+    }
+    const all = [...changed];
+    for (const el of all) if (!all.some((o) => o !== el && o.contains(el))) enhance(el);
     // Drop the changes enhance() just made itself, or they would call it again.
     mo.takeRecords();
   });

@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: center;
     gap: var(--ae-space-3);
-    padding: var(--_py) calc(var(--_py) * var(--ae-phi));
+    padding: var(--_py) round(calc(var(--_py) * var(--ae-phi)), 1px);
     min-block-size: var(--ae-target);
     font-size: var(--ae-text-m);
     font-weight: 500;

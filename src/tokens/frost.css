@@ -9,10 +9,12 @@
     --ae-blur-s: 1rem;
     --ae-blur-m: calc(1rem * var(--ae-phi));
     --ae-blur-l: calc(1rem * pow(var(--ae-phi), 2));
-    --ae-frost-filter: blur(var(--ae-blur-m)) saturate(1.8);
+    /* Glass lifts the colour it blurs. Perceptual, not proportional: a named exception. */
+    --ae-frost-saturate: 1.8;
+    --ae-frost-filter: blur(var(--ae-blur-m)) saturate(var(--ae-frost-saturate));
     /* Thicker material for modal and anchored layers (dialogs, popovers, the navbar): content
        must stay legible over anything. */
-    --ae-frost-filter-l: blur(var(--ae-blur-l)) saturate(1.8);
+    --ae-frost-filter-l: blur(var(--ae-blur-l)) saturate(var(--ae-frost-saturate));
 
     --ae-frost-bg: var(--ae-surface);
     --ae-frost-bg-thick: var(--ae-surface);
@@ -94,11 +96,44 @@
   ) {
     background: var(--ae-frost-bg);
     border: 0;
+    /* Floating layers take the shape presets; components that need another radius set their own. */
+    border-radius: var(--ae-radius-l);
+    corner-shape: var(--ae-corner);
 
     @supports (backdrop-filter: blur(1px)) {
       backdrop-filter: var(--ae-frost-filter);
     }
   }
+  /* Frost inside frost would blur only its parent's glass: twice the cost, and cloudy. An in-flow
+     layer inside another keeps its tint and lets the outer one do the blurring. Top-layer menus,
+     popovers and dialogs blur the page behind them, so they keep theirs. */
+  :is(
+      .frost,
+      .card,
+      .alert,
+      .navbar,
+      .sidebar,
+      .menu,
+      .popover,
+      .list,
+      .settings,
+      .combobox-list,
+      .toast,
+      .action-bar,
+      .selection-bar,
+      .dock,
+      .tabbar,
+      dialog
+    )
+    :is(.frost, .card, .alert, .list, .settings, .navbar, .sidebar) {
+    backdrop-filter: none;
+  }
+
+  /* Bars that span an edge of the viewport stay square: a rounded corner would float off it. */
+  :is(.navbar, .sidebar, .tabbar) {
+    border-radius: 0;
+  }
+
   /* Bars and menus float over scrolling content of any colour, so they take the thicker
      material: text on them must stay legible over anything. */
   :is(.navbar, .menu, .toast, .action-bar, .selection-bar, .dock, .tabbar) {

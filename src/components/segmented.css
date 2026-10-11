@@ -51,7 +51,7 @@
         background: var(--ae-surface);
         box-shadow:
           var(--ae-shadow-s),
-          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-accent);
+          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone);
       }
     }
 
@@ -70,7 +70,7 @@
         /* Like every persistent "on": the pill also carries the 2px accent edge. */
         box-shadow:
           var(--ae-shadow-s),
-          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-accent);
+          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone);
         transition: inset var(--ae-duration) var(--ae-ease);
       }
 

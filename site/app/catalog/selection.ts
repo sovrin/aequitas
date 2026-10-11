@@ -268,7 +268,7 @@ export const selection: Entry[] = [
       "The demo's output sits inside the `<label>`, so it also becomes part of the name. That is fine for a short number; move it out of the label for anything longer.",
       'Add `aria-valuetext` when the number needs a unit to make sense ("62 percent").',
       "Focus draws the ring on the thumb.",
-      "The value reads from where the tone fill ends against the track (3:1 or more); the glass thumb itself is deliberately quiet against the page.",
+      "The value reads from where the tone fill ends against the track (3:1 or more). The track carries the control edge and the glass thumb a stroke in the fill’s tone, so the control can be found at any value, 0 included.",
     ],
     related: ["range-pair", "number", "progress", "meter"],
     keywords: "slider",

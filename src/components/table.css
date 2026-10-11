@@ -71,8 +71,13 @@
       padding-inline-end: 0;
     }
 
+    /* Selected: tinted, with the state edge on the leading cell, as on lists and trees. */
     & tr[aria-selected="true"] {
-      background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+      background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
+
+      & > :first-child {
+        box-shadow: inset var(--ae-edge-x) 0 0 var(--ae-tone);
+      }
     }
 
     & :is(th, td)[data-num] {
@@ -98,6 +103,11 @@
 
     &[data-hover="false"] tbody tr:hover {
       background: none;
+    }
+
+    /* Focus moving up never lands under the pinned header. */
+    &[data-sticky] tbody :focus-visible {
+      scroll-margin-block-start: calc(var(--ae-space-3) * 2 + var(--ae-text-s) * var(--ae-phi));
     }
 
     &[data-sticky] thead th {

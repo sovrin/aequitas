@@ -14,15 +14,21 @@
       font-variant-numeric: tabular-nums;
       background: var(--ae-fill);
       border: 0;
-      caret-color: var(--ae-accent);
+      box-shadow: inset 0 -1px 0 var(--ae-control-edge);
+      border-radius: var(--ae-radius-m);
+      caret-color: var(--ae-tone);
       transition: box-shadow var(--ae-duration-fast) var(--ae-ease);
 
       &:focus-visible {
         box-shadow: var(--ae-ring-field);
       }
 
+      &:is(:user-invalid, [aria-invalid="true"]) {
+        box-shadow: inset 0 0 0 var(--ae-stroke) var(--ae-danger);
+      }
+
       &:not(:placeholder-shown):valid {
-        background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
+        background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
       }
     }
 

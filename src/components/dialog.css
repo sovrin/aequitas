@@ -18,7 +18,7 @@
     --_move-for: var(--ae-duration-fast);
     opacity: 0;
     translate: 0 var(--ae-space-4);
-    scale: 0.96;
+    scale: var(--ae-enter-scale);
     transition:
       opacity var(--_fade-for) var(--ae-ease),
       translate var(--_move-for) var(--ae-ease-spring),
@@ -36,7 +36,7 @@
       @starting-style {
         opacity: 0;
         translate: 0 var(--ae-space-4);
-        scale: 0.96;
+        scale: var(--ae-enter-scale);
       }
     }
 

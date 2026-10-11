@@ -71,7 +71,7 @@
 
   .input {
     inline-size: 100%;
-    padding: var(--ae-space-3) calc(var(--ae-space-3) * var(--ae-phi));
+    padding: var(--ae-space-3) round(calc(var(--ae-space-3) * var(--ae-phi)), 1px);
     background: var(--ae-fill);
     border: 0;
     border-radius: var(--ae-radius-m);
@@ -134,17 +134,6 @@
     }
   }
 
-  /* The native indicator is drawn dark; invert it on dark themes. */
-  :root[data-theme="dark"] .input::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .input::-webkit-calendar-picker-indicator {
-      filter: invert(1);
-    }
-  }
-
   input[type="search"].input::-webkit-search-cancel-button {
     appearance: none;
     inline-size: 0.7em;
@@ -200,7 +189,7 @@
       content: "";
       inline-size: round(calc(var(--_s) / var(--ae-phi)), 2px);
       block-size: round(calc(var(--_s) / var(--ae-phi)), 2px);
-      background: var(--ae-accent-contrast);
+      background: var(--ae-tone-contrast);
       clip-path: polygon(14% 52%, 0 66%, 38% 100%, 100% 22%, 86% 8%, 38% 72%);
       /* Half-size and clear, not scale(0): a mark that grows from nothing looks like it popped. */
       opacity: 0;
@@ -211,7 +200,7 @@
     }
 
     &:checked {
-      background: var(--ae-accent);
+      background: var(--ae-tone);
       box-shadow: var(--ae-focus, 0 0 #0000);
 
       &::after {
@@ -222,7 +211,7 @@
 
     /* Indeterminate (set from script): a bar instead of the tick. */
     &:indeterminate {
-      background: var(--ae-accent);
+      background: var(--ae-tone);
       box-shadow: var(--ae-focus, 0 0 #0000);
 
       &::after {
@@ -271,11 +260,11 @@
     }
 
     &:checked {
-      background: var(--ae-accent);
+      background: var(--ae-tone);
 
       &::after {
         /* The thumb takes the accent's own contrast colour, so it reads on light and dark accents. */
-        background: var(--ae-accent-contrast);
+        background: var(--ae-tone-contrast);
         /* Travel is track width minus track height; padding cancels out (border-box). */
         translate: calc(var(--_w) - var(--_h)) 0;
       }
