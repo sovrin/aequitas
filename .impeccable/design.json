@@ -1,0 +1,508 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-11T17:35:37.485Z",
+  "title": "Design System: aequitas",
+  "extensions": {
+    "colorMeta": {
+      "instrument-blue": {
+        "role": "primary",
+        "displayName": "Instrument Blue",
+        "canonical": "oklch(0.55 0.2 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.18 255)",
+          "oklch(0.26 0.18 255)",
+          "oklch(0.37 0.18 255)",
+          "oklch(0.48 0.18 255)",
+          "oklch(0.59 0.18 255)",
+          "oklch(0.7 0.18 255)",
+          "oklch(0.82 0.18 255)",
+          "oklch(0.95 0.18 255)"
+        ]
+      },
+      "instrument-blue-night": {
+        "role": "primary",
+        "displayName": "Instrument Blue (dark scheme)",
+        "canonical": "oklch(0.72 0.15 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.15 255)",
+          "oklch(0.26 0.15 255)",
+          "oklch(0.37 0.15 255)",
+          "oklch(0.48 0.15 255)",
+          "oklch(0.59 0.15 255)",
+          "oklch(0.7 0.15 255)",
+          "oklch(0.82 0.15 255)",
+          "oklch(0.95 0.15 255)"
+        ]
+      },
+      "instrument-blue-ink": {
+        "role": "primary",
+        "displayName": "Instrument Blue Ink",
+        "canonical": "oklch(0.45 0.15 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.15 255)",
+          "oklch(0.26 0.15 255)",
+          "oklch(0.37 0.15 255)",
+          "oklch(0.48 0.15 255)",
+          "oklch(0.59 0.15 255)",
+          "oklch(0.7 0.15 255)",
+          "oklch(0.82 0.15 255)",
+          "oklch(0.95 0.15 255)"
+        ]
+      },
+      "cool-paper": {
+        "role": "neutral",
+        "displayName": "Cool Paper",
+        "canonical": "oklch(0.975 0.003 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.006 255)",
+          "oklch(0.26 0.006 255)",
+          "oklch(0.37 0.006 255)",
+          "oklch(0.48 0.006 255)",
+          "oklch(0.59 0.006 255)",
+          "oklch(0.7 0.006 255)",
+          "oklch(0.82 0.006 255)",
+          "oklch(0.95 0.006 255)"
+        ]
+      },
+      "cool-paper-sunken": {
+        "role": "neutral",
+        "displayName": "Cool Paper, Sunken",
+        "canonical": "oklch(0.96 0.005 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.006 255)",
+          "oklch(0.26 0.006 255)",
+          "oklch(0.37 0.006 255)",
+          "oklch(0.48 0.006 255)",
+          "oklch(0.59 0.006 255)",
+          "oklch(0.7 0.006 255)",
+          "oklch(0.82 0.006 255)",
+          "oklch(0.95 0.006 255)"
+        ]
+      },
+      "sheet-white": {
+        "role": "neutral",
+        "displayName": "Sheet White",
+        "canonical": "oklch(1 0 0)",
+        "tonalRamp": [
+          "oklch(0.15 0 0)",
+          "oklch(0.26 0 0)",
+          "oklch(0.37 0 0)",
+          "oklch(0.48 0 0)",
+          "oklch(0.59 0 0)",
+          "oklch(0.7 0 0)",
+          "oklch(0.82 0 0)",
+          "oklch(0.95 0 0)"
+        ]
+      },
+      "graphite-ink": {
+        "role": "neutral",
+        "displayName": "Graphite Ink",
+        "canonical": "oklch(0.21 0.02 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.02 255)",
+          "oklch(0.26 0.02 255)",
+          "oklch(0.37 0.02 255)",
+          "oklch(0.48 0.02 255)",
+          "oklch(0.59 0.02 255)",
+          "oklch(0.7 0.02 255)",
+          "oklch(0.82 0.02 255)",
+          "oklch(0.95 0.02 255)"
+        ]
+      },
+      "pencil-grey": {
+        "role": "neutral",
+        "displayName": "Pencil Grey",
+        "canonical": "oklch(0.48 0.02 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.02 255)",
+          "oklch(0.26 0.02 255)",
+          "oklch(0.37 0.02 255)",
+          "oklch(0.48 0.02 255)",
+          "oklch(0.59 0.02 255)",
+          "oklch(0.7 0.02 255)",
+          "oklch(0.82 0.02 255)",
+          "oklch(0.95 0.02 255)"
+        ]
+      },
+      "night-glass": {
+        "role": "neutral",
+        "displayName": "Night Glass",
+        "canonical": "oklch(0.14 0.008 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.008 255)",
+          "oklch(0.26 0.008 255)",
+          "oklch(0.37 0.008 255)",
+          "oklch(0.48 0.008 255)",
+          "oklch(0.59 0.008 255)",
+          "oklch(0.7 0.008 255)",
+          "oklch(0.82 0.008 255)",
+          "oklch(0.95 0.008 255)"
+        ]
+      },
+      "night-glass-sunken": {
+        "role": "neutral",
+        "displayName": "Night Glass, Sunken",
+        "canonical": "oklch(0.115 0.006 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.006 255)",
+          "oklch(0.26 0.006 255)",
+          "oklch(0.37 0.006 255)",
+          "oklch(0.48 0.006 255)",
+          "oklch(0.59 0.006 255)",
+          "oklch(0.7 0.006 255)",
+          "oklch(0.82 0.006 255)",
+          "oklch(0.95 0.006 255)"
+        ]
+      },
+      "night-sheet": {
+        "role": "neutral",
+        "displayName": "Night Sheet",
+        "canonical": "oklch(0.26 0.01 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.01 255)",
+          "oklch(0.26 0.01 255)",
+          "oklch(0.37 0.01 255)",
+          "oklch(0.48 0.01 255)",
+          "oklch(0.59 0.01 255)",
+          "oklch(0.7 0.01 255)",
+          "oklch(0.82 0.01 255)",
+          "oklch(0.95 0.01 255)"
+        ]
+      },
+      "moon-ink": {
+        "role": "neutral",
+        "displayName": "Moon Ink",
+        "canonical": "oklch(0.96 0.005 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.005 255)",
+          "oklch(0.26 0.005 255)",
+          "oklch(0.37 0.005 255)",
+          "oklch(0.48 0.005 255)",
+          "oklch(0.59 0.005 255)",
+          "oklch(0.7 0.005 255)",
+          "oklch(0.82 0.005 255)",
+          "oklch(0.95 0.005 255)"
+        ]
+      },
+      "moon-grey": {
+        "role": "neutral",
+        "displayName": "Moon Grey",
+        "canonical": "oklch(0.72 0.015 255)",
+        "tonalRamp": [
+          "oklch(0.15 0.015 255)",
+          "oklch(0.26 0.015 255)",
+          "oklch(0.37 0.015 255)",
+          "oklch(0.48 0.015 255)",
+          "oklch(0.59 0.015 255)",
+          "oklch(0.7 0.015 255)",
+          "oklch(0.82 0.015 255)",
+          "oklch(0.95 0.015 255)"
+        ]
+      },
+      "success": {
+        "role": "tone",
+        "displayName": "Success",
+        "canonical": "oklch(0.52 0.15 150)",
+        "tonalRamp": [
+          "oklch(0.15 0.15 150)",
+          "oklch(0.26 0.15 150)",
+          "oklch(0.37 0.15 150)",
+          "oklch(0.48 0.15 150)",
+          "oklch(0.59 0.15 150)",
+          "oklch(0.7 0.15 150)",
+          "oklch(0.82 0.15 150)",
+          "oklch(0.95 0.15 150)"
+        ]
+      },
+      "warning": {
+        "role": "tone",
+        "displayName": "Warning",
+        "canonical": "oklch(0.55 0.14 65)",
+        "tonalRamp": [
+          "oklch(0.15 0.14 65)",
+          "oklch(0.26 0.14 65)",
+          "oklch(0.37 0.14 65)",
+          "oklch(0.48 0.14 65)",
+          "oklch(0.59 0.14 65)",
+          "oklch(0.7 0.14 65)",
+          "oklch(0.82 0.14 65)",
+          "oklch(0.95 0.14 65)"
+        ]
+      },
+      "danger": {
+        "role": "tone",
+        "displayName": "Danger",
+        "canonical": "oklch(0.56 0.21 25)",
+        "tonalRamp": [
+          "oklch(0.15 0.18 25)",
+          "oklch(0.26 0.18 25)",
+          "oklch(0.37 0.18 25)",
+          "oklch(0.48 0.18 25)",
+          "oklch(0.59 0.18 25)",
+          "oklch(0.7 0.18 25)",
+          "oklch(0.82 0.18 25)",
+          "oklch(0.95 0.18 25)"
+        ]
+      },
+      "info": {
+        "role": "tone",
+        "displayName": "Info",
+        "canonical": "oklch(0.54 0.14 235)",
+        "tonalRamp": [
+          "oklch(0.15 0.14 235)",
+          "oklch(0.26 0.14 235)",
+          "oklch(0.37 0.14 235)",
+          "oklch(0.48 0.14 235)",
+          "oklch(0.59 0.14 235)",
+          "oklch(0.7 0.14 235)",
+          "oklch(0.82 0.14 235)",
+          "oklch(0.95 0.14 235)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The .display hero line; lightest and tightest text."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "h1/h2 page and section titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "h3/h4 component and card headings."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text at φ leading, ~65ch measure."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels, small buttons, chips."
+      },
+      "eyebrow": {
+        "displayName": "Eyebrow",
+        "purpose": "Tracked small capitals above a heading."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Code and tabular figures."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shadow-s",
+        "value": "var(--ae-shadow-s)",
+        "purpose": "Small floating elements: tooltips, small popovers."
+      },
+      {
+        "name": "shadow-m",
+        "value": "var(--ae-shadow-m)",
+        "purpose": "Cards on the canvas (default)."
+      },
+      {
+        "name": "shadow-l",
+        "value": "var(--ae-shadow-l)",
+        "purpose": "Interactive card hover, dialogs, menus, toasts."
+      },
+      {
+        "name": "frost-edge",
+        "value": "inset 0 1px 0 var(--ae-highlight)",
+        "purpose": "The specular top edge on every floating layer; the only edge glass gets."
+      },
+      {
+        "name": "ring",
+        "value": "0 0 0 2px var(--ae-bg), 0 0 0 4px var(--ae-accent)",
+        "purpose": "Focus ring for controls."
+      },
+      {
+        "name": "ring-field",
+        "value": "inset 0 0 0 1.5px var(--ae-accent), 0 0 0 4px color-mix(in oklch, var(--ae-accent) 28%, transparent)",
+        "purpose": "Text-field focus, inside out."
+      }
+    ],
+    "motion": [
+      {
+        "name": "duration",
+        "value": "220ms",
+        "purpose": "Base duration; fast = ÷φ (136ms), slow = ×φ (356ms)."
+      },
+      {
+        "name": "stagger",
+        "value": "calc(220ms * φ⁻³) ≈ 52ms",
+        "purpose": "Delay between siblings."
+      },
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.2, 0, 0, 1)",
+        "purpose": "Default easing for state transitions."
+      },
+      {
+        "name": "ease-spring",
+        "value": "cubic-bezier(0.32, 0.72, 0, 1)",
+        "purpose": "Long decelerating arrival for entering layers; never overshoots."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "s",
+        "value": "< 48rem"
+      },
+      {
+        "name": "m",
+        "value": "48rem"
+      },
+      {
+        "name": "l",
+        "value": "64rem"
+      },
+      {
+        "name": "xl",
+        "value": "80rem"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Default tinted control; steps down the φ tint ladder, never moves.",
+      "html": "<button class=\"ds-btn\">Pin</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:10px 16px;min-block-size:24px;font:500 1rem/1 inherit;color:var(--ae-text, oklch(0.21 0.02 255));background:var(--ae-fill, color-mix(in oklch, oklch(0.21 0.02 255) 7%, transparent));border:0;border-radius:var(--ae-radius-full, 0);cursor:pointer}.ds-btn:hover{background:var(--ae-fill-hover, color-mix(in oklch, oklch(0.21 0.02 255) 11.3%, transparent))}.ds-btn:active{background:var(--ae-fill-active, color-mix(in oklch, oklch(0.21 0.02 255) 18.3%, transparent))}.ds-btn:focus-visible{outline:none;box-shadow:0 0 0 2px var(--ae-bg, oklch(0.975 0.003 255)),0 0 0 4px var(--ae-accent, oklch(0.55 0.2 255))}"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one solid control; the accent is spent here.",
+      "html": "<button class=\"ds-btn-primary\">Publish</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;padding:10px 16px;min-block-size:24px;font:500 1rem/1 inherit;color:var(--ae-accent-contrast, oklch(0.99 0 0));background:var(--ae-accent, oklch(0.55 0.2 255));border:0;border-radius:var(--ae-radius-full, 0);cursor:pointer}.ds-btn-primary:hover{background:color-mix(in oklab, var(--ae-accent, oklch(0.55 0.2 255)), var(--ae-text, oklch(0.21 0.02 255)) 11.3%)}.ds-btn-primary:active{background:color-mix(in oklab, var(--ae-accent, oklch(0.55 0.2 255)), var(--ae-text, oklch(0.21 0.02 255)) 18.3%)}.ds-btn-primary:focus-visible{outline:none;box-shadow:0 0 0 2px var(--ae-bg, oklch(0.975 0.003 255)),0 0 0 4px var(--ae-accent, oklch(0.55 0.2 255))}"
+    },
+    {
+      "name": "Pressed Toggle",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Persistent on state: accent tint plus a 2px bottom edge, so colour never works alone.",
+      "html": "<button class=\"ds-btn-on\" aria-pressed=\"true\">Pinned</button>",
+      "css": ".ds-btn-on{display:inline-flex;align-items:center;padding:10px 16px;min-block-size:24px;font:500 1rem/1 inherit;color:var(--ae-accent-ink, oklch(0.45 0.15 255));background:color-mix(in oklch, var(--ae-accent, oklch(0.55 0.2 255)) 11.3%, transparent);border:0;border-radius:var(--ae-radius-full, 0);box-shadow:inset 0 -2px 0 var(--ae-accent, oklch(0.55 0.2 255));cursor:pointer}.ds-btn-on:active{background:color-mix(in oklch, var(--ae-accent, oklch(0.55 0.2 255)) 18.3%, transparent)}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Transparent, accent ink; tints on hover.",
+      "html": "<button class=\"ds-btn-ghost\">Cancel</button>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;padding:10px 16px;min-block-size:24px;font:500 1rem/1 inherit;color:var(--ae-accent-ink, oklch(0.45 0.15 255));background:transparent;border:0;border-radius:var(--ae-radius-full, 0);cursor:pointer}.ds-btn-ghost:hover{background:color-mix(in oklch, var(--ae-accent, oklch(0.55 0.2 255)) 11.3%, transparent)}.ds-btn-ghost:active{background:color-mix(in oklch, var(--ae-accent, oklch(0.55 0.2 255)) 18.3%, transparent)}"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Tinted field with a bottom control-edge rule; focus draws inside out.",
+      "html": "<input class=\"ds-input\" placeholder=\"Search projects\">",
+      "css": ".ds-input{inline-size:100%;padding:10px 16px;font:inherit;color:var(--ae-text, oklch(0.21 0.02 255));background:var(--ae-fill, color-mix(in oklch, oklch(0.21 0.02 255) 7%, transparent));border:0;border-radius:var(--ae-radius-m, 0);box-shadow:inset 0 -1px 0 var(--ae-control-edge, color-mix(in oklch, oklch(0.21 0.02 255) 52%, transparent));transition:background 136ms cubic-bezier(0.2,0,0,1),box-shadow 220ms cubic-bezier(0.2,0,0,1)}.ds-input::placeholder{color:var(--ae-text-muted, oklch(0.48 0.02 255))}.ds-input:hover{background:var(--ae-fill-hover, color-mix(in oklch, oklch(0.21 0.02 255) 11.3%, transparent))}.ds-input:focus-visible{outline:none;box-shadow:inset 0 0 0 1.5px var(--ae-accent, oklch(0.55 0.2 255)),0 0 0 4px color-mix(in oklch, var(--ae-accent, oklch(0.55 0.2 255)) 28%, transparent)}"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Small tinted token with label type.",
+      "html": "<span class=\"ds-chip\">Design</span>",
+      "css": ".ds-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;font-size:0.786rem;font-weight:500;line-height:1.618;color:var(--ae-text, oklch(0.21 0.02 255));background:var(--ae-fill, color-mix(in oklch, oklch(0.21 0.02 255) 7%, transparent));border-radius:var(--ae-radius-full, 0)}"
+    },
+    {
+      "name": "Frosted Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Floating glass over the aurora: frost, Shadow M, specular top edge, no border.",
+      "html": "<div class=\"ds-card\"><h4 style=\"margin:0\">Northlight</h4><p style=\"margin:10px 0 0\">Published two minutes ago.</p></div>",
+      "css": ".ds-card{padding:26px;color:var(--ae-text, oklch(0.21 0.02 255));background:var(--ae-frost-bg, color-mix(in oklch, white 66%, transparent));backdrop-filter:blur(1.618rem) saturate(1.8);border:0;border-radius:var(--ae-radius-l, 0);box-shadow:var(--ae-shadow-m, 0 8px 26px -8px rgb(0 0 0 / 0.1)),inset 0 1px 0 var(--ae-highlight, oklch(1 0 0 / 0.9));transition:box-shadow 220ms cubic-bezier(0.2,0,0,1)}.ds-card:hover{box-shadow:var(--ae-shadow-l, 0 26px 68px -12px rgb(0 0 0 / 0.16)),inset 0 1px 0 var(--ae-highlight, oklch(1 0 0 / 0.9))}"
+    },
+    {
+      "name": "Busy Squares",
+      "kind": "custom",
+      "description": "The signature busy indicator: three φ-proportioned squares pulsing, never a spinning circle.",
+      "html": "<span class=\"ds-busy\" role=\"status\" aria-label=\"Loading\"><i></i><i></i><i></i></span>",
+      "css": ".ds-busy{display:inline-flex;gap:4px}.ds-busy i{inline-size:6px;block-size:6px;background:var(--ae-text, oklch(0.21 0.02 255));animation:ds-p .932s ease-in-out infinite}.ds-busy i:nth-child(1){animation-delay:-.311s}.ds-busy i:nth-child(2){animation-delay:-.155s}@keyframes ds-p{0%,80%,100%{opacity:.25;transform:scale(.75)}40%{opacity:1;transform:scale(1)}}@media (prefers-reduced-motion:reduce){.ds-busy i{animation:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Golden Instrument",
+    "overview": "aequitas is a precision tool. Every measure is read off one scale and none is set by eye: space, type, radius, blur, motion, shadow and tint are all powers of φ (1.618034). Where a value can't be on the scale, it is a deliberate, named exception: hairlines, the 1.5px stroke, the 2px state edge, focus rings, the 24px pointer floor, breakpoints, colour and glyph geometry. The instrument is calm because nothing in it is arbitrary. Its confidence comes from the measurements, not from decoration.\n\nThere are two materials and they never trade places. **Glass** belongs to things that float: cards on the canvas, navigation, menus, popovers, dialogs, toasts and docks. They are frosted over a soft aurora that gives the blur something to catch. **Tint** belongs to things you touch: buttons, inputs and chips are flat, translucent fills of the text colour. They answer the pointer by stepping down a φ ladder of tint, never by moving. Surfaces separate by tone and shadow, never by outline. Corners are square by default.\n\nDensity is medium and the type is quiet. Large type gets lighter and tighter, not heavier, so size carries the weight. The accent is a single user-set hue, Instrument Blue by default, spent on the primary action, focus and \"this one is on\". Ten presets and two custom-property knobs (`--ae-hue`, `--ae-neutral-hue`) retune the entire instrument without breaking a proportion.",
+    "keyCharacteristics": [
+      "One ratio, everything derived. Exceptions are named, never accidental.",
+      "Glass where it floats, flat tint where you click.",
+      "Square by default; the φ curve returns only through the `soft` and `round` presets.",
+      "No outlines on surfaces. Depth comes from frost, shadow and a single specular top edge.",
+      "Controls step down a tint ladder (7%, 7·φ, 7·φ²) and never move.",
+      "OKLCH throughout, light and dark resolved with `light-dark()`."
+    ],
+    "rules": [
+      {
+        "name": "The One Hue Rule",
+        "body": "The accent is a single hue, `--ae-hue`, and the neutrals lean toward `--ae-neutral-hue`. Never hard-code a second brand colour. Retune the knobs instead.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Rule",
+        "body": "A tone used as text uses its `-ink` token. The raw tone is for fills, edges and rings only.",
+        "section": "colors"
+      },
+      {
+        "name": "The Aurora Rule",
+        "body": "Frost needs something to blur. The page canvas carries three soft radial fields derived from the accent (lead hue, +55°, −60°). Glass over a flat colour is just a grey box.",
+        "section": "colors"
+      },
+      {
+        "name": "The Lighter-When-Larger Rule",
+        "body": "Weight falls as size rises (h4 520 → h2 480 → h1 460 → display 420), and tracking tightens with it. Never bold a headline to make it louder. Step it up the scale.",
+        "section": "typography"
+      },
+      {
+        "name": "The Leading Rule",
+        "body": "Body leading is φ itself, headings use φ^¼ (1.128) and display uses φ^⅛ (1.062). No other line-heights.",
+        "section": "typography"
+      },
+      {
+        "name": "The No-Hand-Tuned-Space Rule",
+        "body": "Every gap, padding and margin is a `--ae-space-*` step or a φ multiple of one. A 12px or 20px gap is a bug.",
+        "section": "layout"
+      },
+      {
+        "name": "The No-Outline Rule",
+        "body": "Surfaces separate by tone and shadow, never by border. `border: 0` is the frost default. The only drawn lines are hairline separators inside a component and the control edge on findable controls.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Glass-Only-Floats Rule",
+        "body": "Frost is for layers that float above content. Controls are never glass. The single exception is the range thumb, the one part of a control that floats.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Squares-Throughout Rule",
+        "body": "At default settings nothing is rounded: not buttons, avatars, chips or the busy indicator. Never hard-code a radius. Read `--ae-radius-*` so the presets keep working.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do derive every new value from φ through the existing tokens (`--ae-space-*`, `--ae-text-*`, `--ae-radius-*`, `--ae-duration-*`), or add it to the named exceptions on purpose.",
+      "Do answer the pointer with tone: step `--ae-tint-rest` → `--ae-tint-hover` → `--ae-tint-press`.",
+      "Do mark persistent \"on\" states with the 2px `--ae-edge` in the tone, and never with colour alone.",
+      "Do put frost only on floating layers, and give them the specular top edge.",
+      "Do use `-ink` tokens for coloured text, and keep 4.5:1 for text and 3:1 for control boundaries.",
+      "Do read `--ae-radius-*`, so the `soft` and `round` presets keep working.",
+      "Do keep motion on `--ae-ease` (cubic-bezier(0.2, 0, 0, 1)) and `--ae-ease-spring`. Spring settles with no overshoot. Durations are 220ms, ÷φ or ×φ, with a φ⁻³ stagger."
+    ],
+    "donts": [
+      "Don't draw borders or outlines around surfaces. Separate them by tone and shadow.",
+      "Don't move controls on hover or press (no translate, no scale, no lift).",
+      "Don't hard-code px or rem gaps, radii or font sizes off the φ scale.",
+      "Don't make controls glass, or put frost over a flat canvas with no aurora behind it.",
+      "Don't bold large type. Larger text is lighter and tighter.",
+      "Don't introduce a second accent hue, or hard-code colour where a `--ae-*` token exists.",
+      "Don't use rounded spinners or bouncing easing. Busy states are squares, and motion decelerates without overshoot."
+    ]
+  }
+}
