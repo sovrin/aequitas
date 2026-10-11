@@ -3,7 +3,7 @@ import type { HighlighterCore, ThemeRegistration } from "shiki/core";
 // Shiki with the JavaScript regex engine (no wasm) and only the three grammars the docs use. It
 // loads on first use: prerendered blocks arrive highlighted in the payload, so the client only
 // fetches it when a specimen's code is opened.
-export type Lang = "html" | "css" | "js";
+export type Lang = "html" | "css" | "js" | "sh";
 
 // Colours are CSS variables, set in docs.css off the accent hue, so one theme serves light, dark
 // and every accent.
@@ -74,6 +74,7 @@ const load = () =>
           import("shiki/langs/html.mjs"),
           import("shiki/langs/css.mjs"),
           import("shiki/langs/javascript.mjs"),
+          import("shiki/langs/shellscript.mjs"),
         ],
         engine: createJavaScriptRegexEngine(),
       }),
@@ -82,7 +83,7 @@ const load = () =>
 /** Source to the inner HTML of a <code>: one <span class="line"> per line, joined by newlines. */
 export async function highlight(code: string, lang: Lang): Promise<string> {
   const html = (await load()).codeToHtml(code, {
-    lang: lang === "js" ? "javascript" : lang,
+    lang: lang === "js" ? "javascript" : lang === "sh" ? "shellscript" : lang,
     theme: "aequitas",
   });
   return html.match(/<code>([\s\S]*)<\/code>/)?.[1] ?? "";

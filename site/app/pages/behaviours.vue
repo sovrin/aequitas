@@ -12,13 +12,13 @@ markMatches(list, "term"); // highlight a term in the options of a dialog.palett
 <template>
   <div>
     <DocsPageHeader
-      group="Behaviours"
+      group="JavaScript"
       title="Behaviours"
       lede="Seven kilobytes, gzipped, of TypeScript for what HTML cannot do alone."
     />
     <section class="section stack gap-6" id="behaviours">
       <div class="stack measure">
-        <h2>Behaviours.</h2>
+        <h2>In markup.</h2>
         <p class="text-muted">
           <code>aequitas.js</code> is optional and self-initialising. Everything is driven by
           attributes, and markup that arrives later (an SPA render, a fetched fragment) is enhanced

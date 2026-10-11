@@ -17,6 +17,12 @@
       <NuxtLink to="/showcase/kitchen-sink" class="btn" data-size="s" data-variant="ghost"
         >Kitchen sink</NuxtLink
       >
+      <span
+        class="badge"
+        data-variant="outline"
+        data-tip="Northlight and every name, number and logo here are made up"
+        >Demo data</span
+      >
       <button
         class="btn"
         data-size="s"

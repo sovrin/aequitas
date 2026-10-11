@@ -13,13 +13,165 @@
 }
 .scale-row {
   display: grid;
-  grid-template-columns: 4.5rem minmax(0, 1fr);
+  grid-template-columns: var(--ae-space-7) minmax(0, 1fr);
   align-items: center;
   gap: var(--ae-space-4);
   font-family: var(--ae-font-mono);
   font-size: var(--ae-text-xs);
   color: var(--ae-text-muted);
 }
+/* Proportion's live demo: the space and type scales redeclared from the local unit, so everything
+   inside, components included, reflows as the slider moves. Same formulas as tokens/scale.css. */
+.phi-live {
+  --ae-space-0: round(calc(var(--ae-unit) * pow(var(--ae-phi), -4)), 1px);
+  --ae-space-1: round(calc(var(--ae-unit) * pow(var(--ae-phi), -3)), 1px);
+  --ae-space-2: round(calc(var(--ae-unit) * pow(var(--ae-phi), -2)), 1px);
+  --ae-space-3: round(calc(var(--ae-unit) * pow(var(--ae-phi), -1)), 1px);
+  --ae-space-4: round(var(--ae-unit), 1px);
+  --ae-space-5: round(calc(var(--ae-unit) * var(--ae-phi)), 1px);
+  --ae-space-6: round(calc(var(--ae-unit) * pow(var(--ae-phi), 2)), 1px);
+  --ae-space-7: round(calc(var(--ae-unit) * pow(var(--ae-phi), 3)), 1px);
+  --ae-space-8: round(calc(var(--ae-unit) * pow(var(--ae-phi), 4)), 1px);
+  --ae-text-xs: calc(var(--ae-text-base) * pow(var(--ae-phi), -1));
+  --ae-text-s: calc(var(--ae-text-base) * pow(var(--ae-phi), -0.5));
+  --ae-text-m: var(--ae-text-base);
+  --ae-text-l: calc(var(--ae-text-base) * pow(var(--ae-phi), 0.5));
+  --ae-text-xl: calc(var(--ae-text-base) * var(--ae-phi));
+  --ae-text-2xl: calc(var(--ae-text-base) * pow(var(--ae-phi), 1.5));
+  --ae-text-3xl: calc(var(--ae-text-base) * pow(var(--ae-phi), 2));
+  font-size: var(--ae-text-m);
+}
+
+.phi-unit {
+  max-inline-size: var(--ae-measure);
+
+  & input {
+    flex: 1;
+  }
+
+  & output {
+    min-inline-size: 5ch;
+    font-family: var(--ae-font-mono);
+    font-size: var(--ae-text-s);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* The space steps as squares, bottom-aligned: the brand's geometry, read left to right. */
+.phi-squares {
+  display: flex;
+  align-items: end;
+  gap: var(--ae-space-3);
+  overflow-x: auto;
+  padding-block-end: var(--ae-space-1);
+
+  & figure {
+    display: grid;
+    justify-items: center;
+    gap: var(--ae-space-2);
+    margin: 0;
+  }
+
+  & span {
+    aspect-ratio: 1;
+    background: var(--ae-accent);
+  }
+
+  & figcaption {
+    font-family: var(--ae-font-mono);
+    font-size: var(--ae-text-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--ae-text-muted);
+  }
+}
+
+/* Motion takes the full row, so radius and blur pair up above it instead of leaving it alone. */
+.phi-facets > :last-child {
+  grid-column: 1 / -1;
+}
+
+.phi-radii,
+.phi-blurs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--ae-space-4);
+
+  & figure {
+    display: grid;
+    justify-items: center;
+    gap: var(--ae-space-2);
+    margin: 0;
+  }
+
+  & figcaption {
+    font-family: var(--ae-font-mono);
+    font-size: var(--ae-text-xs);
+    color: var(--ae-text-muted);
+  }
+}
+
+/* The round preset's radius-m, stepped by φ: s, m, l, xl. */
+.phi-radii span {
+  inline-size: var(--ae-space-7);
+  aspect-ratio: 1;
+  border-radius: calc(1.25rem * pow(var(--ae-phi), var(--n)));
+  background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-press), transparent);
+}
+
+/* Glass over stripes of the accent, so each blur radius has something to soften. */
+.phi-blurs {
+  padding: var(--ae-space-3);
+  background: repeating-linear-gradient(
+    90deg,
+    var(--ae-accent) 0 var(--ae-space-2),
+    transparent 0 var(--ae-space-4)
+  );
+
+  & span {
+    display: block;
+    inline-size: var(--ae-space-6);
+    aspect-ratio: 1;
+    background: var(--ae-frost-bg);
+    box-shadow: var(--ae-frost-edge);
+  }
+
+  & figcaption {
+    padding-inline: var(--ae-space-1);
+    background: var(--ae-surface);
+  }
+}
+
+/* Material's tint ladder: each rung is the text colour (and the accent) mixed at that step. */
+.tint-ladder {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ae-space-3);
+}
+
+.tint-rung {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ae-space-1);
+
+  & code {
+    grid-column: 1 / -1;
+    padding: 0;
+    background: none;
+    font-size: var(--ae-text-xs);
+    color: var(--ae-text-muted);
+  }
+}
+
+.tint-step {
+  aspect-ratio: var(--ae-ratio);
+  background: color-mix(in oklch, var(--ae-text) var(--t), transparent);
+
+  &.tint-accent {
+    background: color-mix(in oklch, var(--ae-accent) var(--t), transparent);
+  }
+}
+
 .type-row {
   display: flex;
   align-items: baseline;
@@ -28,7 +180,8 @@
 }
 .type-row code {
   flex: none;
-  inline-size: 4.5rem;
+  inline-size: var(--ae-space-7);
+  white-space: nowrap;
   background: none;
   border: 0;
   box-shadow: none;
@@ -44,15 +197,15 @@
   padding: var(--ae-space-5) var(--ae-gutter) 0;
 }
 
-@media (width >= 72rem) {
+@media (width >= 80rem) {
   .docs-main {
-    grid-template-columns: minmax(0, 1fr) 11rem;
+    grid-template-columns: minmax(0, 1fr) calc(1rem * pow(var(--ae-phi), 5));
   }
 }
 
 .docs-main > article {
   min-inline-size: 0;
-  max-inline-size: 64rem;
+  max-inline-size: var(--ae-container);
   /* View transitions run on the article alone (see plugins/aequitas.client.ts); the sidebar is
      outside it and never animates. */
   view-transition-name: article;
@@ -70,7 +223,7 @@
   display: none;
 }
 
-@media (width >= 72rem) {
+@media (width >= 80rem) {
   .docs-main .toc {
     display: block;
     /* Built from the rendered page after mount; its column is reserved, so it only fades in. */
@@ -82,22 +235,26 @@
   }
 }
 
+.overview a.card {
+  color: inherit;
+  text-decoration: none;
+}
+
 .overview .card h4 {
   margin-block-end: var(--ae-space-1);
 }
 
-/* Live previews of full-height layouts */
+/* Live previews of full-height layouts: a sunken well, set apart by tone, not a ring. */
 .preview {
   position: relative;
   background: var(--ae-bg-sunken);
-  box-shadow: inset 0 0 0 1px var(--ae-border);
   overflow: hidden;
 }
 
 .preview .shell,
 .preview .cover,
 .preview .panes {
-  min-block-size: 15rem;
+  min-block-size: calc(1rem * pow(var(--ae-phi), 5.5));
 }
 
 .preview .sidebar,
@@ -115,13 +272,12 @@
 .ph {
   display: grid;
   place-items: center;
-  min-block-size: 3rem;
+  min-block-size: var(--ae-space-6);
   padding: var(--ae-space-3);
   font-family: var(--ae-font-mono);
   font-size: var(--ae-text-xs);
   color: var(--ae-text-muted);
-  background: color-mix(in oklch, var(--ae-accent) 10%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--ae-accent) 30%, transparent);
+  background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
 }
 
 .preview main.p-5 > .ph {
@@ -203,7 +359,7 @@
 
 .preview .master-detail,
 .preview .page {
-  min-block-size: 14rem;
+  min-block-size: calc(1rem * pow(var(--ae-phi), 5.5));
 }
 
 /* ---- Docs app design ---- */
@@ -225,11 +381,12 @@
   flex: none;
   /* Inline beside text (the footer), centred on the line rather than sitting on the baseline. */
   vertical-align: middle;
-  inline-size: 1.5em;
-  block-size: 1.5em;
+  inline-size: calc(1em * var(--ae-phi));
+  block-size: calc(1em * var(--ae-phi));
   /* The favicon's tile: lighter and cooler at the top, deeper at the bottom (the same offsets as
      plugins/favicon.client.ts), but from the theme's accent, so it lightens in dark mode and the
-     glyph turns to the accent's contrast ink with it. Rounded like the banner's. */
+     glyph turns to the accent's contrast ink with it. Rounded like the banner's: the mark's own
+     geometry, one of the named exceptions, so it ignores the shape presets. */
   border-radius: 6%;
   color: var(--ae-accent-contrast);
   background: var(--ae-accent);
@@ -264,15 +421,15 @@
 
 .appearance-swatch {
   display: inline-block;
-  inline-size: 0.9em;
-  block-size: 0.9em;
+  inline-size: calc(1em * pow(var(--ae-phi), -0.25));
+  block-size: calc(1em * pow(var(--ae-phi), -0.25));
   background: var(--ae-accent);
-  box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.1);
+  box-shadow: inset 0 0 0 1px var(--ae-border);
 }
 
 .popover.appearance {
   /* vw, not %: against the anchored area it would shrink to fit instead of flipping to the open side. */
-  inline-size: min(100vw - 2 * var(--ae-gutter), 20rem);
+  inline-size: min(100vw - 2 * var(--ae-gutter), calc(1rem * pow(var(--ae-phi), 6.25)));
   max-inline-size: none;
 }
 
@@ -294,7 +451,7 @@
     margin: 0;
     font-size: var(--ae-text-xs);
     font-weight: 560;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--ae-text-muted);
   }
@@ -328,7 +485,7 @@
   overflow: hidden;
   border-radius: var(--ae-radius-m);
   background: var(--ae-fill);
-  box-shadow: 0 0 0 1px var(--ae-border-strong);
+  box-shadow: var(--ae-shadow-s);
   outline: 2px solid transparent;
   outline-offset: 2px;
   transition:
@@ -452,26 +609,27 @@
   }
 }
 
-/* Density: three list rows, packed by the preset. */
+/* Density: three list rows, packed by the preset's unit (0.8, 1, 1.2) on a φ⁻³ step. */
 .density-preview {
-  --gap: 4px;
+  --d: 1;
+  --gap: calc(1rem * pow(var(--ae-phi), -3) * var(--d));
   align-content: center;
   gap: var(--gap);
   padding-inline: 20%;
 
   &[data-value="compact"] {
-    --gap: 2px;
+    --d: 0.8;
   }
 
   &[data-value="spacious"] {
-    --gap: 7px;
+    --d: 1.2;
   }
 
   & > span {
     display: grid;
     grid-template-columns: 4px 1fr;
     align-items: center;
-    gap: calc(var(--gap) + 2px);
+    gap: calc(var(--gap) * var(--ae-phi));
   }
 
   & > span > span {
@@ -487,19 +645,20 @@
   }
 }
 
-/* Shape: a card and its button, cornered by the preset (the button goes pill once corners soften). */
+/* Shape: a card and its button, cornered by the preset at φ⁻² scale (the button goes pill once
+   corners soften). */
 .shape-preview {
   --r: 0;
   --pill: 0;
   place-items: center;
 
   &[data-value="soft"] {
-    --r: 5px;
+    --r: calc(0.75rem / pow(var(--ae-phi), 2));
     --pill: 999px;
   }
 
   &[data-value="round"] {
-    --r: 9px;
+    --r: calc(1.25rem / pow(var(--ae-phi), 2));
     --pill: 999px;
   }
 
@@ -547,7 +706,7 @@
     aspect-ratio: 1;
     border-radius: var(--ae-radius-s);
     background: var(--swatch);
-    box-shadow: inset 0 0 0 1px oklch(0 0 0 / 0.1);
+    box-shadow: inset 0 0 0 1px var(--ae-border);
     outline: 2px solid transparent;
     outline-offset: 2px;
     cursor: pointer;
@@ -606,7 +765,7 @@
 }
 
 .hero-split .display {
-  max-inline-size: 11ch;
+  max-inline-size: calc(1ch * pow(var(--ae-phi), 5));
 }
 
 /* φ tiles: 34×21 grid, every square a live component */
@@ -639,13 +798,14 @@
   box-shadow: var(--ae-shadow-m);
 }
 
-@container (inline-size < 4.5rem) {
+/* Queries can't read tokens: φ³ and φ⁵ rem, written out. */
+@container (inline-size < 4.236rem) {
   .phi .tile > * {
     display: none;
   }
 }
 
-@container (inline-size < 12rem) {
+@container (inline-size < 11.09rem) {
   .phi .tile .window,
   .phi .tile .stat {
     display: none;
@@ -666,7 +826,7 @@
 }
 
 .entry-key {
-  inline-size: 14rem;
+  inline-size: calc(1rem * pow(var(--ae-phi), 5.5));
   white-space: nowrap;
 }
 
@@ -675,7 +835,7 @@
 }
 
 .entry-values {
-  inline-size: 12rem;
+  inline-size: calc(1rem * pow(var(--ae-phi), 5));
 }
 
 .entry-values > code {
@@ -764,7 +924,7 @@
 }
 
 .specimen-code > pre {
-  max-block-size: 32rem;
+  max-block-size: calc(1rem * pow(var(--ae-phi), 7));
   overflow: auto;
 }
 
@@ -791,8 +951,82 @@
 }
 
 .docs-code > pre {
-  line-height: 1.6;
+  line-height: var(--ae-leading-normal);
   tab-size: 2;
+}
+
+/* Index pages: a group's name on the narrow side of a golden split, its pages on the wide side. */
+.docs-index-jump {
+  padding-block-end: var(--ae-space-4);
+
+  & a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  & a:hover {
+    background: var(--ae-fill-hover);
+  }
+}
+
+.docs-index-group > h2 {
+  position: sticky;
+  inset-block-start: calc(var(--header, 0px) + var(--ae-space-5));
+  align-self: start;
+  display: flex;
+  align-items: center;
+  gap: var(--ae-space-3);
+  font-size: var(--ae-text-xl);
+
+  & > .icon {
+    color: var(--ae-accent);
+  }
+
+  & > .docs-nav-count {
+    margin-inline-start: 0;
+  }
+}
+
+.docs-index-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(calc(1rem * pow(var(--ae-phi), 5.5)), 100%), 1fr));
+  gap: var(--ae-space-1);
+  padding: 0;
+  margin: 0;
+
+  & a {
+    display: grid;
+    gap: var(--ae-space-1);
+    block-size: 100%;
+    padding: var(--ae-space-3);
+    color: var(--ae-text);
+    text-decoration: none;
+    transition: background-color var(--ae-duration) var(--ae-ease);
+
+    &:hover {
+      background: var(--ae-fill-hover);
+      transition-duration: var(--ae-duration-fast);
+    }
+
+    &:active {
+      background: var(--ae-fill-active);
+      transition-duration: 0s;
+    }
+  }
+
+  & b {
+    font-weight: 500;
+  }
+
+  & span {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: var(--ae-text-s);
+    line-height: var(--ae-leading-normal);
+    color: var(--ae-text-muted);
+  }
 }
 
 /* Prev / next */
@@ -814,6 +1048,10 @@
   margin: 0;
 }
 
+.prevnext [rel="next"] {
+  text-align: end;
+}
+
 /* Quieter section rhythm inside pages */
 .docs-main article > div > .section:first-of-type {
   padding-block-start: var(--ae-space-4);
@@ -826,6 +1064,7 @@
   inset-inline: 0;
   z-index: 40;
   display: flex;
+  align-items: center;
   gap: var(--ae-space-1);
   inline-size: fit-content;
   max-inline-size: calc(100% - 2 * var(--ae-gutter));
@@ -882,14 +1121,14 @@
 }
 
 .brand[data-size="l"] .brand-mark {
-  inline-size: 2.25rem;
-  block-size: 2.25rem;
+  inline-size: calc(1rem * pow(var(--ae-phi), 1.5));
+  block-size: calc(1rem * pow(var(--ae-phi), 1.5));
   box-shadow: var(--ae-shadow-s);
 }
 
 .brand-text {
   display: grid;
-  line-height: 1.15;
+  line-height: var(--ae-leading-tight);
 }
 
 .brand-text b {
@@ -921,22 +1160,15 @@
   box-shadow: inset 0 1px 0 var(--ae-border);
 }
 
-.docs-sidebar-foot a {
+.docs-sidebar-foot a:first-of-type {
   margin-inline-start: auto;
 }
 
 .docs-credit {
-  display: flex;
-  align-items: center;
-  gap: var(--ae-space-1);
   margin-block-start: var(--ae-space-6);
   padding-block-start: var(--ae-space-4);
   font-size: var(--ae-text-xs);
   box-shadow: inset 0 1px 0 var(--ae-border);
-
-  & .icon {
-    color: var(--ae-accent);
-  }
 }
 
 .docs-nav {
@@ -959,7 +1191,7 @@
   padding: var(--ae-space-2) var(--ae-space-3) var(--ae-space-1);
   font-size: var(--ae-text-xs);
   font-weight: 560;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ae-text-muted);
 }
@@ -974,7 +1206,7 @@
 }
 
 .docs-nav a:hover {
-  background: var(--ae-fill);
+  background: var(--ae-fill-hover);
 }
 
 .docs-nav :is(a, summary):active {
@@ -982,8 +1214,8 @@
 }
 
 .docs-nav a[aria-current="page"] {
-  color: var(--ae-accent);
-  background: color-mix(in oklch, var(--ae-accent) 14%, transparent);
+  color: var(--ae-accent-ink);
+  background: color-mix(in oklch, var(--ae-accent) var(--ae-tint-hover), transparent);
   box-shadow:
     inset var(--ae-edge-x) 0 0 var(--ae-accent),
     var(--ae-focus, 0 0 #0000);
@@ -1009,7 +1241,7 @@
 }
 
 .docs-nav summary:hover {
-  background: var(--ae-fill);
+  background: var(--ae-fill-hover);
   transition-duration: var(--ae-duration-fast);
 }
 
@@ -1036,8 +1268,8 @@
   inline-size: 0.35em;
   block-size: 0.35em;
   margin-inline-start: var(--ae-space-1);
-  border-block-end: 1.5px solid var(--ae-text-muted);
-  border-inline-end: 1.5px solid var(--ae-text-muted);
+  border-block-end: var(--ae-stroke) solid var(--ae-text-muted);
+  border-inline-end: var(--ae-stroke) solid var(--ae-text-muted);
   rotate: -45deg;
   opacity: 0.7;
   transition: rotate var(--ae-duration) var(--ae-ease);
@@ -1066,6 +1298,7 @@
 .docs-nav-group {
   display: grid;
   gap: 1px;
+  /* Under the group icon's centre: the summary's padding plus half the icon. */
   margin-inline-start: calc(var(--ae-space-3) + 0.5em);
   padding-inline-start: var(--ae-space-2);
   margin-block: var(--ae-space-1);
@@ -1073,7 +1306,7 @@
 }
 
 .docs-nav-group a {
-  padding-block: calc(var(--ae-space-2) * 0.8);
+  padding-block: var(--ae-space-1);
   font-weight: 400;
 }
 

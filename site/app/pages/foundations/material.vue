@@ -1,3 +1,11 @@
+<script setup lang="ts">
+const tints = [
+  { name: "rest", value: "7%" },
+  { name: "hover", value: "11.3%" },
+  { name: "press", value: "18.3%" },
+];
+</script>
+
 <template>
   <div>
     <DocsPageHeader
@@ -47,6 +55,27 @@
           <h6>Solid</h6>
           <p class="text-muted text-s"><code>data-solid</code>, or any control.</p>
         </div>
+      </div>
+    </section>
+    <section class="section stack gap-5" id="tint">
+      <h2>Tint.</h2>
+      <p class="text-muted measure">
+        Controls answer the pointer with tone, never movement. Each state is one step down a φ
+        ladder: rest 7%, hover 7·φ, press 7·φ². Tinted and solid controls mix their tone by the same
+        steps; hover and press the buttons to walk it.
+      </p>
+      <div class="tint-ladder">
+        <div v-for="t in tints" :key="t.name" class="tint-rung">
+          <span class="tint-step" :style="{ '--t': `var(--ae-tint-${t.name})` }"></span>
+          <span class="tint-step tint-accent" :style="{ '--t': `var(--ae-tint-${t.name})` }"></span>
+          <code>{{ t.name }} · {{ t.value }}</code>
+        </div>
+      </div>
+      <div class="cluster">
+        <button class="btn">Tinted</button>
+        <button class="btn" data-variant="ghost">Ghost</button>
+        <button class="btn" aria-pressed="true">Pressed</button>
+        <button class="btn" data-variant="primary">Primary</button>
       </div>
     </section>
     <section class="section stack gap-5" id="depth">

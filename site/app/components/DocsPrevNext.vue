@@ -17,14 +17,7 @@ const next = computed(() =>
       <b>{{ prev.label }}</b>
     </NuxtLink>
     <span v-else></span>
-    <NuxtLink
-      v-if="next"
-      :to="next.to"
-      class="card"
-      data-interactive
-      rel="next"
-      style="text-align: end"
-    >
+    <NuxtLink v-if="next" :to="next.to" class="card" data-interactive rel="next">
       <span class="caption">Next <i class="icon" data-icon="arrow-right" data-size="s"></i></span>
       <b>{{ next.label }}</b>
     </NuxtLink>

@@ -19,10 +19,17 @@ const showcases: Link[] = [
 ];
 
 export const sections: Section[] = [
-  { title: "Start", links: [{ to: "/", label: "Overview" }] },
+  {
+    title: "Start",
+    links: [
+      { to: "/", label: "Overview" },
+      { to: "/start", label: "Install" },
+    ],
+  },
   { title: "Foundations", links: foundations },
   {
     title: "Layouts",
+    links: [{ to: "/layouts", label: "All layouts" }],
     groups: byGroup(layoutEntries, layoutGroups).map((g) => ({
       group: g.group,
       links: g.entries.map((e) => ({ to: `/layouts/${e.slug}`, label: e.title })),
@@ -30,6 +37,7 @@ export const sections: Section[] = [
   },
   {
     title: "Components",
+    links: [{ to: "/components", label: "All components" }],
     groups: byGroup(components, componentGroups).map((g) => ({
       group: g.group,
       links: g.entries.map((e) => ({ to: `/components/${e.slug}`, label: e.title })),
@@ -49,7 +57,6 @@ export const sections: Section[] = [
 
 /** Icon per group, from the framework's own set. */
 export const groupIcons: Record<string, string> = {
-  Shells: "layout",
   Pages: "grid",
   Application: "sliders",
   Actions: "arrow-right",
@@ -66,9 +73,12 @@ export const groupIcons: Record<string, string> = {
   Conversation: "mail",
 };
 
+/** The anchor of a group on its index page, e.g. "Data display" → "data-display". */
+export const groupId = (group: string) => group.toLowerCase().replace(/\s+/g, "-");
+
 /** Every page in reading order, for prev/next. */
 export const pages: Link[] = sections
-  .flatMap((s) => s.links ?? s.groups!.flatMap((g) => g.links))
+  .flatMap((s) => [...(s.links ?? []), ...(s.groups ?? []).flatMap((g) => g.links)])
   .filter((l) => !l.to.includes("#"));
 
 /** The group a path belongs to, if any. */

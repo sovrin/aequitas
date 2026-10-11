@@ -9,7 +9,7 @@ export const layouts: Entry[] = [
   {
     slug: "shell",
     title: "Shell",
-    group: "Shells",
+    group: "Application",
     lede: "One .shell, seven attributes. The sidebar is a container: narrow it and it becomes a rail by itself; leave it out and its column goes too.",
     owns: [".shell", ".main", ".inspector"],
     anatomy: [

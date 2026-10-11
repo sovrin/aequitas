@@ -3,6 +3,7 @@ import manifest from "@aequitas/manifest.json";
 import { findComponent, findLayout } from "~/catalog";
 import { apiRows, owned, type Manifest } from "~/catalog/api";
 import type { Entry } from "~/catalog";
+import { groupId } from "~/utils/nav";
 const props = defineProps<{ entry: Entry; base: "components" | "layouts" }>();
 const related = computed(
   () =>
@@ -24,7 +25,12 @@ const selectors = computed(() => owned(props.entry));
 
 <template>
   <div>
-    <DocsPageHeader :group="entry.group" :title="entry.title" :lede="entry.lede">
+    <DocsPageHeader
+      :group="entry.group"
+      :group-to="`/${base}#${groupId(entry.group)}`"
+      :title="entry.title"
+      :lede="entry.lede"
+    >
       <div class="entry-meta">
         <code v-for="s in selectors" :key="s">{{ s }}</code>
         <NuxtLink
