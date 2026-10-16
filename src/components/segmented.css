@@ -1,22 +1,35 @@
 @layer ae.components {
-  /* <div class="segmented"><label><input type="radio" name="x"><span>One</span></label>…</div> */
+  /* <div class="segmented"><label><input type="radio" name="x"><span>One</span></label>…</div>
+     One joined control, like .btn-group: flat tint segments with hairlines between, rounded only
+     at its outer ends. The checked segment is "on" exactly as a pressed button is. */
   .segmented {
     display: inline-flex;
-    padding: var(--ae-space-1);
-    gap: var(--ae-space-1);
     border-radius: var(--ae-radius-full);
-    background: var(--ae-fill);
 
-    & label {
+    /* As specific as the form rule that makes radio labels inline-flex, and later, so it wins. */
+    & > label:has(> input) {
       position: relative;
       display: grid;
+      border-radius: inherit;
       cursor: pointer;
+    }
+
+    & > label:not(:first-child) {
+      border-start-start-radius: 0;
+      border-end-start-radius: 0;
+    }
+
+    & > label:not(:last-child) {
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
     }
 
     & input {
       appearance: none;
       position: absolute;
       inset: 0;
+      inline-size: auto;
+      block-size: auto;
       margin: 0;
       border-radius: inherit;
       background: none;
@@ -29,65 +42,55 @@
       }
     }
 
+    /* Sized like .btn: inline padding = block × φ, so the two sit level in a row. Positioned so
+       it paints above the input, whose forced-colours fill would otherwise cover the label. */
     & span {
-      padding: var(--ae-space-2) var(--ae-space-4);
-      font-size: var(--ae-text-s);
+      position: relative;
+      padding: var(--ae-space-3) round(calc(var(--ae-space-3) * var(--ae-phi)), 1px);
+      font-size: var(--ae-text-m);
       font-weight: 500;
-      color: var(--ae-text-muted);
-      border-radius: var(--ae-radius-full);
+      line-height: 1;
+      white-space: nowrap;
+      color: var(--ae-text);
+      background: var(--ae-fill);
+      border-radius: inherit;
+      /* Separator, state edge, focus ring. */
+      box-shadow: var(--_sep, 0 0 #0000), var(--_edge, 0 0 #0000), var(--ae-focus, 0 0 #0000);
       transition:
         background var(--ae-duration) var(--ae-ease),
         color var(--ae-duration) var(--ae-ease);
       pointer-events: none;
     }
 
-    & label:has(:checked) span {
-      color: var(--ae-text);
+    & > label + label span {
+      --_sep: inset var(--ae-hairline-x) 0 0 var(--ae-border);
     }
 
-    /* Without anchor positioning the pill sits on the checked segment and just appears. */
-    @supports not (anchor-scope: all) {
-      & label:has(:checked) span {
-        background: var(--ae-surface);
-        box-shadow:
-          var(--ae-shadow-s),
-          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone);
-      }
+    & > label:hover span {
+      background: var(--ae-fill-hover);
     }
 
-    /* With it, one shared pill slides to whichever segment is checked. */
-    @supports (anchor-scope: all) {
-      position: relative;
-      anchor-scope: --ae-segment;
-
-      &::before {
-        content: "";
-        position: absolute;
-        position-anchor: --ae-segment;
-        inset: anchor(top) anchor(right) anchor(bottom) anchor(left);
-        border-radius: var(--ae-radius-full);
-        background: var(--ae-surface);
-        /* Like every persistent "on": the pill also carries the 2px accent edge. */
-        box-shadow:
-          var(--ae-shadow-s),
-          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone);
-        transition: inset var(--ae-duration) var(--ae-ease);
-      }
-
-      &:not(:has(:checked))::before {
-        display: none;
-      }
-
-      & label:has(:checked) {
-        anchor-name: --ae-segment;
-      }
+    & > label:active span {
+      background: var(--ae-fill-active);
     }
 
-    & label:has(:focus-visible) span {
-      box-shadow: var(--ae-ring);
+    /* On: tinted, and an edge along the bottom so it reads without colour. */
+    & > label:has(:checked) span {
+      --_edge: inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone);
+      color: var(--ae-tone-ink);
+      background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
     }
 
-    & label:has(:disabled) {
+    & > label:has(:checked):active span {
+      background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-press), transparent);
+    }
+
+    /* The input takes focus; its segment draws the ring. */
+    & > label:has(:focus-visible) span {
+      --ae-focus: var(--ae-ring);
+    }
+
+    & > label:has(:disabled) {
       opacity: 0.4;
       pointer-events: none;
     }

@@ -162,15 +162,18 @@ export const selection: Entry[] = [
     slug: "segmented",
     title: "Segmented control",
     group: "Selection",
-    lede: "Radio inputs in a tinted track; the chosen segment lifts onto a surface.",
+    lede: "Radio inputs joined into one bar, like a button group; the chosen segment is on exactly as a pressed button is.",
     owns: [".segmented"],
     anatomy: [
-      [".segmented", 'The tinted track. Give it `role="radiogroup"` and an `aria-label`.'],
+      [
+        ".segmented",
+        'The bar: rounded only at its outer ends, hairlines between segments. Give it `role="radiogroup"` and an `aria-label`.',
+      ],
       ["> label", "One per segment."],
       ["label > input[type=radio]", "Covers the segment, invisible. All inputs share a `name`."],
       [
         "label > span",
-        "The segment text. With anchor positioning, one shared surface slides under the checked segment; without it, the checked span gets the surface.",
+        "The segment: a flat tint sized like `.btn`. Checked, it takes the tone tint, tone ink and the 2px edge along its bottom.",
       ],
     ],
     demos: [
@@ -198,7 +201,7 @@ export const selection: Entry[] = [
       ],
       [
         "checked",
-        "On one input: the segment that starts selected. With none checked, no surface is drawn.",
+        "On one input: the segment that starts selected. With none checked, no segment is on.",
       ],
     ],
     keys: [
@@ -209,7 +212,7 @@ export const selection: Entry[] = [
       'It is a native radio group, so screen readers announce "Week, radio button, 2 of 3" without extra markup.',
       '`role="radiogroup"` with an `aria-label` names the group; the radios already group by `name`.',
       "Focus draws the ring on the segment's span, not on the hidden input.",
-      "The slide is turned off under reduced motion.",
+      "The checked segment never relies on colour alone: it also carries the 2px edge. In forced colours it takes the system highlight.",
     ],
     related: ["radio", "tabs", "button-group"],
     keywords: "pill toggle group",
