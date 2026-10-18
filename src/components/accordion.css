@@ -1,7 +1,7 @@
 @layer ae.components {
-  /* <details class="accordion"><summary>…</summary>…</details>. Animates via interpolate-size. */
+  /* <details class="accordion"><summary>…</summary>…</details>. Animates via interpolate-size.
+     Always square: it has no fill, only hairlines between items, which a corner would bend. */
   .accordion {
-    border-radius: var(--ae-radius-m);
     & > summary {
       display: flex;
       align-items: center;
