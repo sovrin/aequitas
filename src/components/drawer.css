@@ -79,6 +79,9 @@
     inline-size: min(100% - 2 * var(--ae-gutter), calc(1rem * pow(var(--ae-phi), 8)));
     margin-block-start: 12dvh;
     padding: 0;
+    /* One step tighter than a dialog's corner: the header and footer run to the edges, and the
+       larger curve would clip the footer's first key under the round preset. */
+    border-radius: var(--ae-radius-l);
     overflow: hidden;
 
     /* Summoned from the keyboard dozens of times a day: it never moves, only a quick fade. */
@@ -97,9 +100,13 @@
       }
     }
 
+    /* The palette's header, not a row control: it keeps its own padded height, and square corners
+       so the divider under it runs straight to the dialog's edges at every radius. */
     & > .input {
+      block-size: auto;
       padding: var(--ae-space-4) var(--_inset);
       font-size: var(--ae-text-l);
+      border-radius: 0;
       background: none;
       box-shadow: inset 0 -1px 0 var(--ae-border);
 
