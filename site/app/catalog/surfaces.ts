@@ -140,12 +140,19 @@ export const surfaces: Entry[] = [
     lede: "An inset grouped list. Rows can be links or buttons; group headers stick while their group scrolls.",
     owns: [".list"],
     anatomy: [
-      [".list", "Frosted container with a medium shadow. Rows are its direct children."],
+      [
+        ".list",
+        "Frosted container with a medium shadow, its corner one step tighter than a card's. Rows are its direct children, or a group's.",
+      ],
       ["> a / > button", "Interactive row: hover and press fill, and a chevron drawn at the end."],
       ["> div", "Static row: same layout, no hover and no chevron."],
       [
+        '> [role="group"]',
+        "Optional: an `<h6>` header and its rows. Its header sticks only within it, so the next group's header pushes it away. Label it with `aria-labelledby` pointing at the header.",
+      ],
+      [
         "> h6",
-        "Optional group header between rows. Sticks to the top while its group scrolls, when the list has a height and `overflow-y: auto`.",
+        "Group header, first in its group (or between flat rows). Sticks to the top while its group scrolls, when the list has a height and `overflow-y: auto`.",
       ],
     ],
     demos: [
@@ -160,13 +167,17 @@ export const surfaces: Entry[] = [
       {
         title: "Group headers and handles",
         html: `<div class="list" style="max-inline-size: 24rem; max-block-size: 11rem; overflow-y: auto">
-  <h6>Today</h6>
-  <div><span class="handle" aria-hidden="true"></span> Review glass thickness <span class="end caption">09:41</span></div>
-  <div><span class="handle" aria-hidden="true"></span> Ship presets <span class="end caption">11:00</span></div>
-  <h6>Tomorrow</h6>
-  <div><span class="handle" aria-hidden="true"></span> Docs: layouts</div>
-  <div><span class="handle" aria-hidden="true"></span> RTL audit</div>
-  <div><span class="handle" aria-hidden="true"></span> Icon set</div>
+  <div role="group" aria-labelledby="g-today">
+    <h6 id="g-today">Today</h6>
+    <div><span class="handle" aria-hidden="true"></span> Review glass thickness <span class="end caption">09:41</span></div>
+    <div><span class="handle" aria-hidden="true"></span> Ship presets <span class="end caption">11:00</span></div>
+  </div>
+  <div role="group" aria-labelledby="g-tomorrow">
+    <h6 id="g-tomorrow">Tomorrow</h6>
+    <div><span class="handle" aria-hidden="true"></span> Docs: layouts</div>
+    <div><span class="handle" aria-hidden="true"></span> RTL audit</div>
+    <div><span class="handle" aria-hidden="true"></span> Icon set</div>
+  </div>
 </div>`,
       },
     ],

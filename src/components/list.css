@@ -1,12 +1,24 @@
 @layer ae.components {
-  /* Inset grouped list. Rows may be <a>, <button> or plain <div>. */
+  /* Inset grouped list. Rows may be <a>, <button> or plain <div>, as direct children or inside a
+     <div role="group"> that opens with its <h6> header. */
   .list {
     display: grid;
+    /* Rows run to the list's edges: its corner is one step tighter than a card's, so the round
+       preset rounds a list without turning a short one into a pill. */
+    border-radius: var(--ae-radius-m);
     /* Keep a focused row clear of the sticky group header. */
     scroll-padding-block-start: 2lh;
     box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
 
-    & > * {
+    /* A group is only a box for its header to stick within, so the next group's header pushes
+       it away instead of sliding over it. */
+    & > [role="group"] {
+      display: grid;
+      border-radius: inherit;
+    }
+
+    & > :not([role="group"]),
+    & > [role="group"] > * {
       display: flex;
       align-items: center;
       gap: var(--ae-space-3);
@@ -20,17 +32,20 @@
     }
 
     /* The first and last rows follow the list's corners, so their tint never pokes past them. */
-    & > :first-child {
+    & > :first-child,
+    & > [role="group"]:first-child > :first-child {
       border-start-start-radius: inherit;
       border-start-end-radius: inherit;
     }
 
-    & > :last-child {
+    & > :last-child,
+    & > [role="group"]:last-child > :last-child {
       border-end-start-radius: inherit;
       border-end-end-radius: inherit;
     }
 
-    & > * + * {
+    & > :not([role="group"]) + :not([role="group"]),
+    & > [role="group"] > * + * {
       box-shadow:
         inset 0 1px 0 var(--ae-border),
         var(--ae-focus, 0 0 #0000);
@@ -38,7 +53,8 @@
 
     /* Current row (master-detail): accent ink and tint, and the accent edge on its inline start,
        as in the sidebar and tree. */
-    & > [aria-current]:not([aria-current="false"]) {
+    & > [aria-current]:not([aria-current="false"]),
+    & > [role="group"] > [aria-current]:not([aria-current="false"]) {
       color: var(--ae-tone-ink);
       background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
       box-shadow:
@@ -46,15 +62,17 @@
         var(--ae-focus, 0 0 #0000);
     }
 
-    & > * + [aria-current]:not([aria-current="false"]) {
+    & > * + [aria-current]:not([aria-current="false"]),
+    & > [role="group"] > * + [aria-current]:not([aria-current="false"]) {
       box-shadow:
         inset var(--ae-edge-x) 0 0 var(--ae-tone),
         inset 0 1px 0 var(--ae-border),
         var(--ae-focus, 0 0 #0000);
     }
 
-    /* Group header: <h6>Today</h6> between rows; sticks while its group scrolls. */
-    & > h6 {
+    /* Group header: <h6>Today</h6> before its rows; sticks while its group scrolls. */
+    & > h6,
+    & > [role="group"] > h6 {
       position: sticky;
       inset-block-start: 0;
       z-index: 1;
@@ -67,7 +85,8 @@
       }
     }
 
-    & > :is(a, button) {
+    & > :is(a, button),
+    & > [role="group"] > :is(a, button) {
       cursor: pointer;
 
       &:hover {
