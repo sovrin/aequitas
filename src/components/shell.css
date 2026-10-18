@@ -295,7 +295,9 @@
       display: flex;
       align-items: center;
       gap: var(--ae-space-3);
-      padding: var(--ae-space-2) var(--ae-space-3);
+      /* A nav row is a small control, level with a menu row. */
+      min-block-size: var(--ae-control-size-s);
+      padding: 0 var(--ae-space-3);
       font-size: var(--ae-text-s);
       font-weight: 500;
       color: var(--ae-text);
@@ -460,7 +462,7 @@
 
     /* Bare until touched; hover, press and "on" come from .btn itself. */
     & > .btn {
-      --_py: var(--ae-space-2);
+      --ae-control-size: var(--ae-control-size-s);
 
       &:not(:hover, :active, [aria-pressed="true"]) {
         background: none;

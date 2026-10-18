@@ -26,7 +26,7 @@ useHead({ title: "Settings · showcase · aequitas" });
         <h6>Appearance</h6>
         <div class="setting">
           <div><b>Theme</b><small>Follows the system unless you choose.</small></div>
-          <div class="segmented" role="radiogroup">
+          <div class="segmented" role="radiogroup" data-size="s">
             <label><input type="radio" name="th" data-theme-set="light" /><span>Light</span></label
             ><label
               ><input type="radio" name="th" data-theme-set="auto" checked /><span
@@ -60,14 +60,14 @@ useHead({ title: "Settings · showcase · aequitas" });
         </div>
         <div class="setting">
           <div><b>Default density</b><small>Compact suits data views.</small></div>
-          <div class="segmented" role="radiogroup">
+          <div class="segmented" role="radiogroup" data-size="s">
             <label><input type="radio" name="dn" checked /><span>Comfortable</span></label
             ><label><input type="radio" name="dn" /><span>Compact</span></label>
           </div>
         </div>
         <div class="setting">
           <div><b>Seats</b><small>3 of 5 used.</small></div>
-          <div class="number">
+          <div class="number" data-size="s">
             <button type="button" aria-label="Decrease" data-step="-1">−</button
             ><input type="number" value="5" min="1" aria-label="Seats" /><button
               type="button"

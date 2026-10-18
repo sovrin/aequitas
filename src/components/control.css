@@ -1,0 +1,21 @@
+@layer ae.components {
+  /* Every control that sits in a row reads two tokens: --ae-control-size for its height and
+     --ae-control-text for its type. data-size steps both together, on the control itself or on
+     a group that holds one, so a small segmented control, stepper or field group is small in
+     every respect, not only in height. */
+  :where(.btn, .input, .select, .segmented, .number, .input-group, .tag-input) {
+    font-size: var(--ae-control-text);
+  }
+
+  :is(.btn, .input, .segmented, .number, .input-group, .tag-input)[data-size="s"],
+  :is(.input-group, .select):has(> .input[data-size="s"]) {
+    --ae-control-size: var(--ae-control-size-s);
+    --ae-control-text: var(--ae-text-s);
+  }
+
+  :is(.btn, .input, .segmented, .number, .input-group, .tag-input)[data-size="l"],
+  :is(.input-group, .select):has(> .input[data-size="l"]) {
+    --ae-control-size: var(--ae-control-size-l);
+    --ae-control-text: var(--ae-text-l);
+  }
+}

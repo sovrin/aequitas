@@ -48,7 +48,9 @@
       align-items: center;
       gap: var(--ae-space-3);
       inline-size: 100%;
-      padding: var(--ae-space-2) var(--ae-space-3);
+      /* Rows of a menu are small controls: the height of the toolbar button that opens them. */
+      min-block-size: var(--ae-control-size-s);
+      padding: 0 var(--ae-space-3);
       text-align: start;
       text-decoration: none;
       color: var(--ae-text);

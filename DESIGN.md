@@ -81,8 +81,8 @@ components:
     backgroundColor: "{colors.tint-rest}"
     textColor: "{colors.graphite-ink}"
     rounded: "{rounded.square}"
-    padding: "10px 16px"
-    height: "24px"
+    padding: "0 16px"
+    height: "42px"
   button-hover:
     backgroundColor: "{colors.tint-hover}"
   button-active:
@@ -91,22 +91,26 @@ components:
     backgroundColor: "{colors.instrument-blue}"
     textColor: "{colors.sheet-white}"
     rounded: "{rounded.square}"
-    padding: "10px 16px"
+    padding: "0 16px"
+    height: "42px"
   button-ghost:
     backgroundColor: "transparent"
     textColor: "{colors.instrument-blue-ink}"
     rounded: "{rounded.square}"
-    padding: "10px 16px"
+    padding: "0 16px"
+    height: "42px"
   input:
     backgroundColor: "{colors.tint-rest}"
     textColor: "{colors.graphite-ink}"
     rounded: "{rounded.square}"
-    padding: "10px 16px"
+    padding: "0 16px"
+    height: "42px"
   chip:
     backgroundColor: "{colors.tint-rest}"
     textColor: "{colors.graphite-ink}"
     typography: "{typography.label}"
-    padding: "4px 10px"
+    padding: "0 10px"
+    height: "33px"
   card:
     backgroundColor: "{colors.sheet-white}"
     rounded: "{rounded.square}"
@@ -197,9 +201,10 @@ Space is a nine-step φ scale (`--ae-space-0…8`), `--ae-unit · φⁿ` for n =
 - **Proportional splits:** `.split` and `.panes` divide 1 : φ, `.golden` divides φ : 1, and `--ae-ratio` is φ as an aspect ratio.
 - **Composition primitives:** `.stack`, `.cluster`, `.grid`, `.switcher`, `.cover`, `.with-aside`, `.bento` and `.masonry`. Compose with these and the gap utilities before writing CSS.
 - **Breakpoints** (the named exception, since media queries can't read tokens): `s` < 48rem, `m` ≥ 48rem, `l` ≥ 64rem, `xl` ≥ 80rem. Components prefer container queries (`cq-*:` variants, cards are size containers).
-- **Padding inside controls:** inline = block × φ.
+- **Control heights:** every control that sits in a row (buttons, fields, selects, steppers, segments, groups) takes its height from `--ae-control-size`: φ² units (42px), with `-s` (33px) and `-l` (53px) a φ^½ step either side, as the text sizes step, and its type from `--ae-control-text`. `data-size="s|l"` steps both together. Inline padding is the height ÷ φ². A row is level by construction; the kitchen sink's control-heights specimen shows it.
+- **Row heights come from the same ladder.** Menu, option, nav, tree and menubar rows, chips, pagination squares and calendar days are the small size; tabs are the default; avatars take all three. A table row is one size taller than the controls it holds (default table: large rows; small table: default rows). The FAB is space-7, one φ step above the large size. Only content rows (lists, accordions, cards) still grow from their padding. The toolbar is the one half-step: small buttons in space-1 padding make 41px, since the ladder's 9px gap between s and m can't centre on whole pixels.
 
-**The No-Hand-Tuned-Space Rule.** Every gap, padding and margin is a `--ae-space-*` step or a φ multiple of one. A 12px or 20px gap is a bug.
+**The No-Hand-Tuned-Space Rule.** Every gap, padding and margin is a `--ae-space-*` step, a φ multiple of one, or a φ² division of `--ae-control-size` (a control's inline padding: 13, 16 or 20px). Any other 12px or 20px gap is a bug.
 
 ## Elevation & Depth
 
@@ -231,7 +236,7 @@ Controls are **quiet tints that never move**. Each is a flat, translucent fill o
 
 ### Buttons
 
-- **Shape:** square (radius-full, 0 by default); minimum block size 24px; padding is space-3 block and space-3·φ inline.
+- **Shape:** square (radius-full, 0 by default); block size `--ae-control-size` (42px; `data-size` steps it and the type to the s or l size, never under the 24px target); inline padding is that height ÷ φ².
 - **Default:** tinted. A 7% Graphite Ink fill with weight 500 and line-height 1.
 - **Primary:** a solid Instrument Blue fill with contrast text. Hover and press mix the text colour in by the tint steps.
 - **Ghost:** transparent with Instrument Blue Ink text. It takes an accent tint on hover.

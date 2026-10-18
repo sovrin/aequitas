@@ -207,7 +207,10 @@
     background: var(--ae-fill);
   }
 
+  /* A keycap carries its own fill, and muted ink is only held to 4.5:1 on a bare surface, so the
+     key keeps full ink wherever it sits (menus and the palette drop the fill and set their own). */
   kbd {
+    color: var(--ae-text);
     box-shadow: inset 0 -1px 0 var(--ae-border-strong);
   }
 

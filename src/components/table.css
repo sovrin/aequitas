@@ -12,9 +12,12 @@
     border-spacing: 0;
     font-variant-numeric: tabular-nums;
 
+    /* A row is one control size taller than the controls it carries: a default table holds
+       default controls in large rows, a small one small controls in default rows. */
     & th,
     & td {
-      padding: var(--ae-space-3) var(--ae-space-4);
+      block-size: var(--ae-control-size-l);
+      padding: 0 var(--ae-space-4);
       text-align: start;
       border-block-end: 1px solid var(--ae-border);
     }
@@ -93,7 +96,8 @@
     }
 
     &[data-size="s"] :is(th, td) {
-      padding: var(--ae-space-2) var(--ae-space-3);
+      block-size: var(--ae-control-size);
+      padding: 0 var(--ae-space-3);
       font-size: var(--ae-text-s);
     }
 

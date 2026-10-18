@@ -5,7 +5,7 @@ export const actions: Entry[] = [
     slug: "button",
     title: "Button",
     group: "Actions",
-    lede: "Flat tinted fill by default; only the primary action is solid. Padding is block × φ inline.",
+    lede: "Flat tinted fill by default; only the primary action is solid. Every control shares one height; inline padding is that height ÷ φ².",
     owns: [".btn"],
     anatomy: [
       [
@@ -53,7 +53,10 @@ export const actions: Entry[] = [
         "data-variant",
         "`primary` is the one solid action on a screen; `ghost` has no fill until hover. Default flat tint.",
       ],
-      ["data-size", "Smaller or larger padding and type. Default sits between."],
+      [
+        "data-size",
+        "One control size smaller (`s`) or larger (`l`): height and type step together. Default sits between.",
+      ],
       [
         "data-tone=accent|success|warning|danger|info",
         "Colours the primary fill, the ghost text and the pressed state.",

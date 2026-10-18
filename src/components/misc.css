@@ -5,8 +5,9 @@
     gap: var(--ae-space-2);
 
     & > input {
-      inline-size: calc(var(--ae-unit) * pow(var(--ae-phi), 2));
-      block-size: calc(var(--ae-unit) * pow(var(--ae-phi), 2.5));
+      /* Big digits: a cell the default control wide and the large one tall. */
+      inline-size: var(--ae-control-size);
+      block-size: var(--ae-control-size-l);
       padding: 0;
       font-size: var(--ae-text-xl);
       font-weight: 500;

@@ -20,7 +20,11 @@
       opacity: 0.45;
     }
 
+    /* The visible text stays small; the link itself never drops under the pointer floor. */
     & a {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--ae-target);
       color: inherit;
       text-decoration: none;
 
@@ -41,8 +45,10 @@
     & > :is(a, button) {
       display: grid;
       place-items: center;
-      min-inline-size: var(--ae-space-6);
-      padding: var(--ae-space-2);
+      /* A small control square; wider only when the number needs it. */
+      min-inline-size: var(--ae-control-size-s);
+      block-size: var(--ae-control-size-s);
+      padding: 0 var(--ae-space-2);
       font: inherit;
       font-size: var(--ae-text-s);
       font-variant-numeric: tabular-nums;

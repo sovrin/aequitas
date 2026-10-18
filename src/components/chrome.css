@@ -50,7 +50,11 @@
     font-size: var(--ae-text-s);
 
     & > :is(button, a) {
-      padding: var(--ae-space-1) var(--ae-space-3);
+      /* As a menu row: the bar's items are the height of the menus they open. */
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--ae-control-size-s);
+      padding: 0 var(--ae-space-3);
       font: inherit;
       color: var(--ae-text);
       text-decoration: none;
@@ -98,7 +102,8 @@
       position: relative;
       display: grid;
       place-items: center;
-      inline-size: round(calc(var(--ae-unit) * pow(var(--ae-phi), 2.5)), 2px);
+      /* A large control square. */
+      inline-size: var(--ae-control-size-l);
       aspect-ratio: 1;
       /* Nested in the dock's corner: its radius less the dock's padding. */
       border-radius: max(0px, var(--ae-radius-l) - var(--ae-space-2));
@@ -174,7 +179,8 @@
     z-index: 20;
     display: grid;
     place-items: center;
-    inline-size: calc(var(--ae-unit) * pow(var(--ae-phi), 3));
+    /* One φ step above a large control. */
+    inline-size: var(--ae-space-7);
     aspect-ratio: 1;
     font-size: var(--ae-text-xl);
     line-height: 1;

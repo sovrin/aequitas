@@ -196,6 +196,10 @@ export const selection: Entry[] = [
     ],
     attrs: [
       [
+        "data-size",
+        "One control size smaller (`s`) or larger (`l`): height and type step together. Default sits between.",
+      ],
+      [
         "data-fill",
         "Spans the row instead of hugging its labels; the segments share it equally, their text centred. For inspectors and narrow panels.",
       ],

@@ -1,16 +1,15 @@
 @layer ae.components {
-  /* Padding: inline = block × φ. Flat tinted fills; only primary is solid. */
+  /* Height from --ae-control-size, inline padding = height ÷ φ². Flat tinted fills; only primary
+     is solid. */
   .btn {
-    --_py: var(--ae-space-3);
     /* Colour of the busy squares; the primary variant swaps it for the tone's contrast. */
     --_busy: var(--ae-text);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--ae-space-3);
-    padding: var(--_py) round(calc(var(--_py) * var(--ae-phi)), 1px);
-    min-block-size: var(--ae-target);
-    font-size: var(--ae-text-m);
+    min-block-size: var(--ae-control-size);
+    padding: 0 round(calc(var(--ae-control-size) / pow(var(--ae-phi), 2)), 1px);
     font-weight: 500;
     line-height: 1;
     white-space: nowrap;
@@ -95,20 +94,9 @@
       }
     }
 
-    &[data-size="s"] {
-      --_py: var(--ae-space-2);
-      font-size: var(--ae-text-s);
-    }
-
-    &[data-size="l"] {
-      --_py: var(--ae-space-4);
-      font-size: var(--ae-text-l);
-    }
-
     &[data-icon] {
-      padding: var(--_py);
-      aspect-ratio: 1;
-      min-inline-size: var(--ae-target);
+      inline-size: var(--ae-control-size);
+      padding: 0;
     }
   }
 

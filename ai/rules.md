@@ -18,7 +18,7 @@
    - `.section` adds vertical rhythm.
    - `.center` centres content.
    - Set gaps with `.gap-1` … `.gap-8`. `.end` pushes an item to the far end of a cluster.
-5. **All spacing is on the φ scale.** Use steps 1–8 (`.p-4`, `.mb-3`, `.gap-5`, `var(--ae-space-4)`). Never use px or arbitrary rem values.
+5. **All spacing is on the φ scale.** Use steps 1–8 (`.p-4`, `.mb-3`, `.gap-5`, `var(--ae-space-4)`). Never use px or arbitrary rem values. Never set a height or block padding on a button, field or row: controls take theirs from `--ae-control-size`, and rows (menus, tabs, tables, chips, avatars) from the same ladder. Use `data-size="s|l"` on `.btn`, `.input`, `.segmented`, `.number`, `.input-group`, `.tag-input` or `.avatar`; it steps height and type together.
 6. **Colour, radius, shadow, blur and type come from tokens.** Use `var(--ae-text)`, `--ae-text-muted`, `--ae-surface`, `--ae-accent`, `--ae-border`, `--ae-radius-m`, `--ae-shadow-m` and so on. For text in a tone, use its ink (`--ae-accent-ink`, `--ae-danger-ink`, `--ae-tone-ink`, …): the tone itself is for fills, edges and rings and is too light to read as text. Never hard-code hex, rgb or oklch values. To retheme, set `--ae-hue` / `--ae-neutral-hue`, or `data-accent` on `<html>`.
 7. **Use the global presets on `<html>`:**
    - `data-theme="light|dark"` (omit to follow the OS)

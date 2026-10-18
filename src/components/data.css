@@ -103,6 +103,7 @@
   .number {
     border-radius: var(--ae-radius-m);
     display: inline-flex;
+    min-block-size: var(--ae-control-size);
     background: var(--ae-fill);
     /* A rule along the bottom, as on .input, so the field can be found; focus replaces it. */
     box-shadow: inset 0 -1px 0 var(--ae-control-edge);
@@ -111,7 +112,7 @@
     & > input {
       appearance: textfield;
       inline-size: 4ch;
-      padding: var(--ae-space-2) 0;
+      padding: 0;
       text-align: center;
       font-variant-numeric: tabular-nums;
       background: none;
@@ -141,7 +142,7 @@
     & > button {
       display: grid;
       place-items: center;
-      inline-size: var(--ae-space-6);
+      inline-size: var(--ae-control-size);
       color: var(--ae-text-muted);
       background: none;
       border: 0;

@@ -2,13 +2,14 @@
   /* <span class="avatar">AL</span> or <span class="avatar"><img …></span> */
   .avatar {
     border-radius: var(--ae-radius-full);
-    --_size: round(calc(var(--ae-unit) * pow(var(--ae-phi), 2)), 2px);
+    /* The control sizes, so a person sits level beside a button of the same size. */
+    --_size: var(--ae-control-size);
     display: inline-grid;
     place-items: center;
     flex: none;
     inline-size: var(--_size);
     block-size: var(--_size);
-    font-size: calc(var(--_size) / pow(var(--ae-phi), 2));
+    font-size: max(var(--ae-text-xs), calc(var(--_size) / pow(var(--ae-phi), 2)));
     font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--ae-tone-ink);
@@ -23,11 +24,11 @@
     }
 
     &[data-size="s"] {
-      --_size: round(calc(var(--ae-unit) * var(--ae-phi)), 2px);
+      --_size: var(--ae-control-size-s);
     }
 
     &[data-size="l"] {
-      --_size: round(calc(var(--ae-unit) * pow(var(--ae-phi), 3)), 2px);
+      --_size: var(--ae-control-size-l);
     }
   }
 

@@ -22,8 +22,9 @@
     & > :not(.input) {
       display: grid;
       place-items: center;
-      padding-inline: var(--ae-space-3);
-      font-size: var(--ae-text-s);
+      /* As a field's own inline padding, and its type one step down (never under text-xs). */
+      padding-inline: round(calc(var(--ae-control-size) / pow(var(--ae-phi), 2)), 1px);
+      font-size: max(var(--ae-text-xs), calc(var(--ae-control-text) / pow(var(--ae-phi), 0.5)));
       color: var(--ae-text-muted);
       white-space: nowrap;
     }

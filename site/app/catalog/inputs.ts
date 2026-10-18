@@ -113,7 +113,7 @@ export const inputs: Entry[] = [
     attrs: [
       [
         "data-size",
-        "Smaller or larger padding and type, matching the button sizes. Default sits between.",
+        "One control size smaller (`s`) or larger (`l`), matching the button sizes: height and type step together. Default sits between.",
       ],
       [
         "required",
@@ -208,6 +208,12 @@ export const inputs: Entry[] = [
   <span><kbd>⌘K</kbd></span>
 </div>`,
       },
+    ],
+    attrs: [
+      [
+        "data-size",
+        "On the group, or on its `.input`: the whole group, affixes and buttons included, takes the small or large control size.",
+      ],
     ],
     a11y: [
       "The prefix and suffix are not part of the input's name. Label the input itself, and reference a meaningful affix (a unit, a domain) with `aria-describedby`.",
@@ -316,7 +322,13 @@ export const inputs: Entry[] = [
 </div>`,
       },
     ],
-    attrs: [["disabled", "On the `<select>`: halves the opacity, as on `.input`."]],
+    attrs: [
+      ["disabled", "On the `<select>`: halves the opacity, as on `.input`."],
+      [
+        "data-size",
+        'On the `<select class="input">`: the field and its chevron take the small or large control size.',
+      ],
+    ],
     keys: [
       ["Space / Alt ↓", "Opens the native list."],
       [
@@ -540,6 +552,10 @@ export const inputs: Entry[] = [
     ],
     attrs: [
       [
+        "data-size",
+        "One control size smaller (`s`) or larger (`l`): height and type step together. Default sits between.",
+      ],
+      [
         "data-step=<n>",
         "On a button: a negative value steps down, a positive one up. The amount comes from the input's `step`, not from this value.",
       ],
@@ -581,6 +597,10 @@ export const inputs: Entry[] = [
       },
     ],
     attrs: [
+      [
+        "data-size",
+        "One control size smaller (`s`) or larger (`l`). The chips inside follow, filling the field less its padding.",
+      ],
       [
         "data-dismiss=.chip",
         "On a chip's button: aequitas.js removes the closest `.chip` on click.",

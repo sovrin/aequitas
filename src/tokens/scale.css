@@ -110,6 +110,19 @@
     --ae-space-7: round(calc(var(--ae-unit) * pow(var(--ae-phi), 3)), 1px); /* 4.236 */
     --ae-space-8: round(calc(var(--ae-unit) * pow(var(--ae-phi), 4)), 1px); /* 6.854 */
 
+    /* Control heights. Every control that sits in a row with others (buttons, fields, selects,
+       steppers, segments, groups) takes its height from these and nothing else, so a row is level
+       by construction. m is φ² units; s and l step by φ^½, as the text sizes do. The small one
+       never drops under the pointer floor. Inline padding is the height ÷ φ². */
+    --ae-control-size-s: max(
+      var(--ae-target),
+      round(calc(var(--ae-unit) * pow(var(--ae-phi), 1.5)), 1px)
+    ); /* 2.058 */
+    --ae-control-size: var(--ae-space-6); /* 2.618 */
+    --ae-control-size-l: round(calc(var(--ae-unit) * pow(var(--ae-phi), 2.5)), 1px); /* 3.330 */
+    /* The type a control sets at that size; data-size steps it with the height (control.css). */
+    --ae-control-text: var(--ae-text-m);
+
     /* φ^-1, but never under 11px: a legibility floor, named like --ae-target (on a small base
        the step alone falls to about 9px). */
     --ae-text-xs: max(calc(var(--ae-text-base) * pow(var(--ae-phi), -1)), 0.6875rem);

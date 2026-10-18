@@ -6,14 +6,15 @@
 
     & > select {
       appearance: none;
-      padding-inline-end: var(--ae-space-7);
+      /* The chevron takes one icon-button square at the end, at every size. */
+      padding-inline-end: var(--ae-control-size);
       cursor: pointer;
     }
 
     &::after {
       content: "";
       position: absolute;
-      inset-inline-end: var(--ae-space-4);
+      inset-inline-end: round(calc(var(--ae-control-size) / pow(var(--ae-phi), 2)), 1px);
       inset-block: 0;
       margin-block: auto;
       inline-size: round(calc(1em / var(--ae-phi)), 1px);

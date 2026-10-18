@@ -22,7 +22,9 @@
       display: flex;
       align-items: center;
       gap: var(--ae-space-2);
-      padding: var(--ae-space-1) var(--ae-space-2);
+      /* As a nav row. */
+      min-block-size: var(--ae-control-size-s);
+      padding: 0 var(--ae-space-2);
       font-size: var(--ae-text-s);
       color: var(--ae-text);
       text-decoration: none;

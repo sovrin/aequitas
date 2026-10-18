@@ -5,7 +5,9 @@
     display: inline-flex;
     align-items: center;
     gap: var(--ae-space-2);
-    padding: var(--ae-space-1) var(--ae-space-3);
+    /* A small control's height, so a chip sits level beside a small button. */
+    min-block-size: var(--ae-control-size-s);
+    padding: 0 var(--ae-space-3);
     font-size: var(--ae-text-s);
     font-weight: 500;
     line-height: var(--ae-phi);

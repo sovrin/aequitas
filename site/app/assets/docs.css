@@ -691,6 +691,36 @@
   }
 }
 
+/* Kitchen sink, control heights: controls hang from the top rule, and a second rule marks
+   --ae-control-size below it. */
+.control-heights {
+  /* One line, so every control hangs from the same pair of rules. */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  align-items: start;
+  background:
+    linear-gradient(var(--ae-accent) 0 0) top / 100% 1px no-repeat,
+    linear-gradient(var(--ae-accent) 0 0) 0 calc(var(--ae-control-size) - 1px) / 100% 1px no-repeat;
+
+  & > * {
+    flex: none;
+  }
+
+  & > .caption {
+    align-self: center;
+    min-inline-size: 2ch;
+  }
+
+  /* In em, so a field keeps room for its text at every size and density. */
+  & > :is(.input, .select, .input-group, .tag-input) {
+    inline-size: 10em;
+  }
+
+  & > .input[type="date"] {
+    inline-size: auto;
+  }
+}
+
 /* Aurora: the canvas under a frosted card, flat when off; drift slides the fields across. */
 .aurora-preview {
   place-items: center;

@@ -23,7 +23,8 @@
   }
 
   .calendar-grid {
-    --_cell: round(calc(var(--ae-unit) * pow(var(--ae-phi), 1.5)), 1px);
+    /* A day is a small control square. */
+    --_cell: var(--ae-control-size-s);
     display: grid;
     grid-template-columns: repeat(7, var(--_cell));
     gap: var(--ae-space-0);

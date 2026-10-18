@@ -130,7 +130,7 @@ const preset = (attr: string, e: Event) => {
           <tr>
             <td><code>data-aurora</code></td>
             <td class="text-muted">
-              present · drift — colour fields behind the page for frost to blur; off by default
+              present · drift: colour fields behind the page for frost to blur; off by default
             </td>
           </tr>
           <tr>

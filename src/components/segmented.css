@@ -49,12 +49,14 @@
       }
     }
 
-    /* Sized like .btn: inline padding = block × φ, so the two sit level in a row. Positioned so
-       it paints above the input, whose forced-colours fill would otherwise cover the label. */
+    /* Sized like .btn, from --ae-control-size, so the two sit level in a row. Positioned so it
+       paints above the input, whose forced-colours fill would otherwise cover the label. */
     & span {
       position: relative;
-      padding: var(--ae-space-3) round(calc(var(--ae-space-3) * var(--ae-phi)), 1px);
-      font-size: var(--ae-text-m);
+      display: grid;
+      place-content: center;
+      min-block-size: var(--ae-control-size);
+      padding: 0 round(calc(var(--ae-control-size) / pow(var(--ae-phi), 2)), 1px);
       font-weight: 500;
       line-height: 1;
       white-space: nowrap;

@@ -69,9 +69,13 @@
     font-weight: 500;
   }
 
+  /* One line tall at --ae-control-size: a single-line field is exactly that high, and a textarea
+     keeps the same padding around its first line and grows from there. The block padding is left
+     unrounded on purpose: it is whatever centres one line in a whole-pixel height. */
   .input {
     inline-size: 100%;
-    padding: var(--ae-space-3) round(calc(var(--ae-space-3) * var(--ae-phi)), 1px);
+    padding: calc((var(--ae-control-size) - 1lh) / 2)
+      round(calc(var(--ae-control-size) / pow(var(--ae-phi), 2)), 1px);
     background: var(--ae-fill);
     border: 0;
     border-radius: var(--ae-radius-m);
@@ -111,17 +115,13 @@
       opacity: 0.4;
       cursor: not-allowed;
     }
+  }
 
-    /* Sizes follow .btn: block padding steps on the space scale, inline is block × φ. */
-    &[data-size="s"] {
-      padding: var(--ae-space-2) calc(var(--ae-space-2) * var(--ae-phi));
-      font-size: var(--ae-text-s);
-    }
-
-    &[data-size="l"] {
-      padding: var(--ae-space-4) calc(var(--ae-space-4) * var(--ae-phi));
-      font-size: var(--ae-text-l);
-    }
+  /* Pickers draw their own parts (a calendar icon, the file button) taller than the text, so a
+     single-line field is held to the size rather than padded to it. */
+  :is(input, select).input {
+    block-size: var(--ae-control-size);
+    padding-block: 0;
   }
 
   /* Native pickers */
@@ -145,8 +145,7 @@
   }
 
   input[type="color"].input {
-    inline-size: var(--ae-space-6);
-    block-size: var(--ae-space-6);
+    inline-size: var(--ae-control-size);
     padding: var(--ae-space-1);
     cursor: pointer;
 
@@ -302,9 +301,11 @@
     color: var(--ae-text-muted);
     cursor: pointer;
 
+    /* The browse button fills the field less its padding, so it nests exactly at every size. */
     &::file-selector-button {
+      block-size: calc(var(--ae-control-size) - 2 * var(--ae-space-2));
       margin-inline-end: var(--ae-space-3);
-      padding: var(--ae-space-2) calc(var(--ae-space-2) * var(--ae-phi));
+      padding: 0 var(--ae-space-3);
       font: inherit;
       font-weight: 500;
       color: var(--ae-text);

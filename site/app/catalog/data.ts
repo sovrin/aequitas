@@ -71,7 +71,10 @@ export const data: Entry[] = [
         "Tints the row with the accent, for rows ticked in the selection column.",
       ],
       ["data-striped", "Tints every even body row."],
-      ["data-size=s", "Tighter cell padding and smaller type, for dense data."],
+      [
+        "data-size=s",
+        "Rows one control size shorter and smaller type, for dense data. A row is always one size taller than the controls it holds.",
+      ],
       ["data-sticky", "Header cells stick to the top of the nearest scrolling ancestor."],
       ["data-fixed", "Fixed table layout: column widths come from the first row, not the content."],
       ["data-hover=false", "Turns off the row hover tint, for tables whose rows do nothing."],
@@ -354,7 +357,10 @@ export const data: Entry[] = [
         "data-tone=accent|success|warning|danger|info",
         "Colours the initials and their tint. Default accent.",
       ],
-      ["data-size", "Smaller or larger square. Default sits between."],
+      [
+        "data-size",
+        "The small or large control size, so an avatar sits level beside a button of the same size. Default sits between.",
+      ],
       [
         "data-status=online|away|busy|offline",
         "Square in the bottom end corner: success, warning or danger. Any other value, or the bare attribute, shows it muted.",
