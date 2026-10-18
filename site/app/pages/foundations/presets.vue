@@ -1,6 +1,6 @@
 <script setup lang="ts">
-// Accent, density and shape drive the site-wide appearance (and the panel); type is a page-only demo.
-const { accent, density, radius } = useAppearance();
+// Accent, density, shape and aurora drive the site-wide appearance (and the panel); type is a page-only demo.
+const { accent, density, radius, aurora, auroraSeed } = useAppearance();
 const preset = (attr: string, e: Event) => {
   const v = (e.target as HTMLSelectElement).value;
   if (v) document.documentElement.dataset[attr] = v;
@@ -53,6 +53,24 @@ const preset = (attr: string, e: Event) => {
               <option value="soft">Soft</option>
               <option value="round">Round</option>
             </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="aurora">Aurora</label>
+          <div class="select">
+            <select class="input" id="aurora" v-model="aurora">
+              <option value="off">Off</option>
+              <option value="">Still</option>
+              <option value="drift">Drift</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="aurora-seed">Aurora seed</label>
+          <div class="number">
+            <button type="button" aria-label="Previous seed" data-step="-1">−</button>
+            <input id="aurora-seed" type="number" placeholder="0" v-model="auroraSeed" />
+            <button type="button" aria-label="Next seed" data-step="1">+</button>
           </div>
         </div>
         <div class="field">
@@ -110,12 +128,24 @@ const preset = (attr: string, e: Event) => {
             <td class="text-muted">soft · round — the system is square by default</td>
           </tr>
           <tr>
+            <td><code>data-aurora</code></td>
+            <td class="text-muted">
+              present · drift — colour fields behind the page for frost to blur; off by default
+            </td>
+          </tr>
+          <tr>
             <td><code>data-type</code></td>
             <td class="text-muted">humanist · serif · mono</td>
           </tr>
           <tr>
             <td><code>data-theme</code></td>
             <td class="text-muted">light · dark — otherwise follows the system</td>
+          </tr>
+          <tr>
+            <td><code>--ae-aurora-seed</code></td>
+            <td class="text-muted">
+              any number; moves the aurora's fields, the same seed always the same layout
+            </td>
           </tr>
           <tr>
             <td><code>--ae-hue</code>, <code>--ae-neutral-hue</code></td>

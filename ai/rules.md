@@ -23,6 +23,7 @@
 7. **Use the global presets on `<html>`:**
    - `data-theme="light|dark"` (omit to follow the OS)
    - `data-accent`, `data-density="compact|spacious"`, `data-radius="soft|round"`, `data-type="serif|humanist|mono"`
+   - `data-aurora` (or `data-aurora="drift"`) puts colour fields behind the page; add it when the page leans on frosted cards. `--ae-aurora-seed: <number>` moves the fields, the same number always the same layout
 8. **Icons are `<i class="icon" data-icon="name"></i>`.** They need `aequitas.icons.css`. Only use names from the icon list; there are no `fa-*` or `bi-*` classes. If you guess a name, the checker suggests the closest real one (`close` → `x`, `settings` → `settings-gear`). Sizes are `data-size="s|l|xl"`. Icon-only buttons are `<button class="btn" data-icon aria-label="…">`.
 9. **Overrides go in unlayered CSS.** aequitas lives in `@layer ae.*`, so any unlayered rule wins. Never use `!important`, and never restyle a component that already has the variant you need.
 10. **Behaviours are attributes too** (with `aequitas.js`):

@@ -5,4 +5,8 @@ export const useAppearance = () => ({
   accent: useState("ap-accent", () => ""),
   density: useState("ap-density", () => ""),
   radius: useState("ap-radius", () => ""),
+  // The site opts into the aurora; "" is the bare attribute (still), "off" removes it.
+  aurora: useState<"" | "drift" | "off">("ap-aurora", () => ""),
+  // --ae-aurora-seed; "" leaves the framework's default layout.
+  auroraSeed: useState<number | "">("ap-aurora-seed", () => ""),
 });

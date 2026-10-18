@@ -26,12 +26,13 @@ export default defineNuxtConfig({
         { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       ],
       // Restore the saved appearance before first paint, so the prerendered page never flashes the
-      // system theme (or default accent/density/shape) while the bundle loads.
+      // system theme (or default accent/density/shape/aurora) while the bundle loads.
+      // The site's aurora is set here, not in htmlAttrs, which hydration would re-apply over "off".
       script: [
         {
           tagPosition: "head",
           tagPriority: "critical",
-          innerHTML: `try{var d=document.documentElement.dataset,s=localStorage,t=s.getItem("ae-theme");if(t==="light"||t==="dark")d.theme=t;["accent","density","radius"].forEach(function(k){var v=s.getItem("docs-"+k);if(v)d[k]=v})}catch(e){}`,
+          innerHTML: `try{var d=document.documentElement.dataset,s=localStorage,t=s.getItem("ae-theme");if(t==="light"||t==="dark")d.theme=t;["accent","density","radius"].forEach(function(k){var v=s.getItem("docs-"+k);if(v)d[k]=v});var a=s.getItem("docs-aurora");if(a!=="off")d.aurora=a==="drift"?a:"";var n=s.getItem("docs-aurora-seed");if(n&&isFinite(n))document.documentElement.style.setProperty("--ae-aurora-seed",n)}catch(e){d.aurora=""}`,
         },
       ],
     },

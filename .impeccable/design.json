@@ -452,7 +452,7 @@
       },
       {
         "name": "The Aurora Rule",
-        "body": "Frost needs something to blur. The page canvas carries three soft radial fields derived from the accent (lead hue, +55°, −60°). Glass over a flat colour is just a grey box.",
+        "body": "Frost needs something to blur. The page canvas carries three soft radial fields derived from the accent (lead hue, +55°, −60°). Glass over a flat colour is just a grey box. Opt-in with data-aurora.",
         "section": "colors"
       },
       {

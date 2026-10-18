@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// Appearance panel: theme, accent, density, shape. State and persistence live in useAppearance().
+// Appearance panel: theme, accent, density, shape, aurora. State and persistence live in useAppearance().
 // Every option previews itself, so the panel is read at a glance rather than label by label.
 
 // Hues as in tokens/presets.css. The swatch resolves them like --ae-accent does, so each shows the
@@ -35,7 +35,13 @@ const shapes = [
   ["round", "Round"],
 ] as const;
 
-const { theme, accent, density, radius } = useAppearance();
+const auroras = [
+  ["off", "Off"],
+  ["", "Still"],
+  ["drift", "Drift"],
+] as const;
+
+const { theme, accent, density, radius, aurora, auroraSeed } = useAppearance();
 const id = useId();
 const accentName = computed(() => accents.find((a) => a[0] === accent.value)?.[1] ?? "Blue");
 </script>
@@ -116,6 +122,29 @@ const accentName = computed(() => accents.find((a) => a[0] === accent.value)?.[1
             </span>
             <span class="ap-name">{{ name }}</span>
           </label>
+        </div>
+      </section>
+
+      <section :aria-labelledby="`${id}-aurora`">
+        <h3 :id="`${id}-aurora`">Aurora</h3>
+        <div class="ap-options" data-short role="radiogroup" :aria-labelledby="`${id}-aurora`">
+          <label v-for="[v, name] in auroras" :key="v">
+            <input type="radio" :name="`ap-aurora-${id}`" :value="v" v-model="aurora" />
+            <!-- The page canvas under a frosted card: flat, still or drifting. -->
+            <span class="ap-preview aurora-preview" :data-value="v || 'still'" aria-hidden="true">
+              <span></span>
+            </span>
+            <span class="ap-name">{{ name }}</span>
+          </label>
+        </div>
+        <!-- Where the fields sit: the same seed is always the same layout. -->
+        <div class="ap-seed">
+          <label :for="`${id}-seed`">Seed</label>
+          <div class="number">
+            <button type="button" aria-label="Previous seed" data-step="-1">−</button>
+            <input :id="`${id}-seed`" type="number" placeholder="0" v-model="auroraSeed" />
+            <button type="button" aria-label="Next seed" data-step="1">+</button>
+          </div>
         </div>
       </section>
     </div>

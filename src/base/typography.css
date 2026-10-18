@@ -74,8 +74,9 @@
 
   /* The aurora lives on a fixed layer so it never scrolls with content. The layer is a fifth larger
      than the viewport and the drift moves it, never its background: a translated layer is only
-     recomposited, a moving background repaints the whole screen every frame. */
-  body::before {
+     recomposited, a moving background repaints the whole screen every frame. Opt-in with
+     <html data-aurora>: it costs a full-screen layer under every frosted surface. */
+  :root[data-aurora] body::before {
     content: "";
     position: fixed;
     inset: 0 -20% -20% 0;
@@ -84,7 +85,7 @@
     pointer-events: none;
   }
 
-  /* Drift is opt-in, <html data-aurora="drift">: every frosted layer re-blurs the moving aurora
+  /* Drift is a further opt-in, <html data-aurora="drift">: every frosted layer re-blurs the moving aurora
      each frame, so a still page would otherwise never let the GPU idle. */
   @media (prefers-reduced-motion: no-preference) {
     :root[data-aurora="drift"] body::before {

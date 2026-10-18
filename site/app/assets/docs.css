@@ -691,6 +691,52 @@
   }
 }
 
+/* Aurora: the canvas under a frosted card, flat when off; drift slides the fields across. */
+.aurora-preview {
+  place-items: center;
+  background: var(--ae-aurora), var(--ae-bg);
+  background-size:
+    160% 160%,
+    auto;
+
+  &[data-value="off"] {
+    background: var(--ae-bg);
+  }
+
+  & > span {
+    inline-size: 56%;
+    block-size: 56%;
+    background: color-mix(in oklch, var(--ae-surface) 60%, transparent);
+    backdrop-filter: blur(4px);
+    box-shadow: var(--ae-shadow-s);
+  }
+}
+
+.ap-seed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ae-space-3);
+  margin-block-start: var(--ae-space-3);
+  font-size: var(--ae-text-s);
+  color: var(--ae-text-muted);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .aurora-preview[data-value="drift"] {
+    animation: aurora-preview-drift calc(var(--ae-duration) * pow(var(--ae-phi), 7)) ease-in-out
+      infinite alternate;
+  }
+}
+
+@keyframes aurora-preview-drift {
+  to {
+    background-position:
+      100% 100%,
+      0 0;
+  }
+}
+
 /* Accent: one row of swatches, each the accent as it resolves in the current scheme. */
 .ap-swatches {
   display: grid;

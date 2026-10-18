@@ -162,7 +162,7 @@ The palette is cool, near-neutral paper with one decisive accent hue. Neutrals c
 
 **The Ink Rule.** A tone used as text uses its `-ink` token. The raw tone is for fills, edges and rings only.
 
-**The Aurora Rule.** Frost needs something to blur. The page canvas carries three soft radial fields derived from the accent (lead hue, +55°, −60°). Glass over a flat colour is just a grey box. The aurora is still unless `data-aurora="drift"` asks it to move.
+**The Aurora Rule.** Frost needs something to blur. `<html data-aurora>` gives the page canvas three soft radial fields derived from the accent (lead hue, +55°, −60°). Glass over a flat colour is just a grey box, so pages built on glass should turn it on. The aurora is still unless `data-aurora="drift"` asks it to move. `--ae-aurora-seed` places the fields: each turns about the page centre by a multiple of the golden angle, so a seed is a layout, not a random draw.
 
 ## Typography
 

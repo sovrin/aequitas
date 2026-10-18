@@ -4,7 +4,7 @@ import { setTheme } from "@aequitas/aequitas.js";
 // defaults and the head script (nuxt.config.ts) has already applied the saved values to <html>, so the
 // sync after hydration only updates the controls and must not re-apply or animate anything.
 export default defineNuxtPlugin((nuxtApp) => {
-  const { theme, accent, density, radius } = useAppearance();
+  const { theme, accent, density, radius, aurora, auroraSeed } = useAppearance();
   let synced = false;
 
   const apply = (attr: string, v: string) => {
@@ -22,6 +22,10 @@ export default defineNuxtPlugin((nuxtApp) => {
       accent.value = localStorage.getItem("docs-accent") ?? "";
       density.value = localStorage.getItem("docs-density") ?? "";
       radius.value = localStorage.getItem("docs-radius") ?? "";
+      const a = localStorage.getItem("docs-aurora");
+      aurora.value = a === "off" || a === "drift" ? a : "";
+      const n = Number(localStorage.getItem("docs-aurora-seed") || NaN);
+      auroraSeed.value = Number.isFinite(n) ? n : "";
     } catch {}
     // Watchers run before the next render; flip the flag after them so the sync itself is inert.
     nextTick(() => (synced = true));
@@ -61,4 +65,22 @@ export default defineNuxtPlugin((nuxtApp) => {
   watch(accent, (v) => synced && apply("accent", v));
   watch(density, (v) => synced && apply("density", v));
   watch(radius, (v) => synced && apply("radius", v));
+  // Unlike the presets, the bare attribute is a value here, so "off" is what removes it.
+  watch(aurora, (v) => {
+    if (!synced) return;
+    if (v === "off") delete document.documentElement.dataset.aurora;
+    else document.documentElement.dataset.aurora = v;
+    try {
+      localStorage.setItem("docs-aurora", v);
+    } catch {}
+  });
+  watch(auroraSeed, (v) => {
+    if (!synced) return;
+    const style = document.documentElement.style;
+    if (typeof v === "number" && Number.isFinite(v)) style.setProperty("--ae-aurora-seed", `${v}`);
+    else style.removeProperty("--ae-aurora-seed");
+    try {
+      localStorage.setItem("docs-aurora-seed", `${v}`);
+    } catch {}
+  });
 });

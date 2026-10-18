@@ -11,6 +11,13 @@
   initial-value: 255;
 }
 
+/* Where the aurora's fields sit. Any number; 0 is the default layout. */
+@property --ae-aurora-seed {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
 /* The accent in each scheme, registered so a hue change crossfades the colour in a straight line
    (the hue itself would interpolate as a number, sweeping the long way round the wheel). */
 @property --ae-accent-light {
@@ -91,14 +98,26 @@
     --ae-thumb: oklch(1 0 0);
 
     /* Aurora: colour fields behind the page. Frost needs something to blur. */
+    /* --ae-aurora-seed turns each field about the page centre by a multiple of the golden angle,
+       the first by one, the second by two, the third by three, so every seed is a different layout
+       and the same seed is always the same one. Seed 0 leaves the fields at 14% 6%, 90% 12% and
+       72% 96%. */
+    --ae-aurora-seed: 0;
+    --_aurora-turn: calc(var(--ae-aurora-seed) * 1turn / pow(var(--ae-phi), 2));
+    --_aurora-1: calc(50% - 36% * cos(var(--_aurora-turn)) + 44% * sin(var(--_aurora-turn)))
+      calc(50% - 36% * sin(var(--_aurora-turn)) - 44% * cos(var(--_aurora-turn)));
+    --_aurora-2: calc(50% + 40% * cos(var(--_aurora-turn) * 2) + 38% * sin(var(--_aurora-turn) * 2))
+      calc(50% + 40% * sin(var(--_aurora-turn) * 2) - 38% * cos(var(--_aurora-turn) * 2));
+    --_aurora-3: calc(50% + 22% * cos(var(--_aurora-turn) * 3) - 46% * sin(var(--_aurora-turn) * 3))
+      calc(50% + 22% * sin(var(--_aurora-turn) * 3) + 46% * cos(var(--_aurora-turn) * 3));
     --ae-aurora:
       radial-gradient(
-        46% 40% at 14% 6%,
+        46% 40% at var(--_aurora-1),
         light-dark(oklch(0.88 0.09 var(--ae-hue) / 0.7), oklch(0.42 0.09 var(--ae-hue) / 0.7)),
         transparent
       ),
       radial-gradient(
-        40% 44% at 90% 12%,
+        40% 44% at var(--_aurora-2),
         light-dark(
           oklch(0.9 0.07 calc(var(--ae-hue) + 55) / 0.55),
           oklch(0.4 0.07 calc(var(--ae-hue) + 55) / 0.5)
@@ -106,7 +125,7 @@
         transparent
       ),
       radial-gradient(
-        50% 40% at 72% 96%,
+        50% 40% at var(--_aurora-3),
         light-dark(
           oklch(0.9 0.07 calc(var(--ae-hue) - 60) / 0.5),
           oklch(0.38 0.07 calc(var(--ae-hue) - 60) / 0.5)
@@ -139,7 +158,7 @@
     :root {
       --ae-aurora:
         radial-gradient(
-          46% 40% at 14% 6%,
+          46% 40% at var(--_aurora-1),
           light-dark(
             oklch(from var(--ae-accent-light) 0.88 0.09 h / 0.7),
             oklch(from var(--ae-accent-dark) 0.42 0.09 h / 0.7)
@@ -147,7 +166,7 @@
           transparent
         ),
         radial-gradient(
-          40% 44% at 90% 12%,
+          40% 44% at var(--_aurora-2),
           light-dark(
             oklch(from var(--ae-accent-light) 0.9 0.07 calc(h + 55) / 0.55),
             oklch(from var(--ae-accent-dark) 0.4 0.07 calc(h + 55) / 0.5)
@@ -155,7 +174,7 @@
           transparent
         ),
         radial-gradient(
-          50% 40% at 72% 96%,
+          50% 40% at var(--_aurora-3),
           light-dark(
             oklch(from var(--ae-accent-light) 0.9 0.07 calc(h - 60) / 0.5),
             oklch(from var(--ae-accent-dark) 0.38 0.07 calc(h - 60) / 0.5)
