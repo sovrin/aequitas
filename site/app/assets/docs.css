@@ -410,9 +410,13 @@
 }
 
 .search-btn {
-  justify-content: start;
   min-inline-size: 0;
   color: var(--ae-text-muted);
+
+  /* The labelled button reads from its start; the compact icon-only one stays centred. */
+  &:not([data-icon]) {
+    justify-content: start;
+  }
 }
 
 .appearance-btn {
