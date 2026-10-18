@@ -226,7 +226,7 @@ Each shadow has three layers: contact, key and ambient. The key and ambient offs
 
 ## Shapes
 
-Square by default: `--ae-radius-m` is 0, so every derived radius (s = m/φ, l = m·φ, xl = m·φ²) is also 0, and "pill" is square too. The `soft` (φ^-½ ≈ 0.786rem) and `round` (φ^½ ≈ 1.272rem) presets bring the φ curve back to every component, with `corner-shape: round` and true pills at 999px. Shape changes glide, because the radius is a registered `<length>`. The brand mark repeats the geometry: a golden rectangle cut into squares. The busy indicator is three pulsing squares sized φ⁻² with φ⁻³ gaps, never a spinning circle.
+Square by default: `--ae-radius-m` is 0, so every derived radius (s = m/φ, l = m·φ, xl = m·φ²) is also 0, and "pill" is square too. The `soft` (φ^-½ ≈ 0.786rem) and `round` (φ^½ ≈ 1.272rem) presets bring the φ curve back to every component, with `corner-shape: round` and true pills at 999px. Shape changes glide, because the radius is a registered `<length>`. A layer whose rows or bars run to its edges takes a tighter corner than a card, so the curve never cuts into them: lists and windows take radius-m (their bars' content also starts at least that far in), and the command palette, with its taller header, takes radius-l. The brand mark repeats the geometry: a golden rectangle cut into squares. The busy indicator is three pulsing squares sized φ⁻² with φ⁻³ gaps, never a spinning circle.
 
 **The Squares-Throughout Rule.** At default settings nothing is rounded: not buttons, avatars, chips or the busy indicator. Never hard-code a radius. Read `--ae-radius-*` so the presets keep working.
 
