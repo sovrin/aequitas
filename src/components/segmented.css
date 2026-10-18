@@ -4,12 +4,19 @@
      at its outer ends. The checked segment is "on" exactly as a pressed button is. */
   .segmented {
     display: inline-flex;
+    /* Short of room, segments wrap to another row rather than crush or spill out; a hairline of
+       canvas parts the rows. */
+    flex-wrap: wrap;
+    row-gap: 1px;
+    max-inline-size: 100%;
     border-radius: var(--ae-radius-full);
 
     /* As specific as the form rule that makes radio labels inline-flex, and later, so it wins. */
     & > label:has(> input) {
       position: relative;
       display: grid;
+      /* Never narrower than its word; a wrapped row shares out the width. */
+      flex: 1 0 auto;
       border-radius: inherit;
       cursor: pointer;
     }
@@ -51,6 +58,8 @@
       font-weight: 500;
       line-height: 1;
       white-space: nowrap;
+      /* A segment stretched by a wrapped row or data-fill keeps its word in the middle. */
+      text-align: center;
       color: var(--ae-text);
       background: var(--ae-fill);
       border-radius: inherit;
@@ -100,12 +109,8 @@
       display: flex;
 
       /* Equal shares while there is room; a label never shrinks below its word. */
-      & > label {
+      & > label:has(> input) {
         flex: 1 1 0;
-      }
-
-      & span {
-        text-align: center;
       }
     }
   }

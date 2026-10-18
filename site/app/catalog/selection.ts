@@ -167,7 +167,7 @@ export const selection: Entry[] = [
     anatomy: [
       [
         ".segmented",
-        'The bar: rounded only at its outer ends, hairlines between segments. Give it `role="radiogroup"` and an `aria-label`.',
+        'The bar: rounded only at its outer ends, hairlines between segments. Short of room, segments wrap onto another row instead of shrinking. Give it `role="radiogroup"` and an `aria-label`.',
       ],
       ["> label", "One per segment."],
       ["label > input[type=radio]", "Covers the segment, invisible. All inputs share a `name`."],
