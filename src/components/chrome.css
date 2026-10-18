@@ -1,7 +1,11 @@
 @layer ae.components {
   /* <div class="window"><header><span>Northlight</span></header><div>…</div></div> */
   .window {
-    border-radius: var(--ae-radius-l);
+    /* A frame whose title and status bars run to its edges: its corner is one step tighter than
+       a card's, and the bars' content starts no closer to the edge than that radius, so no preset
+       can curve into the traffic lights or the status text. */
+    --_r: var(--ae-radius-m);
+    border-radius: var(--_r);
     corner-shape: var(--ae-corner);
     --_d: var(--ae-space-2);
     display: grid;
@@ -14,7 +18,7 @@
       display: flex;
       align-items: center;
       gap: var(--ae-space-3);
-      padding: var(--ae-space-2) var(--ae-space-3);
+      padding: var(--ae-space-2) max(var(--ae-space-3), var(--_r));
       font-size: var(--ae-text-xs);
       color: var(--ae-text-muted);
       background: var(--ae-fill);
@@ -39,6 +43,10 @@
       & > span {
         margin-inline: auto;
       }
+    }
+
+    & > .statusbar {
+      padding-inline: max(var(--ae-space-3), var(--_r));
     }
   }
 
