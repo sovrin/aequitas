@@ -1,8 +1,10 @@
-/* Geist Variable, copied to dist/fonts by the build. Falls back to the system UI font. */
+/* Geist Variable, copied to dist/fonts by the build. Optional, not swap: a font that
+   misses first paint is skipped for that visit instead of swapped in, so text never
+   re-wraps under the reader. Preload the files to have them in time. */
 @font-face {
   font-family: "Geist Variable";
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
   font-weight: 100 900;
   src: url("./fonts/geist-latin-wght-normal.woff2") format("woff2-variations");
 }
@@ -10,7 +12,7 @@
 @font-face {
   font-family: "Geist Mono Variable";
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
   font-weight: 100 900;
   src: url("./fonts/geist-mono-latin-wght-normal.woff2") format("woff2-variations");
 }
