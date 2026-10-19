@@ -15,8 +15,10 @@
     & > label:has(> input) {
       position: relative;
       display: grid;
-      /* Never narrower than its word; a wrapped row shares out the width. */
+      /* Never narrower than its word; a wrapped row shares out the width. A label wider than the
+         whole control wraps. */
       flex: 1 0 auto;
+      max-inline-size: 100%;
       border-radius: inherit;
       cursor: pointer;
     }
@@ -58,8 +60,9 @@
       min-block-size: var(--ae-control-size);
       padding: 0 round(calc(var(--ae-control-size) / pow(var(--ae-phi), 2)), 1px);
       font-weight: 500;
-      line-height: 1;
-      white-space: nowrap;
+      /* As .btn: a label wider than the whole control wraps, balanced, rather than being cut. */
+      line-height: var(--ae-leading-tight);
+      text-wrap: balance;
       /* A segment stretched by a wrapped row or data-fill keeps its word in the middle. */
       text-align: center;
       color: var(--ae-text);

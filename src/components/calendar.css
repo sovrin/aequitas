@@ -26,7 +26,8 @@
     /* A day is a small control square. */
     --_cell: var(--ae-control-size-s);
     display: grid;
-    grid-template-columns: repeat(7, var(--_cell));
+    /* Short of room, days shrink, square, down to the pointer floor. */
+    grid-template-columns: repeat(7, minmax(var(--ae-target), var(--_cell)));
     gap: var(--ae-space-0);
     font-variant-numeric: tabular-nums;
 

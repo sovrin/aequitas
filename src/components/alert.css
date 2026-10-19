@@ -1,11 +1,18 @@
 @layer ae.components {
   .alert {
     display: flex;
+    /* Short of room, the action drops below the message rather than spill out or crush it: the
+       message keeps φ⁵ rem (≈ 11rem) before it lets the action share its row. */
+    flex-wrap: wrap;
     gap: var(--ae-space-4);
     padding: var(--ae-space-4) var(--ae-space-5);
     border-radius: var(--ae-radius-m);
     corner-shape: var(--ae-corner);
     background-color: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
+
+    & > div {
+      flex: 1 1 calc(1rem * pow(var(--ae-phi), 5));
+    }
 
     & strong {
       color: var(--ae-tone-ink);

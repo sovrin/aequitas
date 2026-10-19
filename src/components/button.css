@@ -6,13 +6,14 @@
     --_busy: var(--ae-text);
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    /* Safe, so a cut label keeps its start in view. */
+    justify-content: safe center;
     gap: var(--ae-space-3);
     min-block-size: var(--ae-control-size);
     padding: 0 round(calc(var(--ae-control-size) / pow(var(--ae-phi), 2)), 1px);
     font-weight: 500;
-    line-height: 1;
-    white-space: nowrap;
+    /* Tight leading for the rare wrapped label; one line still centres in the control height. */
+    line-height: var(--ae-leading-tight);
     color: var(--ae-text);
     text-decoration: none;
     background: var(--ae-fill);
@@ -104,6 +105,10 @@
      rounded only at its outer corners. */
   .btn-group {
     display: inline-flex;
+    /* As .segmented: short of room, buttons wrap to another row rather than spill out. */
+    flex-wrap: wrap;
+    row-gap: 1px;
+    max-inline-size: 100%;
 
     & > .btn + .btn {
       --_sep: inset var(--ae-hairline-x) 0 0 var(--ae-border);

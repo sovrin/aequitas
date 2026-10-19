@@ -12,7 +12,8 @@
    */
   .shell {
     --sidebar: calc(1rem * pow(var(--ae-phi), 6)); /* ≈ 18 rem */
-    --rail: calc(1rem * pow(var(--ae-phi), 3)); /* ≈ 4.2 rem */
+    /* φ³ units, not rem: the rail's padding follows the density, so its width does too. */
+    --rail: calc(var(--ae-unit) * pow(var(--ae-phi), 3)); /* ≈ 4.2 units */
     --inspector: calc(1rem * pow(var(--ae-phi), 6));
     --header: 0px;
     display: grid;
@@ -244,7 +245,7 @@
     & h6,
     & details > summary {
       padding: var(--ae-space-4) var(--ae-space-3) var(--ae-space-1);
-      font-size: var(--ae-text-xs);
+      font-size: var(--ae-text-s);
       color: var(--ae-text-muted);
     }
 

@@ -32,6 +32,8 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--ae-space-3);
+    /* Even where it is sized to its content (centred, or a flex item), it wraps at its parent. */
+    max-inline-size: 100%;
   }
 
   /* The golden split: two columns at exactly 1 : φ whenever they share a row. The narrow side
@@ -83,6 +85,7 @@
   /* Centre a single thing — sign-in cards, empty pages. */
   .center {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     place-items: center;
     min-block-size: 100dvh;
     padding: var(--ae-gutter);

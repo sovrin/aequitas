@@ -23,7 +23,8 @@
 
   /* Inline field: label beside the control. */
   .field[data-inline] {
-    grid-template-columns: max-content minmax(0, 1fr);
+    /* The label takes its own width, up to the minor part of a golden split; then it wraps. */
+    grid-template-columns: fit-content(calc(100% / pow(var(--ae-phi), 2))) minmax(0, 1fr);
     display: grid;
     align-items: center;
     column-gap: var(--ae-space-4);
@@ -55,6 +56,7 @@
 
   fieldset {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--ae-space-3);
     min-inline-size: 0;
     margin: 0;
@@ -78,7 +80,8 @@
       round(calc(var(--ae-control-size) / pow(var(--ae-phi), 2)), 1px);
     background: var(--ae-fill);
     border: 0;
-    border-radius: var(--ae-radius-m);
+    /* A single-line field is shaped like the buttons it sits beside; one that grows is not. */
+    border-radius: var(--ae-radius-full);
     /* A rule along the bottom, so an empty field can still be found. Focus and invalid replace it. */
     box-shadow: inset 0 -1px 0 var(--ae-control-edge);
     transition:
@@ -124,6 +127,11 @@
     padding-block: 0;
   }
 
+  /* Fields that grow past one line keep the card-like corner: a pill can't hold a paragraph. */
+  :is(textarea, select[multiple], select[size]:not([size="1"])).input {
+    border-radius: var(--ae-radius-m);
+  }
+
   /* Native pickers */
   .input::-webkit-calendar-picker-indicator {
     opacity: 0.6;
@@ -144,8 +152,11 @@
     cursor: pointer;
   }
 
+  /* A field holding a φ : 1 swatch: wider than a square, so it reads as a colour to pick rather
+     than an icon. The swatch is concentric with the field, square in square, round in round. */
   input[type="color"].input {
-    inline-size: var(--ae-control-size);
+    --_swatch-r: max(0px, calc(var(--ae-radius-full) - var(--ae-space-1)));
+    inline-size: calc(var(--ae-control-size) * var(--ae-phi));
     padding: var(--ae-space-1);
     cursor: pointer;
 
@@ -156,10 +167,13 @@
     /* Separate rules: a browser drops a whole selector list with a pseudo it doesn't know. */
     &::-webkit-color-swatch {
       border: 0;
+      border-radius: var(--_swatch-r);
+      corner-shape: var(--ae-corner);
     }
 
     &::-moz-color-swatch {
       border: 0;
+      border-radius: var(--_swatch-r);
     }
   }
 
@@ -225,8 +239,10 @@
   input[type="radio"] {
     border-radius: var(--ae-radius-full);
 
+    /* The dot takes the ring's shape: a square in a square, a circle in a circle. */
     &::after {
       clip-path: none;
+      border-radius: inherit;
       inline-size: round(calc(var(--_s) / pow(var(--ae-phi), 2)), 2px);
       block-size: round(calc(var(--_s) / pow(var(--ae-phi), 2)), 2px);
     }

@@ -25,6 +25,10 @@
     font-feature-settings: "calt", "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Content wraps, and a word too long for its box breaks rather than spilling out of it.
+       "anywhere", so grid tracks and flex items can also shrink below their longest word. Tokens
+       (controls, badges, deltas, times, keys) are nowrap and keep their one line. */
+    overflow-wrap: anywhere;
   }
 
   /* Cross-document view transitions: same-origin navigations crossfade. */
@@ -111,9 +115,8 @@
     text-wrap: balance;
   }
 
-  /* Long words in large type break rather than push a narrow page sideways. */
+  /* Long words in large type break (overflow-wrap, from body) and hyphenate where they can. */
   :is(h1, h2, .display) {
-    overflow-wrap: break-word;
     hyphens: auto;
   }
 
@@ -197,7 +200,8 @@
   samp,
   pre {
     font-family: var(--ae-font-mono);
-    font-size: calc(1em / pow(var(--ae-phi), 0.25));
+    /* Relative to its context, but never under the --ae-text-xs floor (kbd in small text). */
+    font-size: max(var(--ae-text-xs), calc(1em / pow(var(--ae-phi), 0.25)));
   }
 
   code,
@@ -239,7 +243,8 @@
 
   dl {
     display: grid;
-    grid-template-columns: max-content 1fr;
+    /* Terms take their own width, up to the minor part of a golden split; then they wrap. */
+    grid-template-columns: fit-content(calc(100% / pow(var(--ae-phi), 2))) minmax(0, 1fr);
     gap: var(--ae-space-2) var(--ae-space-5);
   }
 
@@ -283,7 +288,7 @@
   /* Small capitals, tracked open: a label, set like one. */
   .eyebrow {
     font-size: var(--ae-text-xs);
-    font-weight: 540;
+    font-weight: 560;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--ae-text-muted);

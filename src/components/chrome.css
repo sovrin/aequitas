@@ -9,6 +9,7 @@
     corner-shape: var(--ae-corner);
     --_d: var(--ae-space-2);
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr);
     background: var(--ae-surface);
     box-shadow: var(--ae-shadow-l), var(--ae-frost-edge);

@@ -1,7 +1,7 @@
 @layer ae.components {
   /* <div class="input-group"><span>https://</span><input class="input"><span>.com</span></div> */
   .input-group {
-    border-radius: var(--ae-radius-m);
+    border-radius: var(--ae-radius-full);
     display: flex;
     background: var(--ae-fill);
     /* The group carries the field's bottom rule; its input doesn't. */
@@ -10,7 +10,8 @@
 
     & > .input {
       flex: 1;
-      min-inline-size: 0;
+      /* The field keeps at least the minor part of a golden split; past that, a cell wraps. */
+      min-inline-size: calc(100% / pow(var(--ae-phi), 2));
       background: none;
       box-shadow: none;
 
@@ -25,11 +26,12 @@
       /* As a field's own inline padding, and its type one step down (never under text-xs). */
       padding-inline: round(calc(var(--ae-control-size) / pow(var(--ae-phi), 2)), 1px);
       font-size: max(var(--ae-text-xs), calc(var(--ae-control-text) / pow(var(--ae-phi), 0.5)));
+      text-align: center;
       color: var(--ae-text-muted);
-      white-space: nowrap;
     }
 
-    &:focus-within {
+    /* The field's ring only while the field has focus; a button cell shows its own ring. */
+    &:has(> .input:focus) {
       box-shadow: var(--ae-ring-field);
     }
   }

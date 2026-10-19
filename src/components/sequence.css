@@ -9,6 +9,8 @@
 
     & > li {
       flex: 1;
+      /* Steps share the row, but a label word sets its step's minimum: break-word, not anywhere. */
+      overflow-wrap: break-word;
       display: grid;
       gap: var(--ae-space-2);
       margin: 0;
@@ -89,6 +91,7 @@
   /* <ol class="timeline"><li data-tone="success"><time>09:41</time><div>…</div></li></ol> */
   .timeline {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--ae-space-4);
     padding: 0;
     list-style: none;

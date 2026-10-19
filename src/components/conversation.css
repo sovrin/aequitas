@@ -2,6 +2,7 @@
   /* <div class="thread"><div class="bubble">…</div><div class="bubble" data-self>…</div></div> */
   .thread {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--ae-space-2);
   }
 

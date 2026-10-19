@@ -56,7 +56,9 @@
       color: var(--ae-text);
       background: none;
       border: 0;
-      border-radius: var(--ae-radius-s);
+      /* Concentric with the menu: its corner less the inset, so a row's tint never pokes past it. */
+      border-radius: max(0px, calc(var(--ae-radius-l) - var(--ae-space-2)));
+      corner-shape: var(--ae-corner);
       cursor: pointer;
 
       /* Toned like ghost buttons: --ae-tone is the accent unless the item sets data-tone. */
@@ -90,7 +92,7 @@
 
       & kbd {
         margin-inline-start: auto;
-        font-size: var(--ae-text-xs);
+        font-size: var(--ae-text-s);
         color: var(--ae-text-muted);
         background: none;
       }
@@ -103,7 +105,6 @@
 
     & h6 {
       padding: var(--ae-space-2) var(--ae-space-3) var(--ae-space-1);
-      font-size: var(--ae-text-xs);
     }
   }
 }

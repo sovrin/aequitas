@@ -69,8 +69,8 @@
 
   /* <div class="stat"><b>12,480</b><span>Active users</span></div> */
   .stat {
-    border-radius: var(--ae-radius-m);
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--ae-space-1);
 
     & > b {
@@ -89,6 +89,7 @@
 
   .empty {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     justify-items: center;
     gap: var(--ae-space-3);
     padding: var(--ae-space-7) var(--ae-space-5);

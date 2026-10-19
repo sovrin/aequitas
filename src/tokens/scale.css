@@ -123,8 +123,8 @@
     /* The type a control sets at that size; data-size steps it with the height (control.css). */
     --ae-control-text: var(--ae-text-m);
 
-    /* φ^-1, but never under 11px: a legibility floor, named like --ae-target (on a small base
-       the step alone falls to about 9px). */
+    /* The 11px legibility floor, named like --ae-target. φ^-1 of the base only wins above a 17.8px
+       base, so at the shipped clamp (15.2–17px) xs is the floor, 1.09–1.22× under s rather than √φ. */
     --ae-text-xs: max(calc(var(--ae-text-base) * pow(var(--ae-phi), -1)), 0.6875rem);
     --ae-text-s: calc(var(--ae-text-base) * pow(var(--ae-phi), -0.5)); /* φ^-½   */
     --ae-text-m: var(--ae-text-base);

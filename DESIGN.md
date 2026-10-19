@@ -55,12 +55,12 @@ typography:
     lineHeight: 1.618
   eyebrow:
     fontFamily: "ui-sans-serif, -apple-system, 'SF Pro Text', system-ui, 'Geist Variable', 'Segoe UI', sans-serif"
-    fontSize: "0.618rem"
-    fontWeight: 540
+    fontSize: "0.6875rem"
+    fontWeight: 560
     letterSpacing: "0.12em"
   mono:
     fontFamily: "ui-monospace, 'SF Mono', 'Geist Mono Variable', Menlo, Consolas, monospace"
-    fontSize: "0.786rem"
+    fontSize: "0.889em"
 rounded:
   square: "0px"
   soft: "12px"
@@ -177,19 +177,24 @@ The palette is cool, near-neutral paper with one decisive accent hue. Neutrals c
 
 ### Hierarchy
 
-The scale steps by √φ (1.272) from a fluid base, `--ae-text-base`. Sizes below are at a 1rem base.
+The scale steps by √φ (1.272) from a fluid base, `--ae-text-base`. Sizes below are at a 1rem base; the base itself runs 0.95–1.0625rem, and 0.88–0.95rem in compact, so `s` renders 0.75–0.835rem (0.69–0.75rem compact).
 
 - **Display** (420, 4.236rem, line-height 1.062, −0.042em): the `.display` hero line. It is the lightest and tightest text in the system.
 - **Headline** (h1 at 460 and 4.236rem, −0.038em; h2 at 480 and 2.618rem, −0.03em; line-height 1.128): page and section titles.
 - **Title** (520; h3 at 2.058rem, h4 at 1.618rem; −0.022em): component and card headings. h5 is 1.272rem at 560, and h6 is 0.786rem at 560 in Pencil Grey.
 - **Body** (400, fluid 0.95–1.0625rem, line-height φ = 1.618): running text, wrapped `pretty`, measure `40ch · φ` ≈ 65ch.
-- **Label** (500, 0.786rem): field labels, buttons at `data-size="s"`, chips.
-- **Eyebrow** (540, 0.618rem, +0.12em, uppercase, Pencil Grey): small capitals tracked open, set like a label.
+- **Label** (500, 0.786rem): field labels, legends, table headers, buttons at `data-size="s"`, chips.
+- **Group label** (h6, 560, 0.786rem, Pencil Grey): one treatment for every group heading, on the page and in sidebars, menus and the palette.
+- **Fine print** (`--ae-text-xs`, the 11px floor): captions, badges, tooltips, timestamps. φ⁻¹ of the base would fall to 9.4–10.5px, so this size is the floor, not a φ step.
+- **Eyebrow** (560, 0.6875rem, +0.12em, uppercase, Pencil Grey): small capitals tracked open, set at the floor.
+- **Mono** (0.889em, i.e. ÷ φ^¼ of its context): code and kbd, never under the floor. Shortcut hints in menus and the palette are `s`.
 - **Lead** (1.272rem, Pencil Grey): the intro paragraph under a display line.
 
 ### Named Rules
 
 **The Lighter-When-Larger Rule.** Weight falls as size rises (h4 520 → h2 480 → h1 460 → display 420), and tracking tightens with it. Never bold a headline to make it louder. Step it up the scale.
+
+**The Floor Rule.** Small text has two sizes, `s` and the 11px floor, and in compact density the floor rises to meet `s`, leaving one. Nothing renders under the floor, and small text uses three weights: 400 for meta, 500 for labels and anything clickable, 560 for group labels and eyebrows (and 580 for `strong`).
 
 **The Leading Rule.** Body leading is φ itself, headings use φ^¼ (1.128) and display uses φ^⅛ (1.062). No other line-heights.
 
@@ -203,6 +208,8 @@ Space is a nine-step φ scale (`--ae-space-0…8`), `--ae-unit · φⁿ` for n =
 - **Breakpoints** (the named exception, since media queries can't read tokens): `s` < 48rem, `m` ≥ 48rem, `l` ≥ 64rem, `xl` ≥ 80rem. Components prefer container queries (`cq-*:` variants, cards are size containers).
 - **Control heights:** every control that sits in a row (buttons, fields, selects, steppers, segments, groups) takes its height from `--ae-control-size`: φ² units (42px), with `-s` (33px) and `-l` (53px) a φ^½ step either side, as the text sizes step, and its type from `--ae-control-text`. `data-size="s|l"` steps both together. Inline padding is the height ÷ φ². A row is level by construction; the kitchen sink's control-heights specimen shows it.
 - **Row heights come from the same ladder.** Menu, option, nav, tree and menubar rows, chips, pagination squares and calendar days are the small size; tabs are the default; avatars take all three. A table row is one size taller than the controls it holds (default table: large rows; small table: default rows). The FAB is space-7, one φ step above the large size. Only content rows (lists, accordions, cards) still grow from their padding. The toolbar is the one half-step: small buttons in space-1 padding make 41px, since the ladder's 9px gap between s and m can't centre on whole pixels.
+
+**The Too-Much-Content Rule.** Text is never cut: no ellipsis, no clipping. A token on the ladder (button, chip, badge, segment) stops at its container's edge and its label wraps, balanced, onto another line, so the control grows taller. Content wraps too, and a word too long for its box breaks (`overflow-wrap: anywhere` on `body`); whether a label fits is the author's content, not the framework's call. Groups of tokens wrap to another row (`.tabs`, `.segmented`, `.btn-group`, an alert's action, `.cluster`); a navbar's links scroll sideways instead. Where a share has to be kept, it is the minor part of a golden split: a `dl` term, an inline label or a list row's trailing meta takes its own width up to φ⁻², and an input-group's field never drops under φ⁻². Tokens and labels that must stay whole keep their words: tabs, step labels, deltas and table columns (a wide table scrolls in `.table-scroll`). `.truncate` stays available as an explicit opt-in.
 
 **The No-Hand-Tuned-Space Rule.** Every gap, padding and margin is a `--ae-space-*` step, a φ multiple of one, or a φ² division of `--ae-control-size` (a control's inline padding: 13, 16 or 20px). Any other 12px or 20px gap is a bug.
 
@@ -226,7 +233,7 @@ Each shadow has three layers: contact, key and ambient. The key and ambient offs
 
 ## Shapes
 
-Square by default: `--ae-radius-m` is 0, so every derived radius (s = m/φ, l = m·φ, xl = m·φ²) is also 0, and "pill" is square too. The `soft` (φ^-½ ≈ 0.786rem) and `round` (φ^½ ≈ 1.272rem) presets bring the φ curve back to every component, with `corner-shape: round` and true pills at 999px. Shape changes glide, because the radius is a registered `<length>`. A layer whose rows or bars run to its edges takes a tighter corner than a card, so the curve never cuts into them: lists and windows take radius-m (their bars' content also starts at least that far in), and the command palette, with its taller header, takes radius-l. The brand mark repeats the geometry: a golden rectangle cut into squares. The busy indicator is three pulsing squares sized φ⁻² with φ⁻³ gaps, never a spinning circle.
+Square by default: `--ae-radius-m` is 0, so every derived radius (s = m/φ, l = m·φ, xl = m·φ²) is also 0, and "pill" is square too. The `soft` (φ^-½ ≈ 0.786rem) and `round` (φ^½ ≈ 1.272rem) presets bring the φ curve back to every component, with `corner-shape: round` and true pills at 999px. Shape changes glide, because the radius is a registered `<length>`. A layer whose rows or bars run to its edges takes a tighter corner than a card, so the curve never cuts into them: lists and windows take radius-m (their bars' content also starts at least that far in), and the command palette, with its taller header, takes radius-l. Rows inset in a floating layer (menu items, palette options) are concentric with it: its radius less the inset. What you click or type into on one line is shaped alike: buttons, chips, badges and single-line fields (inputs, selects, input groups, steppers) take radius-full, so under soft and round they are all pills; a field that grows past one line (textarea, tag input, multi-row select) keeps radius-m. The brand mark repeats the geometry: a golden rectangle cut into squares. The busy indicator is three pulsing squares sized φ⁻² with φ⁻³ gaps, never a spinning circle.
 
 **The Squares-Throughout Rule.** At default settings nothing is rounded: not buttons, avatars, chips or the busy indicator. Never hard-code a radius. Read `--ae-radius-*` so the presets keep working.
 

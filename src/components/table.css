@@ -11,6 +11,9 @@
     border-collapse: separate;
     border-spacing: 0;
     font-variant-numeric: tabular-nums;
+    /* A column stays as wide as its longest word: a table too wide for its box scrolls in
+       .table-scroll rather than breaking its data mid-word. */
+    overflow-wrap: break-word;
 
     /* A row is one control size taller than the controls it carries: a default table holds
        default controls in large rows, a small one small controls in default rows. */

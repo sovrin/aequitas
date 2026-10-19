@@ -1279,8 +1279,11 @@
   color: var(--ae-text-muted);
 }
 
+/* A long index read top to bottom, not a row of controls: rows grow from their padding, as a toc's
+   do, instead of taking the framework sidebar's control height (42px under spacious). */
 .docs-nav a {
   display: block;
+  min-block-size: 0;
   padding: var(--ae-space-2) var(--ae-space-3);
   font-size: var(--ae-text-s);
   font-weight: 500;

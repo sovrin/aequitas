@@ -113,8 +113,10 @@
       grid-row: span 2;
     }
 
+    /* As specific as the span rules above, so it wins: a span left on a one-column grid makes
+       implicit columns and crushes the cells beside it. */
     @media (width < 48rem) {
-      & > * {
+      & > :is([data-span], [data-rows]) {
         grid-column: auto;
         grid-row: auto;
       }
@@ -129,6 +131,7 @@
 
     & > * {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       align-content: center;
       padding: var(--ae-space-7) var(--ae-gutter);
     }
@@ -253,6 +256,7 @@
      shell). An intrinsic size, not a minimum, so an aspect ratio never turns it into a min width. */
   .stage {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     place-items: center;
     contain-intrinsic-block-size: calc(1rem * pow(var(--ae-phi), 5));
     /* Nor a content minimum: with .golden the ratio holds exactly. */
@@ -282,6 +286,7 @@
     inset: 0;
     z-index: 2;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     place-items: center;
     border-radius: inherit;
     /* The thick material: text on it stays 4.5:1 over any media behind it. */
@@ -313,6 +318,7 @@
   /* Preferences rows, label + description start, control end. <div class="settings"><div class="setting"><div><b>…</b><small>…</small></div><input …></div></div> */
   .settings {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     box-shadow: var(--ae-shadow-m), var(--ae-frost-edge);
 
     & > .setting {
@@ -385,6 +391,7 @@
       min-block-size: 100dvh;
       scroll-snap-align: start;
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       align-content: center;
       padding: var(--ae-space-7) var(--ae-gutter);
     }

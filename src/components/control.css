@@ -18,4 +18,11 @@
     --ae-control-size: var(--ae-control-size-l);
     --ae-control-text: var(--ae-text-l);
   }
+
+  /* Short of room, a control on the ladder stops at its container's edge and its label wraps,
+     balanced, onto another line: the control grows taller and no text is ever cut. */
+  :where(.btn, .chip, .badge) {
+    max-inline-size: 100%;
+    text-wrap: balance;
+  }
 }

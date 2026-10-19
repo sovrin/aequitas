@@ -43,6 +43,7 @@
   /* <span class="delta" data-trend="up">+12.4%</span> */
   .delta {
     display: inline-flex;
+    white-space: nowrap;
     align-items: center;
     gap: 0.3em;
     font-size: var(--ae-text-s);
@@ -144,6 +145,7 @@
 
     & > .column {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       align-content: start;
       gap: var(--ae-space-3);
       padding: var(--ae-space-3);

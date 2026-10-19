@@ -3,6 +3,7 @@
      <div role="group"> that opens with its <h6> header. */
   .list {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     /* Rows run to the list's edges: its corner is one step tighter than a card's, so the round
        preset rounds a list without turning a short one into a pill. */
     border-radius: var(--ae-radius-m);
@@ -29,6 +30,13 @@
       text-decoration: none;
       background: none;
       border: 0;
+
+      /* Trailing meta (a time, a count, a role) keeps its own width up to the minor part of a
+         golden split, so a short one is never squeezed and a long one wraps. */
+      & > .end:not(:has(*)) {
+        flex-shrink: 0;
+        max-inline-size: calc(100% / pow(var(--ae-phi), 2));
+      }
     }
 
     /* The first and last rows follow the list's corners, so their tint never pokes past them. */

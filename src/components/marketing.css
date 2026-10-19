@@ -2,6 +2,7 @@
   /* <section class="hero"><h6>Eyebrow</h6><h1>…</h1><p>…</p><div class="cluster">…</div></section> */
   .hero {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--ae-space-5);
     padding-block: var(--ae-space-8) var(--ae-space-7);
 
@@ -47,6 +48,7 @@
 
     & > .card {
       display: grid;
+      grid-template-columns: minmax(0, 1fr);
       gap: var(--ae-space-4);
 
       & > * + * {
@@ -173,6 +175,7 @@
   /* <figure class="testimonial"><blockquote>…</blockquote><figcaption><span class="avatar">AL</span><span><b>Ada</b> Role</span></figcaption></figure> */
   .testimonial {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     align-content: start;
     gap: var(--ae-space-4);
     margin: 0;

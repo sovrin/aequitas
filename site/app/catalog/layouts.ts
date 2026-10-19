@@ -139,7 +139,7 @@ export const layouts: Entry[] = [
       [".shell[--sidebar=<length>]", "Sidebar column width. Default φ⁶ ≈ 18rem."],
       [
         ".shell[--rail=<length>]",
-        "Sidebar width with `data-rail` or a collapsed `data-collapsible`. Default φ³ ≈ 4.2rem; keep it under 7rem or the sidebar keeps its full layout.",
+        "Sidebar width with `data-rail` or a collapsed `data-collapsible`. Default φ³ units (`--ae-unit`), so it follows the density: ≈ 4.2rem, 3.3rem compact, 5.4rem spacious. Keep it under 7rem or the sidebar keeps its full layout.",
       ],
       [".shell[--inspector=<length>]", "Inspector column width. Default φ⁶ ≈ 18rem."],
     ],

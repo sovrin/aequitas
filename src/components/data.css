@@ -4,6 +4,7 @@
     border-radius: var(--ae-radius-m);
     position: relative;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     place-items: center;
     gap: var(--ae-space-1);
     padding: var(--ae-space-6) var(--ae-space-5);
@@ -101,7 +102,7 @@
 
   /* <div class="number"><button aria-label="Decrease">−</button><input type="number"><button aria-label="Increase">+</button></div> */
   .number {
-    border-radius: var(--ae-radius-m);
+    border-radius: var(--ae-radius-full);
     display: inline-flex;
     min-block-size: var(--ae-control-size);
     background: var(--ae-fill);
@@ -253,6 +254,7 @@
 
   .swatch {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--ae-space-2);
     font-family: var(--ae-font-mono);
     font-size: var(--ae-text-xs);
@@ -319,7 +321,7 @@
   /* <dl class="properties"><dt>Owner</dt><dd>Ada</dd>…</dl>: key-value rows, one dd per dt. */
   .properties {
     display: grid;
-    grid-template-columns: minmax(max-content, 1fr) minmax(0, 2fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
     gap: 0;
     font-size: var(--ae-text-s);
 

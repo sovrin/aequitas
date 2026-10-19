@@ -17,6 +17,24 @@
       backdrop-filter: none;
     }
 
+    /* Short of room, the links scroll sideways, as the sidebar's row does on a phone, and the
+       brand and actions wrap. The scroller is padded by space-2 so it clips neither a focus ring
+       (4px) nor a current link's underline. */
+    & > * {
+      min-inline-size: 0;
+    }
+
+    /* The links take what the brand and actions leave, so they are the first to give way. */
+    & > nav {
+      flex: 1 1 0;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      margin: calc(var(--ae-space-2) * -1);
+      padding: var(--ae-space-2);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
     & a {
       color: var(--ae-text-muted);
       text-decoration: none;

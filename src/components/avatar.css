@@ -10,7 +10,7 @@
     inline-size: var(--_size);
     block-size: var(--_size);
     font-size: max(var(--ae-text-xs), calc(var(--_size) / pow(var(--ae-phi), 2)));
-    font-weight: 600;
+    font-weight: 560;
     letter-spacing: -0.02em;
     color: var(--ae-tone-ink);
     background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-press), transparent);

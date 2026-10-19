@@ -40,7 +40,7 @@ const exceptions: [string, string][] = [
   ["24px pointer target", "An accessibility floor (WCAG 2.5.8), not a design choice."],
   [
     "11px small-text floor",
-    "--ae-text-xs is φ⁻¹ of the base, but never smaller than 11px to stay legible.",
+    "--ae-text-xs is the floor: φ⁻¹ of the base would fall to 9–10.5px. Compact density merges it with --ae-text-s.",
   ],
   [
     "Breakpoints",
