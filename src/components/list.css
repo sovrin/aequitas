@@ -123,6 +123,12 @@
         opacity: 0.6;
       }
 
+      /* Trailing meta already takes the free space; the chevron follows it at the row gap
+         instead of splitting that space and stranding the meta mid-row. */
+      &:has(> .end)::after {
+        margin-inline-start: 0;
+      }
+
       &:dir(rtl)::after {
         rotate: -45deg;
       }

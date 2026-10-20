@@ -5,8 +5,9 @@ useHead({ title: "Landing · showcase · aequitas" });
 
 <template>
   <div class="page">
-    <header class="navbar" data-shrink>
-      <strong>Northlight</strong>
+    <!-- The thin frost the sidebar uses, not the bar default: the aurora shows through. -->
+    <header class="navbar" data-shrink style="--ae-frost-bg: inherit">
+      <strong class="cluster flex-nowrap gap-2"><ShowcaseMark /> Northlight</strong>
       <nav class="cluster"><a href="#">Product</a><a href="#">Pricing</a><a href="#">Docs</a></nav>
       <span class="end cluster gap-2"
         ><a href="#" class="btn" data-size="s" data-variant="ghost">Sign in</a

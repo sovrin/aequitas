@@ -14,7 +14,7 @@ export const navigation: Entry[] = [
       ],
       [
         "> strong, > nav",
-        "Brand and link groups in one row. Every `<a>` inside is a quiet, small link.",
+        "Brand and link groups in one row. Links in the `<nav>` are small nav rows: a hover fill, and the current one (`aria-current`) in the accent tint with a 2px bottom edge. Other `<a>`s are quiet, small links.",
       ],
       ["> .end", "Optional. The `.end` utility pushes trailing actions to the far side."],
     ],

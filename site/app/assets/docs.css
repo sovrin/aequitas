@@ -1165,8 +1165,15 @@
   }
 }
 
-.showcase-bar .btn {
+/* Nothing shrinks: on a phone the bar scrolls sideways rather than squeezing the badge into a column. */
+.showcase-bar > * {
+  flex: none;
   white-space: nowrap;
+}
+
+/* A showcase's own sticky save bar rests above the fixed showcase bar instead of under it. */
+:has(> .showcase-bar) .action-bar {
+  inset-block-end: calc(var(--ae-control-size-s) + 2 * var(--ae-space-1) + 2 * var(--ae-gutter));
 }
 
 /* ---- Docs navigation ---- */

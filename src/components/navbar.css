@@ -57,5 +57,42 @@
         text-decoration-color: var(--ae-tone);
       }
     }
+
+    /* The bar's own links are small nav rows, level with its buttons: a hover fill, and the
+       current one in the accent tint with the 2px edge along the bottom, as a sidebar row has
+       it on its inline start. */
+    & > nav {
+      gap: var(--ae-space-1);
+    }
+
+    & > nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--ae-space-2);
+      min-block-size: var(--ae-control-size-s);
+      padding-inline: var(--ae-space-3);
+      border-radius: var(--ae-radius-full);
+      corner-shape: var(--ae-corner);
+      text-decoration: none;
+      transition:
+        color var(--ae-duration) var(--ae-ease),
+        background-color var(--ae-duration) var(--ae-ease);
+
+      &:hover {
+        background: var(--ae-fill-hover);
+      }
+
+      &:active {
+        background: var(--ae-fill-active);
+      }
+
+      &[aria-current="page"] {
+        color: var(--ae-tone-ink);
+        background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
+        box-shadow:
+          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone),
+          var(--ae-focus, 0 0 #0000);
+      }
+    }
   }
 }

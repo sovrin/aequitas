@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-11T17:35:37.485Z",
+  "generatedAt": "2026-10-21T12:18:35.593Z",
   "title": "Design System: aequitas",
   "extensions": {
     "colorMeta": {
@@ -421,6 +421,22 @@
       "css": ".ds-card{padding:26px;color:var(--ae-text, oklch(0.21 0.02 255));background:var(--ae-frost-bg, color-mix(in oklch, white 66%, transparent));backdrop-filter:blur(1.618rem) saturate(1.8);border:0;border-radius:var(--ae-radius-l, 0);box-shadow:var(--ae-shadow-m, 0 8px 26px -8px rgb(0 0 0 / 0.1)),inset 0 1px 0 var(--ae-highlight, oklch(1 0 0 / 0.9));transition:box-shadow 220ms cubic-bezier(0.2,0,0,1)}.ds-card:hover{box-shadow:var(--ae-shadow-l, 0 26px 68px -12px rgb(0 0 0 / 0.16)),inset 0 1px 0 var(--ae-highlight, oklch(1 0 0 / 0.9))}"
     },
     {
+      "name": "Navbar",
+      "kind": "nav",
+      "refersTo": "navbar",
+      "description": "Thick-frost bar with one hairline below; its links are small nav rows, the current one in the accent tint with a 2px bottom edge.",
+      "html": "<header class=\"ds-navbar\"><strong class=\"ds-navbar-brand\">Northlight</strong><nav class=\"ds-navbar-links\"><a href=\"#\" aria-current=\"page\">Home</a><a href=\"#\">Pages</a><a href=\"#\">Schedule</a></nav></header>",
+      "css": ".ds-navbar{display:flex;align-items:center;gap:26px;padding:10px 26px;color:var(--ae-text, oklch(0.21 0.02 255));background:var(--ae-frost-bg-thick, color-mix(in oklch, white 88%, transparent));backdrop-filter:blur(2.618rem) saturate(1.8);box-shadow:0 1px 0 var(--ae-border, color-mix(in oklch, oklch(0.21 0.02 255) 11%, transparent))}.ds-navbar-brand{font-weight:600}.ds-navbar-links{display:flex;gap:4px}.ds-navbar-links a{display:inline-flex;align-items:center;min-block-size:33px;padding-inline:10px;font-size:0.786rem;font-weight:500;color:var(--ae-text-muted, oklch(0.48 0.02 255));text-decoration:none;border-radius:var(--ae-radius-full, 0);transition:color 220ms cubic-bezier(0.2,0,0,1),background-color 220ms cubic-bezier(0.2,0,0,1)}.ds-navbar-links a:hover{color:var(--ae-text, oklch(0.21 0.02 255));background:var(--ae-fill-hover, color-mix(in oklch, oklch(0.21 0.02 255) 11.3%, transparent))}.ds-navbar-links a:active{background:var(--ae-fill-active, color-mix(in oklch, oklch(0.21 0.02 255) 18.3%, transparent))}.ds-navbar-links a[aria-current=page]{color:var(--ae-accent-ink, oklch(0.45 0.15 255));background:color-mix(in oklch, var(--ae-accent, oklch(0.55 0.2 255)) 11.3%, transparent);box-shadow:inset 0 -2px 0 var(--ae-accent, oklch(0.55 0.2 255))}.ds-navbar-links a:focus-visible{outline:none;box-shadow:0 0 0 2px var(--ae-bg, oklch(0.975 0.003 255)),0 0 0 4px var(--ae-accent, oklch(0.55 0.2 255))}"
+    },
+    {
+      "name": "List",
+      "kind": "custom",
+      "refersTo": "list",
+      "description": "Inset grouped list on thin frost; rows divide by hairlines, trailing meta sits right before the chevron.",
+      "html": "<div class=\"ds-list\"><a href=\"#\"><span>Continue <b>Why we stopped using sprints</b></span><span class=\"ds-list-meta\">12 min ago</span></a><a href=\"#\"><span>Review <b>October changelog</b></span><span class=\"ds-list-meta\">09:12</span></a></div>",
+      "css": ".ds-list{display:grid;color:var(--ae-text, oklch(0.21 0.02 255));background:var(--ae-frost-bg, color-mix(in oklch, white 66%, transparent));backdrop-filter:blur(1.618rem) saturate(1.8);border-radius:var(--ae-radius-m, 0);box-shadow:var(--ae-shadow-m, 0 8px 26px -8px rgb(0 0 0 / 0.1)),inset 0 1px 0 var(--ae-highlight, oklch(1 0 0 / 0.9))}.ds-list>a{display:flex;align-items:center;gap:10px;padding:10px 16px;color:inherit;text-decoration:none}.ds-list>a+a{box-shadow:inset 0 1px 0 var(--ae-border, color-mix(in oklch, oklch(0.21 0.02 255) 11%, transparent))}.ds-list>a:hover{background:var(--ae-fill-hover, color-mix(in oklch, oklch(0.21 0.02 255) 11.3%, transparent))}.ds-list>a:active{background:var(--ae-fill-active, color-mix(in oklch, oklch(0.21 0.02 255) 18.3%, transparent))}.ds-list>a::after{content:'';inline-size:7px;block-size:7px;flex:none;border-block-start:1.5px solid var(--ae-text-muted, oklch(0.48 0.02 255));border-inline-end:1.5px solid var(--ae-text-muted, oklch(0.48 0.02 255));rotate:45deg;opacity:0.6}.ds-list-meta{margin-inline-start:auto;flex-shrink:0;font-size:0.6875rem;color:var(--ae-text-muted, oklch(0.48 0.02 255))}"
+    },
+    {
       "name": "Busy Squares",
       "kind": "custom",
       "description": "The signature busy indicator: three φ-proportioned squares pulsing, never a spinning circle.",
@@ -452,7 +468,7 @@
       },
       {
         "name": "The Aurora Rule",
-        "body": "Frost needs something to blur. The page canvas carries three soft radial fields derived from the accent (lead hue, +55°, −60°). Glass over a flat colour is just a grey box. Opt-in with data-aurora.",
+        "body": "Frost needs something to blur. `<html data-aurora>` gives the page canvas three soft radial fields derived from the accent (lead hue, +55°, −60°). Glass over a flat colour is just a grey box, so pages built on glass should turn it on. The aurora is still unless `data-aurora=\"drift\"` asks it to move. `--ae-aurora-seed` places the fields: each turns about the page centre by a multiple of the golden angle, so a seed is a layout, not a random draw.",
         "section": "colors"
       },
       {
@@ -461,13 +477,23 @@
         "section": "typography"
       },
       {
+        "name": "The Floor Rule",
+        "body": "Small text has two sizes, `s` and the 11px floor, and in compact density the floor rises to meet `s`, leaving one. Nothing renders under the floor, and small text uses three weights: 400 for meta, 500 for labels and anything clickable, 560 for group labels and eyebrows (and 580 for `strong`).",
+        "section": "typography"
+      },
+      {
         "name": "The Leading Rule",
         "body": "Body leading is φ itself, headings use φ^¼ (1.128) and display uses φ^⅛ (1.062). No other line-heights.",
         "section": "typography"
       },
       {
+        "name": "The Too-Much-Content Rule",
+        "body": "Text is never cut: no ellipsis, no clipping. A token on the ladder (button, chip, badge, segment) stops at its container's edge and its label wraps, balanced, onto another line, so the control grows taller. Content wraps too, and a word too long for its box breaks (`overflow-wrap: anywhere` on `body`); whether a label fits is the author's content, not the framework's call. Groups of tokens wrap to another row (`.tabs`, `.segmented`, `.btn-group`, an alert's action, `.cluster`); a navbar's links scroll sideways instead. Where a share has to be kept, it is the minor part of a golden split: a `dl` term, an inline label or a list row's trailing meta takes its own width up to φ⁻², and an input-group's field never drops under φ⁻². Tokens and labels that must stay whole keep their words: tabs, step labels, deltas and table columns (a wide table scrolls in `.table-scroll`). `.truncate` stays available as an explicit opt-in.",
+        "section": "layout"
+      },
+      {
         "name": "The No-Hand-Tuned-Space Rule",
-        "body": "Every gap, padding and margin is a `--ae-space-*` step or a φ multiple of one. A 12px or 20px gap is a bug.",
+        "body": "Every gap, padding and margin is a `--ae-space-*` step, a φ multiple of one, or a φ² division of `--ae-control-size` (a control's inline padding: 13, 16 or 20px). Any other 12px or 20px gap is a bug.",
         "section": "layout"
       },
       {
@@ -487,22 +513,22 @@
       }
     ],
     "dos": [
-      "Do derive every new value from φ through the existing tokens (`--ae-space-*`, `--ae-text-*`, `--ae-radius-*`, `--ae-duration-*`), or add it to the named exceptions on purpose.",
-      "Do answer the pointer with tone: step `--ae-tint-rest` → `--ae-tint-hover` → `--ae-tint-press`.",
-      "Do mark persistent \"on\" states with the 2px `--ae-edge` in the tone, and never with colour alone.",
-      "Do put frost only on floating layers, and give them the specular top edge.",
-      "Do use `-ink` tokens for coloured text, and keep 4.5:1 for text and 3:1 for control boundaries.",
-      "Do read `--ae-radius-*`, so the `soft` and `round` presets keep working.",
-      "Do keep motion on `--ae-ease` (cubic-bezier(0.2, 0, 0, 1)) and `--ae-ease-spring`. Spring settles with no overshoot. Durations are 220ms, ÷φ or ×φ, with a φ⁻³ stagger."
+      "**Do** derive every new value from φ through the existing tokens (`--ae-space-*`, `--ae-text-*`, `--ae-radius-*`, `--ae-duration-*`), or add it to the named exceptions on purpose.",
+      "**Do** answer the pointer with tone: step `--ae-tint-rest` → `--ae-tint-hover` → `--ae-tint-press`.",
+      "**Do** mark persistent \"on\" states with the 2px `--ae-edge` in the tone, and never with colour alone.",
+      "**Do** put frost only on floating layers, and give them the specular top edge.",
+      "**Do** use `-ink` tokens for coloured text, and keep 4.5:1 for text and 3:1 for control boundaries.",
+      "**Do** read `--ae-radius-*`, so the `soft` and `round` presets keep working.",
+      "**Do** keep motion on `--ae-ease` (cubic-bezier(0.2, 0, 0, 1)) and `--ae-ease-spring`. Spring settles with no overshoot. Durations are 220ms, ÷φ or ×φ, with a φ⁻³ stagger."
     ],
     "donts": [
-      "Don't draw borders or outlines around surfaces. Separate them by tone and shadow.",
-      "Don't move controls on hover or press (no translate, no scale, no lift).",
-      "Don't hard-code px or rem gaps, radii or font sizes off the φ scale.",
-      "Don't make controls glass, or put frost over a flat canvas with no aurora behind it.",
-      "Don't bold large type. Larger text is lighter and tighter.",
-      "Don't introduce a second accent hue, or hard-code colour where a `--ae-*` token exists.",
-      "Don't use rounded spinners or bouncing easing. Busy states are squares, and motion decelerates without overshoot."
+      "**Don't** draw borders or outlines around surfaces. Separate them by tone and shadow.",
+      "**Don't** move controls on hover or press (no translate, no scale, no lift).",
+      "**Don't** hard-code px or rem gaps, radii or font sizes off the φ scale.",
+      "**Don't** make controls glass, or put frost over a flat canvas with no aurora behind it.",
+      "**Don't** bold large type. Larger text is lighter and tighter.",
+      "**Don't** introduce a second accent hue, or hard-code colour where a `--ae-*` token exists.",
+      "**Don't** use rounded spinners or bouncing easing. Busy states are squares, and motion decelerates without overshoot."
     ]
   }
 }

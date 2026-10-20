@@ -238,6 +238,14 @@
     scrollbar-width: thin;
   }
 
+  /* Docked panels stretch to the viewport (their max-block-size caps it), so the edge hairline
+     never stops halfway down the page. Floating panels keep fitting their content. */
+  @media (width >= 48rem) {
+    .shell:not([data-float]) > :is(.sidebar, .inspector) {
+      align-self: stretch;
+    }
+  }
+
   .sidebar {
     container-type: inline-size;
     box-shadow: inset calc(var(--ae-hairline-x) * -1) 0 0 var(--ae-border);
