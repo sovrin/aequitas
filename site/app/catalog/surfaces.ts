@@ -120,6 +120,10 @@ export const surfaces: Entry[] = [
         "--ae-frost-bg",
         "The fill: the surface colour at 66% (light) or 72% (dark). Dialogs, popovers and the combobox list set a thicker mix so text stays legible.",
       ],
+      [
+        "--ae-frost-bg-sheer",
+        "A sheerer fill, the surface at 50% (light) or 56% (dark), for a layer over a quiet backdrop it should show. Set `--ae-frost-bg: var(--ae-frost-bg-sheer)` on it. Solid under reduced transparency, like the others.",
+      ],
       ["--ae-frost-filter", "The backdrop filter: `blur(var(--ae-blur-m)) saturate(1.8)`."],
       [
         "--ae-frost-edge",

@@ -113,6 +113,7 @@
       --ae-edge: 3px;
       --ae-frost-bg: var(--ae-surface);
       --ae-frost-bg-thick: var(--ae-surface);
+      --ae-frost-bg-sheer: var(--ae-surface);
       --ae-frost-filter: none;
       --ae-frost-filter-l: none;
     }

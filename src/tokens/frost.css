@@ -18,6 +18,9 @@
 
     --ae-frost-bg: var(--ae-surface);
     --ae-frost-bg-thick: var(--ae-surface);
+    /* Sheerer material for a layer over a quiet backdrop it should show (a toolbar over a
+       canvas), where the thin fill reads as nearly solid. Not for text over busy content. */
+    --ae-frost-bg-sheer: var(--ae-surface);
     /* The only edge: a specular catch on the top, where light hits glass. */
     --ae-frost-edge: inset 0 1px 0 var(--ae-highlight);
 
@@ -61,6 +64,10 @@
         color-mix(in oklch, var(--ae-surface) 88%, transparent),
         color-mix(in oklch, var(--ae-surface) 90%, transparent)
       );
+      --ae-frost-bg-sheer: light-dark(
+        color-mix(in oklch, var(--ae-surface) 50%, transparent),
+        color-mix(in oklch, var(--ae-surface) 56%, transparent)
+      );
     }
   }
 
@@ -68,6 +75,7 @@
     :root {
       --ae-frost-bg: var(--ae-surface);
       --ae-frost-bg-thick: var(--ae-surface);
+      --ae-frost-bg-sheer: var(--ae-surface);
       --ae-frost-filter: none;
       --ae-frost-filter-l: none;
     }
