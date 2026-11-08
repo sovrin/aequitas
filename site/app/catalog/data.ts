@@ -250,7 +250,7 @@ export const data: Entry[] = [
     ],
     attrs: [
       [
-        "data-tone=accent|success|warning|danger|info",
+        "data-tone=accent|success|warning|danger|info|neutral",
         "Colours the tint, the text, the outline and the dot. Default accent.",
       ],
       [
@@ -304,7 +304,7 @@ export const data: Entry[] = [
     ],
     attrs: [
       [
-        "data-tone=accent|success|warning|danger|info",
+        "data-tone=accent|success|warning|danger|info|neutral",
         "On a filter chip, colours the checked tint and edge. Default accent.",
       ],
       [
@@ -354,7 +354,7 @@ export const data: Entry[] = [
     ],
     attrs: [
       [
-        "data-tone=accent|success|warning|danger|info",
+        "data-tone=accent|success|warning|danger|info|neutral",
         "Colours the initials and their tint. Default accent.",
       ],
       [
@@ -398,7 +398,10 @@ export const data: Entry[] = [
       },
     ],
     attrs: [
-      ["data-tone=accent|success|warning|danger|info", "Colour of the square. Default accent."],
+      [
+        "data-tone=accent|success|warning|danger|info|neutral",
+        "Colour of the square. Default accent.",
+      ],
     ],
     a11y: [
       "The dot is empty and announces nothing. The label beside it carries the status; never use the dot alone.",
@@ -509,7 +512,7 @@ export const data: Entry[] = [
     ],
     attrs: [
       [
-        "data-tone=accent|success|warning|danger|info",
+        "data-tone=accent|success|warning|danger|info|neutral",
         "On an `li`: colours its marker. Default accent.",
       ],
     ],

@@ -25,7 +25,7 @@ export const feedback: Entry[] = [
     ],
     attrs: [
       [
-        "data-tone=accent|success|warning|danger|info",
+        "data-tone=accent|success|warning|danger|info|neutral",
         "Sets the tint and the colour of the `<strong>` lead. Default accent.",
       ],
       [
@@ -86,11 +86,11 @@ export const feedback: Entry[] = [
       ["data-toast=<text>", "On any element: a click shows a toast with this message."],
       ["data-toast-title=<text>", "With `data-toast`: a bold title before the message."],
       [
-        "data-toast-tone=accent|success|warning|danger|info",
+        "data-toast-tone=accent|success|warning|danger|info|neutral",
         "With `data-toast`: the toast's tone.",
       ],
       [
-        ".toast[data-tone=accent|success|warning|danger|info]",
+        ".toast[data-tone=accent|success|warning|danger|info|neutral]",
         "Draws a small square in the tone before the message and colours the title. No square without it.",
       ],
       [".toasts[data-position]", "Which corner or edge the stack sits in. Default bottom end."],
@@ -136,7 +136,7 @@ export const feedback: Entry[] = [
     ],
     attrs: [
       [
-        "data-tone=accent|success|warning|danger|info",
+        "data-tone=accent|success|warning|danger|info|neutral",
         "Background colour; the text takes the tone's contrast colour. Default accent.",
       ],
     ],
@@ -174,7 +174,7 @@ export const feedback: Entry[] = [
     attrs: [
       ["value=<n>", "How much is done. Leave it out for the indeterminate sweep."],
       ["max=<n>", "The total. Default `1`."],
-      ["data-tone=accent|success|warning|danger|info", "Colours the fill. Default accent."],
+      ["data-tone=accent|success|warning|danger|info|neutral", "Colours the fill. Default accent."],
     ],
     a11y: [
       "`<progress>` is a progressbar and announces its percentage. Label it with `<label for>` or `aria-label`.",

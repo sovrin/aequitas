@@ -73,7 +73,7 @@ export const marketing: Entry[] = [
     attrs: [
       ["data-center", "Centres each feature's icon and text."],
       [
-        "data-tone=accent|success|warning|danger|info",
+        "data-tone=accent|success|warning|danger|info|neutral",
         "Colours the icons. Set it on the grid, or on one feature.",
       ],
       ["--min=<length>", "Minimum column width. Default φ⁶ ≈ 18rem."],
@@ -121,7 +121,7 @@ export const marketing: Entry[] = [
         "On one tier inside `.pricing`: solid tone fill with contrast text and an inverted button, no blur.",
       ],
       [
-        ".card[data-tone=accent|success|warning|danger|info]",
+        ".card[data-tone=accent|success|warning|danger|info|neutral]",
         "Changes the tone the featured card is filled with. Default accent.",
       ],
     ],

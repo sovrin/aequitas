@@ -221,4 +221,12 @@
     --ae-tone-contrast: var(--ae-info-contrast);
     --ae-tone-ink: var(--ae-info-ink);
   }
+
+  /* No colour: the tone is the text itself, for an action or state that must not read as the
+     accent (a ghost icon in a toolbar, a form's send next to the page's one primary action). */
+  [data-tone="neutral"] {
+    --ae-tone: var(--ae-text);
+    --ae-tone-contrast: var(--ae-surface);
+    --ae-tone-ink: var(--ae-text);
+  }
 }

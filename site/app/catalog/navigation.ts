@@ -229,7 +229,7 @@ export const navigation: Entry[] = [
       ["aria-current=page", "On the current page: solid fill in the tone colour."],
       ["disabled", "On a `<button>`: dimmed and ignores the pointer."],
       [
-        "data-tone=accent|success|warning|danger|info",
+        "data-tone=accent|success|warning|danger|info|neutral",
         "Colours the current page's fill. Default accent.",
       ],
     ],

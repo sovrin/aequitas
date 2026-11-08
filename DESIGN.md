@@ -158,7 +158,7 @@ The palette is cool, near-neutral paper with one decisive accent hue. Neutrals c
 
 ### Tones
 
-- **Success** ({colors.success}), **Warning** ({colors.warning}), **Danger** ({colors.danger}) and **Info** ({colors.info}) each carry a `-contrast` and an `-ink` sibling. Components read the active `--ae-tone*` triple, and `data-tone` swaps it.
+- **Success** ({colors.success}), **Warning** ({colors.warning}), **Danger** ({colors.danger}) and **Info** ({colors.info}) each carry a `-contrast` and an `-ink` sibling. Components read the active `--ae-tone*` triple, and `data-tone` swaps it. `data-tone="neutral"` makes the tone the text colour itself, for an action or state that must not read as the accent.
 
 ### Named Rules
 

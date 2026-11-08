@@ -4,7 +4,7 @@
 2. **Variants are `data-*` attributes, never modifier classes.** Write `<button class="btn" data-variant="primary">`, not `.btn-primary`. The same vocabulary recurs everywhere:
    - `data-variant`: `primary · ghost` on `.btn`, `solid · outline` on `.badge`, `plain · inline · check` on `ul`/`ol`
    - `data-size`: `s · l` (`.badge` and `.testimonial` take only `l`, `.card` and `.table` only `s`; `.container` and `dialog` add `full`, `.icon` adds `xl`)
-   - `data-tone`: `accent · success · warning · danger · info`
+   - `data-tone`: `accent · success · warning · danger · info · neutral`
    - placement: `data-side` (drawer, shell, with-aside), `data-tip-side` (tooltips) and `data-position` (the `.toasts` region). Don't move one onto another component.
 3. **State is ARIA, not classes.** Use `aria-busy="true"` for loading, `aria-pressed` for toggles, `aria-current="page|step|date"` for the current item, `aria-invalid="true"` for errors, `aria-selected` for selection, `aria-sort` on `th`, and `disabled`. Never add `.active`, `.is-loading` or `.disabled`.
    - The components draw every state: hover and press as tone steps (`--ae-fill` → `--ae-fill-hover` → `--ae-fill-active`), "on" as a 2px accent edge. Don't add movement (`scale`, `translate`) or extra colour to controls.

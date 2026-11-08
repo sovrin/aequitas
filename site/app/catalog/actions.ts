@@ -58,7 +58,7 @@ export const actions: Entry[] = [
         "One control size smaller (`s`) or larger (`l`): height and type step together. Default sits between.",
       ],
       [
-        "data-tone=accent|success|warning|danger|info",
+        "data-tone=accent|success|warning|danger|info|neutral",
         "Colours the primary fill, the ghost text and the pressed state.",
       ],
       ["data-icon", "Square, icon-only button. Needs an `aria-label`."],
@@ -196,7 +196,7 @@ export const actions: Entry[] = [
     ],
     attrs: [
       ["aria-label=<text>", "Required: the button has no visible text."],
-      ["data-tone=accent|success|warning|danger|info", "Colours the fill. Default accent."],
+      ["data-tone=accent|success|warning|danger|info|neutral", "Colours the fill. Default accent."],
       ["data-tip=<text>", "Tooltip text; see Tooltip."],
     ],
     keys: [["Enter / Space", "Activates the button."]],

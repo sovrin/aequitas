@@ -259,7 +259,7 @@ export const selection: Entry[] = [
         "How far the track is filled. Default `0%`. aequitas.js sets it from `value`, `min` and `max`.",
       ],
       ["data-output=<id>", "Id of an element whose text aequitas.js keeps equal to the value."],
-      ["data-tone=accent|success|warning|danger|info", "Colours the fill. Default accent."],
+      ["data-tone=accent|success|warning|danger|info|neutral", "Colours the fill. Default accent."],
       ["min=<n>", "Native lower bound; the fill is measured from it. Default `0`."],
       ["max=<n>", "Native upper bound. Default `100`."],
     ],
@@ -324,7 +324,7 @@ export const selection: Entry[] = [
         "--to=<percent>",
         "Where the fill ends. Default `100%`. aequitas.js sets it from the second input.",
       ],
-      ["data-tone=accent|success|warning|danger|info", "Colours the fill. Default accent."],
+      ["data-tone=accent|success|warning|danger|info|neutral", "Colours the fill. Default accent."],
       [
         "input[data-top]",
         "Set by aequitas.js on the thumb that sits on top: the one moved last, or, at a shared value, the one that can still move away from the other.",

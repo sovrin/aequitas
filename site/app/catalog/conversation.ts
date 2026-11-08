@@ -33,7 +33,7 @@ export const conversation: Entry[] = [
     attrs: [
       [".bubble[data-self]", "Marks a message as yours: end-aligned, tone fill, contrast text."],
       [
-        ".bubble[data-tone=accent|success|warning|danger|info]",
+        ".bubble[data-tone=accent|success|warning|danger|info|neutral]",
         "Changes the tone of a `data-self` bubble. Default accent.",
       ],
     ],
