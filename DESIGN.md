@@ -154,7 +154,7 @@ The palette is cool, near-neutral paper with one decisive accent hue. Neutrals c
 - **Graphite Ink** ({colors.graphite-ink}): body text. It is also the base of every control tint.
 - **Pencil Grey** ({colors.pencil-grey}): muted text, lead paragraphs, eyebrows and captions.
 - **Night Glass** ({colors.night-glass}), **Night Glass, Sunken** ({colors.night-glass-sunken}), **Night Sheet** ({colors.night-sheet}), **Moon Ink** ({colors.moon-ink}) and **Moon Grey** ({colors.moon-grey}): the dark-scheme counterparts of canvas, well, surface, text and muted text.
-- **Control Edge** ({colors.control-edge}): the 3:1 boundary that only _findable controls_ get (an empty field's bottom rule, a track, an off switch). Surfaces never get one.
+- **Control Edge** ({colors.control-edge}): the 3:1 boundary that only _findable controls_ get (an empty field's bottom rule, a track, the outline and thumb of an off switch, whose track stays empty so off never reads as disabled). Surfaces never get one.
 
 ### Tones
 

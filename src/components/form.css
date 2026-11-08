@@ -259,33 +259,53 @@
     padding: var(--ae-space-0);
     display: inline-flex;
     vertical-align: middle;
-    background: var(--ae-control-edge);
+    /* Off is an empty track: the control edge outlines it and a φ⁻¹ thumb sits in it, so it
+       reads as off, not as a greyed-out disabled block. A border, not a shadow, so it holds in
+       forced colours. */
+    background: transparent;
+    border: 1px solid var(--ae-control-edge);
     border-radius: var(--ae-radius-full);
     cursor: pointer;
-    transition: background var(--ae-duration) var(--ae-ease);
+    transition:
+      background var(--ae-duration) var(--ae-ease),
+      border-color var(--ae-duration) var(--ae-ease);
 
     &::after {
       content: "";
       aspect-ratio: 1;
       block-size: 100%;
       border-radius: inherit;
-      background: var(--ae-thumb);
-      box-shadow: var(--ae-shadow-s);
-      transition: translate var(--ae-duration-slow) var(--ae-ease-spring);
+      background: var(--ae-control-edge);
+      scale: calc(1 / var(--ae-phi));
+      transition:
+        translate var(--ae-duration-slow) var(--ae-ease-spring),
+        scale var(--ae-duration-slow) var(--ae-ease-spring);
     }
 
     &:checked {
       background: var(--ae-tone);
+      border-color: var(--ae-tone);
 
       &::after {
-        /* The thumb takes the accent's own contrast colour, so it reads on light and dark accents. */
+        /* The thumb takes the accent's own contrast colour, so it reads on light and dark accents,
+           and grows to fill the track as it slides. */
         background: var(--ae-tone-contrast);
-        /* Travel is track width minus track height; padding cancels out (border-box). */
+        box-shadow: var(--ae-shadow-s);
+        scale: 1;
+        /* Travel is track width minus track height; padding and border cancel out (border-box). */
         translate: calc(var(--_w) - var(--_h)) 0;
       }
 
       &:dir(rtl)::after {
         translate: calc(var(--_h) - var(--_w)) 0;
+      }
+    }
+
+    /* The presets' forced-colours list can't reach a pseudo-element inside :is(), so the off
+       thumb is painted here, or it would vanish into Canvas. */
+    @media (forced-colors: active) {
+      &:not(:checked)::after {
+        background: CanvasText;
       }
     }
   }
