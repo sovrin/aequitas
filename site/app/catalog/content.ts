@@ -174,15 +174,24 @@ export const content: Entry[] = [
     anatomy: [
       ["hr", "A bare 1px hairline, no border."],
       [".divider", "A short label centred between two hairlines that fill the remaining width."],
+      [
+        ".cluster > hr",
+        "Stands up: a short vertical hairline between groups in a row, as in a toolbar.",
+      ],
     ],
     demos: [
       {
         title: "Divider",
         html: `<div class="stack gap-4"><hr /><div class="divider">or</div></div>`,
       },
+      {
+        title: "Between groups in a row",
+        html: `<div class="cluster gap-2"><button class="btn" data-icon data-variant="ghost" aria-label="Copy link"><i class="icon" data-icon="link"></i></button><button class="btn" data-icon data-variant="ghost" aria-label="Undo"><i class="icon" data-icon="undo"></i></button><hr aria-orientation="vertical" /><button class="btn" data-icon data-variant="ghost" data-tone="neutral" aria-label="Help"><i class="icon" data-icon="help"></i></button></div>`,
+      },
     ],
     a11y: [
       "`<hr>` is announced as a separator. Use it when the break is in the content, not only for decoration.",
+      'In a row, give the `<hr>` `aria-orientation="vertical"` so it is announced the way it is drawn.',
       '`.divider` is plain text between two drawn lines; its label is read in sequence, so it must make sense read aloud ("or").',
     ],
     related: ["list", "toolbar"],

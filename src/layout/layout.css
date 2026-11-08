@@ -34,6 +34,14 @@
     gap: var(--ae-space-3);
     /* Even where it is sized to its content (centred, or a flex item), it wraps at its parent. */
     max-inline-size: 100%;
+
+    /* An <hr> in a row stands up: a short hairline between groups, as in a .toolbar. */
+    & > hr {
+      flex: none;
+      inline-size: 1px;
+      block-size: calc(1em * pow(var(--ae-phi), 0.5));
+      background: var(--ae-border-strong);
+    }
   }
 
   /* The golden split: two columns at exactly 1 : φ whenever they share a row. The narrow side
