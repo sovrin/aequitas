@@ -93,7 +93,7 @@
     min-block-size: var(--ae-control-size);
     padding: var(--ae-space-1);
     background: var(--ae-fill);
-    box-shadow: inset 0 -1px 0 var(--ae-control-edge);
+    box-shadow: var(--ae-edge-field) var(--ae-control-edge);
     cursor: text;
     transition: box-shadow var(--ae-duration) var(--ae-ease);
 
@@ -263,6 +263,7 @@
       inline-size: var(--ae-space-6);
       block-size: var(--ae-space-6);
       background: var(--swatch);
+      border-radius: var(--ae-radius-control);
       cursor: pointer;
       transition: box-shadow var(--ae-duration-fast) var(--ae-ease);
 
@@ -274,6 +275,55 @@
 
       &:has(:focus-visible) {
         box-shadow: var(--ae-ring);
+      }
+    }
+
+    /* data-labels: each colour's name under its square, for presets picked by name. The square
+       moves to ::before, so the label can hold the text; the rings follow it. */
+    &[data-labels] {
+      align-items: start;
+
+      & label {
+        display: grid;
+        justify-items: center;
+        gap: var(--ae-space-1);
+        inline-size: auto;
+        min-inline-size: var(--ae-space-6);
+        block-size: auto;
+        font-size: var(--ae-text-xs);
+        line-height: var(--ae-leading-tight);
+        color: var(--ae-text-muted);
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
+
+        &::before {
+          content: "";
+          inline-size: var(--ae-space-6);
+          block-size: var(--ae-space-6);
+          background: var(--swatch);
+          border-radius: var(--ae-radius-control);
+          transition: box-shadow var(--ae-duration-fast) var(--ae-ease);
+        }
+
+        &:has(:checked) {
+          color: var(--ae-text);
+          box-shadow: none;
+
+          &::before {
+            box-shadow:
+              inset 0 0 0 2px var(--ae-bg),
+              0 0 0 2px var(--ae-text);
+          }
+        }
+
+        &:has(:focus-visible) {
+          box-shadow: none;
+
+          &::before {
+            box-shadow: var(--ae-ring);
+          }
+        }
       }
     }
 

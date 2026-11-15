@@ -61,6 +61,12 @@
     --ae-radius-full: 0; /* "pill" is square too; use 999px for pills */
     --ae-corner: round;
 
+    /* Where a control's edge runs, as a box-shadow less its colour: along the bottom while
+       corners are square, around the whole shape once they round (the soft and round presets),
+       so it never bends up into the corners. A custom --ae-radius-m sets the ring forms too. */
+    --ae-edge-on: inset 0 calc(var(--ae-edge) * -1) 0 0; /* the "on" state */
+    --ae-edge-field: inset 0 -1px 0 0; /* the rule that finds an empty field */
+
     /* Depth — contact, key and ambient layers, large blur, low alpha. Never a stroke. Key and
        ambient offsets sit on the space scale, each blur two steps (φ²) above its offset; contact
        layers and spreads are whole pixels. */
@@ -186,6 +192,9 @@
     --ae-radius-s: calc(var(--ae-radius-m) / var(--ae-phi));
     --ae-radius-l: calc(var(--ae-radius-m) * var(--ae-phi));
     --ae-radius-xl: calc(var(--ae-radius-m) * pow(var(--ae-phi), 2));
+    /* What you click or type into on one line: φ^1.5 under radius-m (≈6px under soft), so
+       controls follow any --ae-radius-m continuously. The round preset makes them pills. */
+    --ae-radius-control: calc(var(--ae-radius-m) / pow(var(--ae-phi), 1.5));
   }
 
   :root,

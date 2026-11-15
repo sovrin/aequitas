@@ -15,7 +15,7 @@
       font-variant-numeric: tabular-nums;
       background: var(--ae-fill);
       border: 0;
-      box-shadow: inset 0 -1px 0 var(--ae-control-edge);
+      box-shadow: var(--ae-edge-field) var(--ae-control-edge);
       border-radius: var(--ae-radius-m);
       caret-color: var(--ae-tone);
       transition: box-shadow var(--ae-duration-fast) var(--ae-ease);

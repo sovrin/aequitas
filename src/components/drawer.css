@@ -164,9 +164,8 @@
       gap: var(--ae-space-3);
       padding: var(--ae-space-3) var(--ae-space-4);
       font-size: var(--ae-text-m);
-      /* Concentric with the palette: its corner less the list's inset, as menu rows are. */
-      border-radius: max(0px, calc(var(--ae-radius-l) - var(--ae-space-2)));
-      corner-shape: var(--ae-corner);
+      /* Square at every radius: the current row's edge runs down its side, and a rounded row
+         would bend it into the corners. */
       cursor: pointer;
 
       /* The row Enter will run takes the accent tone, as in a menu. */

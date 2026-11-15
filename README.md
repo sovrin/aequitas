@@ -70,6 +70,7 @@ Set these on `<html>`. Light and dark follow the OS unless `data-theme` says oth
 | `data-accent`  | `blue` `indigo` `purple` `pink` `red` `orange` `yellow` `green` `teal` `graphite` |
 | `data-density` | `compact` `spacious`                                                              |
 | `data-radius`  | `soft` `round`                                                                    |
+| `data-emphasis` | `reduced`: the accent only on actions (primary, FAB, progress, links, focus); states in ink |
 | `data-aurora`  | present: colour fields behind the page for frost to blur; `drift` also moves them |
 | `data-type`    | `serif` `humanist` `mono`                                                         |
 

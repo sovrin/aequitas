@@ -81,9 +81,9 @@
     background: var(--ae-fill);
     border: 0;
     /* A single-line field is shaped like the buttons it sits beside; one that grows is not. */
-    border-radius: var(--ae-radius-full);
+    border-radius: var(--ae-radius-control);
     /* A rule along the bottom, so an empty field can still be found. Focus and invalid replace it. */
-    box-shadow: inset 0 -1px 0 var(--ae-control-edge);
+    box-shadow: var(--ae-edge-field) var(--ae-control-edge);
     transition:
       background var(--ae-duration-fast) var(--ae-ease),
       box-shadow var(--ae-duration) var(--ae-ease);
@@ -155,7 +155,7 @@
   /* A field holding a φ : 1 swatch: wider than a square, so it reads as a colour to pick rather
      than an icon. The swatch is concentric with the field, square in square, round in round. */
   input[type="color"].input {
-    --_swatch-r: max(0px, calc(var(--ae-radius-full) - var(--ae-space-1)));
+    --_swatch-r: max(0px, calc(var(--ae-radius-control) - var(--ae-space-1)));
     inline-size: calc(var(--ae-control-size) * var(--ae-phi));
     padding: var(--ae-space-1);
     cursor: pointer;
