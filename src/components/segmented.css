@@ -1,15 +1,20 @@
 @layer ae.components {
   /* <div class="segmented"><label><input type="radio" name="x"><span>One</span></label>…</div>
-     One joined control, like .btn-group: flat tint segments with hairlines between, rounded only
-     at its outer ends. The checked segment is "on" exactly as a pressed button is. */
+     One tinted track holding its options as bare labels; the checked one is a raised thumb of
+     surface. The thumb is the one control that lifts: the lift is what marks the choice, so it
+     reads without colour and needs no edge. The track's inset keeps the whole control at
+     --ae-control-size, level with a button beside it. */
   .segmented {
+    --_inset: var(--ae-space-0);
+
     display: inline-flex;
-    /* Short of room, segments wrap to another row rather than crush or spill out; a hairline of
-       canvas parts the rows. */
+    /* Short of room, segments wrap to another row rather than crush or spill out. */
     flex-wrap: wrap;
-    row-gap: 1px;
+    gap: var(--_inset);
     max-inline-size: 100%;
-    border-radius: var(--ae-radius-full);
+    padding: var(--_inset);
+    background: var(--ae-fill);
+    border-radius: var(--ae-radius-control);
 
     /* As specific as the form rule that makes radio labels inline-flex, and later, so it wins. */
     & > label:has(> input) {
@@ -19,18 +24,9 @@
          whole control wraps. */
       flex: 1 0 auto;
       max-inline-size: 100%;
-      border-radius: inherit;
+      /* Concentric with the track: its radius less the inset. */
+      border-radius: max(0px, calc(var(--ae-radius-control) - var(--_inset)));
       cursor: pointer;
-    }
-
-    & > label:not(:first-child) {
-      border-start-start-radius: 0;
-      border-end-start-radius: 0;
-    }
-
-    & > label:not(:last-child) {
-      border-start-end-radius: 0;
-      border-end-end-radius: 0;
     }
 
     & input {
@@ -57,7 +53,7 @@
       position: relative;
       display: grid;
       place-content: center;
-      min-block-size: var(--ae-control-size);
+      min-block-size: calc(var(--ae-control-size) - 2 * var(--_inset));
       padding: 0 round(calc(var(--ae-control-size) / pow(var(--ae-phi), 2)), 1px);
       font-weight: 500;
       /* As .btn: a label wider than the whole control wraps, balanced, rather than being cut. */
@@ -65,38 +61,44 @@
       text-wrap: balance;
       /* A segment stretched by a wrapped row or data-fill keeps its word in the middle. */
       text-align: center;
-      color: var(--ae-text);
-      background: var(--ae-fill);
+      color: var(--ae-text-muted);
       border-radius: inherit;
-      /* Separator, state edge, focus ring. */
-      box-shadow: var(--_sep, 0 0 #0000), var(--_edge, 0 0 #0000), var(--ae-focus, 0 0 #0000);
+      /* Lift, state edge, focus ring. */
+      box-shadow: var(--_lift, 0 0 #0000), var(--_edge, 0 0 #0000), var(--ae-focus, 0 0 #0000);
       transition:
         background var(--ae-duration) var(--ae-ease),
         color var(--ae-duration) var(--ae-ease);
       pointer-events: none;
     }
 
-    & > label + label span {
-      --_sep: inset var(--ae-hairline-x) 0 0 var(--ae-border);
-    }
-
     & > label:hover span {
-      background: var(--ae-fill-hover);
+      color: var(--ae-text);
+      background: var(--ae-fill);
     }
 
     & > label:active span {
-      background: var(--ae-fill-active);
+      background: var(--ae-fill-hover);
     }
 
-    /* On: tinted, and an edge along the bottom so it reads without colour. */
+    /* On: a thumb lifted off the track. In light it is the white surface; in dark the surface is
+       hardly lighter than the track, so the thumb takes the press tint over it instead and reads
+       as the brightest step of the ladder. */
     & > label:has(:checked) span {
-      --_edge: inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone);
-      color: var(--ae-tone-ink);
-      background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
+      --_lift: var(--ae-shadow-s);
+      color: var(--ae-text);
+      background: light-dark(var(--ae-surface), var(--ae-fill-active));
     }
 
-    & > label:has(:checked):active span {
-      background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-press), transparent);
+    /* A tone, when one is asked for, inks the thumb's label. */
+    &[data-tone] > label:has(:checked) span {
+      color: var(--ae-tone-ink);
+    }
+
+    /* More contrast asked for: the thumb also takes the state edge. */
+    @media (prefers-contrast: more) {
+      & > label:has(:checked) span {
+        --_edge: var(--ae-edge-on) var(--ae-tone);
+      }
     }
 
     /* The input takes focus; its segment draws the ring. */
@@ -117,6 +119,54 @@
       & > label:has(> input) {
         flex: 1 1 0;
       }
+    }
+  }
+
+  /* Equal shares (data-fill, up to six options): the thumb is the track's own ::before, placed by
+     which option is checked out of how many, so it glides from one choice to the next. A control
+     that hugs its labels has segments of differing widths, and keeps the checked segment as its
+     thumb, as above. */
+  .segmented[data-fill]:has(> label:nth-child(2):last-child) { --_n: 2; }
+  .segmented[data-fill]:has(> label:nth-child(3):last-child) { --_n: 3; }
+  .segmented[data-fill]:has(> label:nth-child(4):last-child) { --_n: 4; }
+  .segmented[data-fill]:has(> label:nth-child(5):last-child) { --_n: 5; }
+  .segmented[data-fill]:has(> label:nth-child(6):last-child) { --_n: 6; }
+
+  .segmented[data-fill]:has(> label:nth-child(1) > :checked) { --_i: 0; }
+  .segmented[data-fill]:has(> label:nth-child(2) > :checked) { --_i: 1; }
+  .segmented[data-fill]:has(> label:nth-child(3) > :checked) { --_i: 2; }
+  .segmented[data-fill]:has(> label:nth-child(4) > :checked) { --_i: 3; }
+  .segmented[data-fill]:has(> label:nth-child(5) > :checked) { --_i: 4; }
+  .segmented[data-fill]:has(> label:nth-child(6) > :checked) { --_i: 5; }
+
+  .segmented[data-fill]:has(> label > :checked):has(> label:nth-child(2):last-child, > label:nth-child(3):last-child, > label:nth-child(4):last-child, > label:nth-child(5):last-child, > label:nth-child(6):last-child) {
+    /* One share of the track between its insets and gaps. */
+    --_w: calc((100% - 2 * var(--_inset) - (var(--_n) - 1) * var(--_inset)) / var(--_n));
+
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset-block: var(--_inset);
+      inset-inline-start: calc(var(--_inset) + var(--_i) * (var(--_w) + var(--_inset)));
+      inline-size: var(--_w);
+      border-radius: max(0px, calc(var(--ae-radius-control) - var(--_inset)));
+      background: light-dark(var(--ae-surface), var(--ae-fill-active));
+      box-shadow: var(--ae-shadow-s);
+      transition: inset-inline-start var(--ae-duration) var(--ae-ease-spring);
+      pointer-events: none;
+    }
+
+    /* Segments share the row exactly, so the thumb lands on one; the checked one lets it show. */
+    & > label:has(> input) {
+      flex: 1 1 0;
+      min-inline-size: 0;
+    }
+
+    & > label:has(:checked) span {
+      --_lift: none;
+      background: none;
     }
   }
 }

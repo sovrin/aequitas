@@ -162,18 +162,18 @@ export const selection: Entry[] = [
     slug: "segmented",
     title: "Segmented control",
     group: "Selection",
-    lede: "Radio inputs joined into one bar, like a button group; the chosen segment is on exactly as a pressed button is.",
+    lede: "Radio inputs in one tinted track; the chosen one is a raised thumb.",
     owns: [".segmented"],
     anatomy: [
       [
         ".segmented",
-        'The bar: rounded only at its outer ends, hairlines between segments. Short of room, segments wrap onto another row instead of shrinking. Give it `role="radiogroup"` and an `aria-label`.',
+        'The track: one tint, inset so the thumb sits inside it at the control height. Short of room, segments wrap onto another row instead of shrinking. Give it `role="radiogroup"` and an `aria-label`.',
       ],
       ["> label", "One per segment."],
       ["label > input[type=radio]", "Covers the segment, invisible. All inputs share a `name`."],
       [
         "label > span",
-        "The segment: a flat tint sized like `.btn`. Checked, it takes the tone tint, tone ink and the 2px edge along its bottom.",
+        "The segment: a bare, muted label. Checked, it is a thumb with a small shadow (the white surface in light, the press tint in dark), in text ink (tone ink under `data-tone`); under `prefers-contrast: more` it also takes the 2px edge. Under `data-fill` (up to six options, shared equally) the thumb glides from one choice to the next.",
       ],
     ],
     demos: [
@@ -448,6 +448,7 @@ export const selection: Entry[] = [
       ["> label", "One square per colour, filled with its `--swatch`."],
       ["label > input[type=radio]", "Covers the square, invisible. All share a `name`."],
       ["label > span.sr-only", "The colour's name, as the radio's accessible name."],
+      ["label > span", "Under `data-labels`: the colour's name, shown under its square."],
     ],
     demos: [
       {
@@ -460,9 +461,18 @@ export const selection: Entry[] = [
   <label style="--swatch: var(--ae-success)"><input type="radio" name="sw" /><span class="sr-only">Green</span></label>
 </div>`,
       },
+      {
+        title: "Named · data-labels",
+        html: `<div class="swatch-group" data-labels role="radiogroup" aria-label="Highlight colour">
+  <label style="--swatch: var(--ae-accent)"><input type="radio" name="sw-named" checked /><span>Accent</span></label>
+  <label style="--swatch: var(--ae-info)"><input type="radio" name="sw-named" /><span>Blue</span></label>
+  <label style="--swatch: var(--ae-success)"><input type="radio" name="sw-named" /><span>Green</span></label>
+</div>`,
+      },
     ],
     attrs: [
       ["--swatch=<colour>", "On each label: the colour of its square."],
+      ["data-labels", "On the group: each colour's name shows under its square, from a plain `span` in place of `span.sr-only`."],
       [
         "checked",
         "On one radio: draws a background-coloured gap and a text-coloured ring around its square.",

@@ -90,7 +90,7 @@
         color: var(--ae-tone-ink);
         background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
         box-shadow:
-          inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone),
+          var(--ae-edge-on) var(--ae-tone),
           var(--ae-focus, 0 0 #0000);
       }
     }

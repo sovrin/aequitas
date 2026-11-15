@@ -1,6 +1,9 @@
 <script setup lang="ts">
-// Accent, density, shape and aurora drive the site-wide appearance (and the panel); type is a page-only demo.
-const { accent, density, radius, aurora, auroraSeed } = useAppearance();
+// Accent, density, shape and aurora drive the site-wide appearance (and the panel); type and emphasis are page-only demos.
+const { accent, density, radius, radiusM, aurora, auroraSeed } = useAppearance();
+const radiusShown = computed(() =>
+  radiusM.value === "" ? (PRESET_RADIUS[radius.value] ?? 0) : radiusM.value,
+);
 const preset = (attr: string, e: Event) => {
   const v = (e.target as HTMLSelectElement).value;
   if (v) document.documentElement.dataset[attr] = v;
@@ -13,7 +16,7 @@ const preset = (attr: string, e: Event) => {
     <DocsPageHeader
       group="Foundations"
       title="Presets"
-      lede="Attributes on <html> or any subtree. Accent, density, shape and type — the whole page follows."
+      lede="Attributes on <html> or any subtree. Accent, density, shape, type and emphasis — the whole page follows."
     />
     <section class="section stack gap-5" id="presets">
       <h2>Try them.</h2>
@@ -55,6 +58,23 @@ const preset = (attr: string, e: Event) => {
             </select>
           </div>
         </div>
+        <ClientOnly>
+          <div class="field">
+            <label for="radius-m" class="flex justify-between">
+              <span>Radius</span><span class="tabular">{{ radiusShown.toFixed(2) }}rem</span>
+            </label>
+            <input
+              id="radius-m"
+              type="range"
+              min="0.25"
+              max="2"
+              step="0.05"
+              :disabled="!radius"
+              :value="radiusShown"
+              @input="radiusM = Number(($event.target as HTMLInputElement).value)"
+            />
+          </div>
+        </ClientOnly>
         <div class="field">
           <label for="aurora">Aurora</label>
           <div class="select">
@@ -81,6 +101,15 @@ const preset = (attr: string, e: Event) => {
               <option value="humanist">Humanist</option>
               <option value="serif">Serif</option>
               <option value="mono">Mono</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="emphasis">Emphasis</label>
+          <div class="select">
+            <select class="input" id="emphasis" @change="preset('emphasis', $event)">
+              <option value="">Full</option>
+              <option value="reduced">Reduced</option>
             </select>
           </div>
         </div>
@@ -131,6 +160,12 @@ const preset = (attr: string, e: Event) => {
             <td><code>data-aurora</code></td>
             <td class="text-muted">
               present · drift: colour fields behind the page for frost to blur; off by default
+            </td>
+          </tr>
+          <tr>
+            <td><code>data-emphasis</code></td>
+            <td class="text-muted">
+              reduced — the accent only on actions; switches, checks, ranges, tabs and selections in ink
             </td>
           </tr>
           <tr>

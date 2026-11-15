@@ -22,7 +22,7 @@
 6. **Colour, radius, shadow, blur and type come from tokens.** Use `var(--ae-text)`, `--ae-text-muted`, `--ae-surface`, `--ae-accent`, `--ae-border`, `--ae-radius-m`, `--ae-shadow-m` and so on. For text in a tone, use its ink (`--ae-accent-ink`, `--ae-danger-ink`, `--ae-tone-ink`, …): the tone itself is for fills, edges and rings and is too light to read as text. Never hard-code hex, rgb or oklch values. To retheme, set `--ae-hue` / `--ae-neutral-hue`, or `data-accent` on `<html>`.
 7. **Use the global presets on `<html>`:**
    - `data-theme="light|dark"` (omit to follow the OS)
-   - `data-accent`, `data-density="compact|spacious"`, `data-radius="soft|round"`, `data-type="serif|humanist|mono"`
+   - `data-accent`, `data-density="compact|spacious"`, `data-radius="soft|round"`, `data-type="serif|humanist|mono"`, `data-emphasis="reduced"` (the accent only on actions; states in ink)
    - `data-aurora` (or `data-aurora="drift"`) puts colour fields behind the page; add it when the page leans on frosted cards. `--ae-aurora-seed: <number>` moves the fields, the same number always the same layout
 8. **Icons are `<i class="icon" data-icon="name"></i>`.** They need `aequitas.icons.css`. Only use names from the icon list; there are no `fa-*` or `bi-*` classes. If you guess a name, the checker suggests the closest real one (`close` → `x`, `settings` → `settings-gear`). Sizes are `data-size="s|l|xl"`. Icon-only buttons are `<button class="btn" data-icon aria-label="…">`.
 9. **Overrides go in unlayered CSS.** aequitas lives in `@layer ae.*`, so any unlayered rule wins. Never use `!important`, and never restyle a component that already has the variant you need.

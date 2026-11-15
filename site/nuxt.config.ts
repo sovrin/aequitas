@@ -32,7 +32,7 @@ export default defineNuxtConfig({
         {
           tagPosition: "head",
           tagPriority: "critical",
-          innerHTML: `try{var d=document.documentElement.dataset,s=localStorage,t=s.getItem("ae-theme");if(t==="light"||t==="dark")d.theme=t;["accent","density","radius"].forEach(function(k){var v=s.getItem("docs-"+k);if(v)d[k]=v});var a=s.getItem("docs-aurora");if(a!=="off")d.aurora=a==="drift"?a:"";var n=s.getItem("docs-aurora-seed");if(n&&isFinite(n))document.documentElement.style.setProperty("--ae-aurora-seed",n)}catch(e){d.aurora=""}`,
+          innerHTML: `try{var d=document.documentElement.dataset,s=localStorage,t=s.getItem("ae-theme");if(t==="light"||t==="dark")d.theme=t;["accent","density","radius"].forEach(function(k){var v=s.getItem("docs-"+k);if(v)d[k]=v});var a=s.getItem("docs-aurora");if(a!=="off")d.aurora=a==="drift"?a:"";var n=s.getItem("docs-aurora-seed");if(n&&isFinite(n))document.documentElement.style.setProperty("--ae-aurora-seed",n);var m=s.getItem("docs-radius-m");if(d.radius&&m&&isFinite(m))document.documentElement.style.setProperty("--ae-radius-m",m+"rem")}catch(e){d.aurora=""}`,
         },
       ],
     },
