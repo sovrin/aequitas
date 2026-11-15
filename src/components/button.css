@@ -18,7 +18,7 @@
     text-decoration: none;
     background: var(--ae-fill);
     border: 0;
-    border-radius: var(--ae-radius-full);
+    border-radius: var(--ae-radius-control);
     /* Separator (button groups), state edge, focus ring. */
     box-shadow: var(--_sep, 0 0 #0000), var(--_edge, 0 0 #0000), var(--ae-focus, 0 0 #0000);
     cursor: pointer;
@@ -40,7 +40,7 @@
 
     /* On: tinted, and an edge along the bottom so it reads without colour. */
     &[aria-pressed="true"] {
-      --_edge: inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone);
+      --_edge: var(--ae-edge-on) var(--ae-tone);
       color: var(--ae-tone-ink);
       background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
 

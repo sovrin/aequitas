@@ -41,8 +41,12 @@ const auroras = [
   ["drift", "Drift"],
 ] as const;
 
-const { theme, accent, density, radius, aurora, auroraSeed } = useAppearance();
+const { theme, accent, density, radius, radiusM, aurora, auroraSeed } = useAppearance();
 const id = useId();
+// The radius slider shows the shape's own radius until it is moved; square has none to tune.
+const radiusShown = computed(() =>
+  radiusM.value === "" ? (PRESET_RADIUS[radius.value] ?? 0) : radiusM.value,
+);
 const accentName = computed(() => accents.find((a) => a[0] === accent.value)?.[1] ?? "Blue");
 </script>
 
@@ -123,6 +127,26 @@ const accentName = computed(() => accents.find((a) => a[0] === accent.value)?.[1
             <span class="ap-name">{{ name }}</span>
           </label>
         </div>
+        <!-- Any corner between the presets': every radius derives from --ae-radius-m. Client-only,
+             since the saved radius is only known in the browser. -->
+        <ClientOnly>
+          <div class="ap-seed">
+            <label :for="`${id}-radius-m`">
+              Radius <span class="ap-value tabular">{{ radiusShown.toFixed(2) }}rem</span>
+            </label>
+            <input
+              :id="`${id}-radius-m`"
+              type="range"
+              min="0.25"
+              max="2"
+              step="0.05"
+              :disabled="!radius"
+              :value="radiusShown"
+              style="inline-size: 9rem"
+              @input="radiusM = Number(($event.target as HTMLInputElement).value)"
+            />
+          </div>
+        </ClientOnly>
       </section>
 
       <section :aria-labelledby="`${id}-aurora`">

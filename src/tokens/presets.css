@@ -4,6 +4,7 @@
  *   data-density  scales the base unit; every φ-derived space follows
  *   data-radius   soft | round corners
  *   data-type     serif | humanist | mono type
+ *   data-emphasis reduced: the accent only for actions; states in ink
  */
 @layer ae.tokens {
   [data-accent="blue"] {
@@ -44,7 +45,28 @@
     --ae-accent-contrast: light-dark(oklch(0.99 0 0), oklch(0.18 0 0));
   }
 
+  /* Emphasis: reduced spends the accent on actions only (primary buttons, the FAB, progress,
+     links and focus). Every on, checked, selected and current state reads in ink instead, as
+     data-tone="neutral" does. A subtree or control with its own data-tone keeps it. */
+  [data-emphasis="reduced"] {
+    --ae-tone: var(--ae-text);
+    --ae-tone-contrast: var(--ae-surface);
+    --ae-tone-ink: var(--ae-text);
+
+    & :is(.btn[data-variant="primary"], .fab, progress):not([data-tone], [data-tone] *) {
+      --ae-tone: var(--ae-accent);
+      --ae-tone-contrast: var(--ae-accent-contrast);
+      --ae-tone-ink: var(--ae-accent-ink);
+    }
+  }
+
   /* Shape presets: the system is square by default. */
+  [data-radius="soft"],
+  [data-radius="round"] {
+    /* Rounded, an edge rings the shape instead of bending up into its corners. */
+    --ae-edge-on: inset 0 0 0 var(--ae-stroke);
+    --ae-edge-field: inset 0 0 0 1px;
+  }
   [data-radius="soft"] {
     --ae-radius-m: calc(1rem / pow(var(--ae-phi), 0.5)); /* ≈ 0.786rem */
     --ae-radius-full: 999px;
@@ -52,6 +74,7 @@
   [data-radius="round"] {
     --ae-radius-m: calc(1rem * pow(var(--ae-phi), 0.5)); /* ≈ 1.272rem */
     --ae-radius-full: 999px;
+    --ae-radius-control: 999px;
   }
 
   /* Type presets */

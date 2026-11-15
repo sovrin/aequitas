@@ -1,7 +1,7 @@
 @layer ae.components {
   /* <span class="chip">Design <button aria-label="Remove Design">×</button></span> */
   .chip {
-    border-radius: var(--ae-radius-full);
+    border-radius: var(--ae-radius-control);
     display: inline-flex;
     align-items: center;
     gap: var(--ae-space-2);
@@ -78,7 +78,7 @@
     /* On: tinted, with the bottom edge. An edge rather than a check mark, so the label never
        shifts when it toggles. */
     &:has(:checked) {
-      --_edge: inset 0 calc(var(--ae-edge) * -1) 0 var(--ae-tone);
+      --_edge: var(--ae-edge-on) var(--ae-tone);
       color: var(--ae-tone-ink);
       background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
 

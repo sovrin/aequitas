@@ -9,7 +9,7 @@
     line-height: var(--ae-phi);
     color: var(--ae-tone-ink);
     background: color-mix(in oklch, var(--ae-tone) var(--ae-tint-hover), transparent);
-    border-radius: var(--ae-radius-full);
+    border-radius: var(--ae-radius-control);
 
     &[data-variant="solid"] {
       color: var(--ae-tone-contrast);

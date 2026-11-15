@@ -4,7 +4,7 @@ import { setTheme } from "@aequitas/aequitas.js";
 // defaults and the head script (nuxt.config.ts) has already applied the saved values to <html>, so the
 // sync after hydration only updates the controls and must not re-apply or animate anything.
 export default defineNuxtPlugin((nuxtApp) => {
-  const { theme, accent, density, radius, aurora, auroraSeed } = useAppearance();
+  const { theme, accent, density, radius, radiusM, aurora, auroraSeed } = useAppearance();
   let synced = false;
 
   const apply = (attr: string, v: string) => {
@@ -22,6 +22,8 @@ export default defineNuxtPlugin((nuxtApp) => {
       accent.value = localStorage.getItem("docs-accent") ?? "";
       density.value = localStorage.getItem("docs-density") ?? "";
       radius.value = localStorage.getItem("docs-radius") ?? "";
+      const m = Number(localStorage.getItem("docs-radius-m") || NaN);
+      radiusM.value = radius.value && Number.isFinite(m) ? m : "";
       const a = localStorage.getItem("docs-aurora");
       aurora.value = a === "off" || a === "drift" ? a : "";
       const n = Number(localStorage.getItem("docs-aurora-seed") || NaN);
@@ -64,7 +66,22 @@ export default defineNuxtPlugin((nuxtApp) => {
   // density switches at once.
   watch(accent, (v) => synced && apply("accent", v));
   watch(density, (v) => synced && apply("density", v));
-  watch(radius, (v) => synced && apply("radius", v));
+  // A new shape starts from its own radius; the slider then sets --ae-radius-m, which every other
+  // radius derives from and glides to.
+  watch(radius, (v) => {
+    if (!synced) return;
+    apply("radius", v);
+    radiusM.value = "";
+  });
+  watch(radiusM, (v) => {
+    if (!synced) return;
+    const style = document.documentElement.style;
+    if (typeof v === "number" && Number.isFinite(v)) style.setProperty("--ae-radius-m", `${v}rem`);
+    else style.removeProperty("--ae-radius-m");
+    try {
+      localStorage.setItem("docs-radius-m", `${v}`);
+    } catch {}
+  });
   // Unlike the presets, the bare attribute is a value here, so "off" is what removes it.
   watch(aurora, (v) => {
     if (!synced) return;
