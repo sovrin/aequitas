@@ -64,17 +64,17 @@ The docs have a page for each, with live specimens, anatomy and the full API.
 
 Set these on `<html>`. Light and dark follow the OS unless `data-theme` says otherwise.
 
-| Attribute      | Values                                                                            |
-| -------------- | --------------------------------------------------------------------------------- |
-| `data-theme`   | `light` `dark`                                                                    |
-| `data-accent`  | `blue` `indigo` `purple` `pink` `red` `orange` `yellow` `green` `teal` `graphite` |
-| `data-density` | `compact` `spacious`                                                              |
-| `data-radius`  | `soft` `round`                                                                    |
+| Attribute       | Values                                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------- |
+| `data-theme`    | `light` `dark`                                                                              |
+| `data-accent`   | `blue` `indigo` `purple` `pink` `red` `orange` `yellow` `green` `teal` `graphite`           |
+| `data-density`  | `compact` `spacious`                                                                        |
+| `data-radius`   | `soft` `round`                                                                              |
 | `data-emphasis` | `reduced`: the accent only on actions (primary, FAB, progress, links, focus); states in ink |
-| `data-aurora`  | present: colour fields behind the page for frost to blur; `drift` also moves them |
-| `data-type`    | `serif` `humanist` `mono`                                                         |
+| `data-aurora`   | present: colour fields behind the page for frost to blur; `drift` also moves them           |
+| `data-type`     | `serif` `humanist` `mono`                                                                   |
 
-For any other colour, set `--ae-hue` and `--ae-neutral-hue`. Every control that sits in a row takes its height from `--ae-control-size` (with `-s` and `-l`), so buttons, fields and steppers line up. To move the aurora's fields, set `--ae-aurora-seed` to any number: the same seed always gives the same layout. Components take `data-tone="accent|success|warning|danger|info|neutral"`.
+`dist/accents.json` has each named accent's `light` and `dark` shade as a colour, for whatever can't read the CSS (an SVG favicon, a canvas). For any other colour, set `--ae-hue` and `--ae-neutral-hue`. Every control that sits in a row takes its height from `--ae-control-size` (with `-s` and `-l`), so buttons, fields and steppers line up. To move the aurora's fields, set `--ae-aurora-seed` to any number: the same seed always gives the same layout. Components take `data-tone="accent|success|warning|danger|info|neutral"`.
 
 Controls answer the pointer with tone, never movement, and persistent states add a 2px accent edge so colour never carries meaning alone. Frost falls back to solid surfaces without `backdrop-filter` or under `prefers-reduced-transparency`; `prefers-contrast`, `forced-colors` and `prefers-reduced-motion` are handled throughout.
 

@@ -7,6 +7,7 @@ import { bundle } from "lightningcss";
 import { build as esbuild } from "esbuild";
 import { generate } from "./generate.js";
 import { ai } from "./ai.js";
+import { accents } from "./accents.js";
 
 const entry = fileURLToPath(new URL("../src/aequitas.css", import.meta.url));
 const outDir = fileURLToPath(new URL("../dist/", import.meta.url));
@@ -63,6 +64,12 @@ export async function build(): Promise<void> {
       tokens[m[1]] ??= m[2].replace(/\s+/g, " ").trim();
   }
   await writeFile(outDir + "tokens.json", JSON.stringify(tokens, null, 2) + "\n");
+
+  // The named accents' shades as colours, for what can't read the CSS (scripts/accents.ts).
+  const shades = Object.fromEntries(
+    Object.entries(accents).map(([name, { light, dark }]) => [name, { light, dark }]),
+  );
+  await writeFile(outDir + "accents.json", JSON.stringify(shades, null, 2) + "\n");
 
   const entries = [
     ["aequitas", entry],
