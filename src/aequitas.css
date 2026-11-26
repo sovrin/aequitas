@@ -7,6 +7,7 @@
 @import "./tokens/scale.css";
 @import "./tokens/frost.css";
 @import "./tokens/presets.css";
+@import "./_generated/accents.css";
 
 @import "./base/fonts.css";
 @import "./base/reset.css";

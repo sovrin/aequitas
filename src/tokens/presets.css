@@ -1,50 +1,12 @@
 /*
  * System presets. Attributes on <html> or any subtree.
- *   data-accent   named accent hues, in the spirit of macOS accent colours
+ *   data-accent   named accent hues, in the spirit of macOS accent colours (scripts/accents.ts)
  *   data-density  scales the base unit; every φ-derived space follows
  *   data-radius   soft | round corners
  *   data-type     serif | humanist | mono type
  *   data-emphasis reduced: the accent only for actions; states in ink
  */
 @layer ae.tokens {
-  [data-accent="blue"] {
-    --ae-hue: 255;
-  }
-  [data-accent="indigo"] {
-    --ae-hue: 280;
-  }
-  [data-accent="purple"] {
-    --ae-hue: 305;
-  }
-  [data-accent="pink"] {
-    --ae-hue: 350;
-  }
-  [data-accent="red"] {
-    --ae-hue: 25;
-  }
-  [data-accent="orange"] {
-    --ae-hue: 55;
-  }
-  [data-accent="yellow"] {
-    --ae-hue: 90;
-  }
-  /* Green and teal are light hues: their solid fill is darkened so white text on it stays 4.5:1.
-     A custom --ae-hue between about 150 and 220 needs the same. */
-  [data-accent="green"] {
-    --ae-hue: 150;
-    --ae-accent-light: oklch(0.5 0.17 150);
-  }
-  [data-accent="teal"] {
-    --ae-hue: 195;
-    --ae-accent-light: oklch(0.5 0.13 195);
-  }
-  [data-accent="graphite"] {
-    --ae-hue: 255;
-    --ae-accent-light: oklch(0.42 0.01 255);
-    --ae-accent-dark: oklch(0.78 0.01 255);
-    --ae-accent-contrast: light-dark(oklch(0.99 0 0), oklch(0.18 0 0));
-  }
-
   /* Emphasis: reduced spends the accent on actions only (primary buttons, the FAB, progress,
      links and focus). Every on, checked, selected and current state reads in ink instead, as
      data-tone="neutral" does. A subtree or control with its own data-tone keeps it. */
